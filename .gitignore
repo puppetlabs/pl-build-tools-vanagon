@@ -1,0 +1,5 @@
+vendor/*
+output/*
+.bundle
+gems
+Gemfile.lock
