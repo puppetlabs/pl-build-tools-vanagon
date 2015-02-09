@@ -23,24 +23,26 @@ component "cmake" do |pkg, settings, platform|
     [ "export CC=#{settings[:bindir]}/gcc", "export CXX=#{settings[:bindir]}/g++",
       "export LDFLAGS=-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags",
       "rm -rf build", "mkdir build", "pushd build",
-      "../bootstrap  --prefix=#{settings[:prefix]} \
+        "../bootstrap  --prefix=#{settings[:prefix]} \
                      --datadir=/share/cmake \
                      --docdir=/share/doc/cmake-#{pkg.get_version} \
                      --mandir=/share/man \
                      --parallel=`/usr/bin/getconf _NPROCESSORS_ONLN`",
-        "make VERBOSE=1 -j2", "popd" ]
+                     "#{platform[:make]} VERBOSE=1 -j$(shell expr $(shell #{platform[:num_cores]}) + 1)", "popd" ]
   end
 
   pkg.install do
     [ "pushd #{settings[:prefix]}; wget http://buildsources.delivery.puppetlabs.net/pl-build-toolchain.cmake",
-      "chmod 644 pl-build-toolchain.make", "popd" , "pushd build", "make -j2 install", "popd",
-      "rm -rf #{settings[:datadir]}/doc/cmake-#{pkg.get_version}",
+      "chmod 644 pl-build-toolchain.make", "popd" , "pushd build",
+      "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1) install",
+      "popd", "rm -rf #{settings[:datadir]}/doc/cmake-#{pkg.get_version}",
       "rm -rf #{settings[:mandir]}",
       "export CC=#{settings[:bindir]}/gcc", "export CXX=#{settings[:bindir]}/g++",
       "export LDFLAGS=-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags",
-      "unset DISPLAY", "pushd build", "bin/ctest -V -E ModuleNotices -E CMake.HTML -E CTestTestUpload -j2",
+      "unset DISPLAY", "pushd build",
+      "bin/ctest -V -E ModuleNotices -E CMake.HTML -E CTestTestUpload -j$(shell expr $(shell #{platform[:num_cores]}) + 1)",
       "popd"
-     ]
+    ]
   end
 
 end

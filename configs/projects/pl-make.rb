@@ -1,4 +1,4 @@
-project "pl-cmake" do |proj|
+project "pl-make" do |proj|
   # Project level settings our components will care about
   proj.setting(:prefix, "/opt/pl-build-tools")
   proj.setting(:sysconfdir, "/etc/pl-build-tools")
@@ -10,12 +10,11 @@ project "pl-cmake" do |proj|
   proj.setting(:datadir, File.join(proj.prefix, "share"))
   proj.setting(:mandir, File.join(proj.datadir, "man"))
 
-  proj.description "Puppet Labs cmake"
-  proj.version "3.1.0"
-  proj.license "Same as cmake"
+  proj.description "Puppet Labs Make"
+  proj.version "4.1"
+  proj.license "GPLv2"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
-
 
   proj.requires 'pl-gcc'
 
@@ -23,10 +22,7 @@ project "pl-cmake" do |proj|
   proj.setting(:cflags, "-I#{proj.includedir}")
   proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
 
-
-  proj.component "cmake"
-
+  proj.component "make"
 
   proj.directory proj.prefix
-
 end

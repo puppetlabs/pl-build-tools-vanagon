@@ -11,7 +11,7 @@ project "pl-gcc" do |proj|
   proj.setting(:mandir, File.join(proj.datadir, "man"))
 
   proj.description "Puppet Labs GCC"
-  proj.version_from_git
+  proj.version "4.8.2"
   proj.license "Same as GCC"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
