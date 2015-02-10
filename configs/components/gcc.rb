@@ -3,16 +3,28 @@ component "gcc" do |pkg, settings, platform|
   pkg.md5sum "deca88241c1135e2ff9fa5486ab5957b"
   pkg.url "http://buildsources.delivery.puppetlabs.net/gcc-#{pkg.get_version}.tar.gz"
 
-  pkg.build_requires "gcc"
-  pkg.build_requires "gawk"
-  pkg.build_requires "binutils"
-  pkg.build_requires "gzip"
-  pkg.build_requires "bzip2"
-  pkg.build_requires "make"
-  pkg.build_requires "tar"
-  pkg.build_requires "libstdc++-devel"
-  pkg.build_requires "glibc-devel"
-  pkg.build_requires "gcc-c++"
+
+  if platform.is_deb?
+    pkg.build_requires "debhelper"
+    pkg.build_requires "build-essential"
+    pkg.requires "libc6-dev"
+  else
+    pkg.build_requires "gcc"
+    pkg.build_requires "gawk"
+    pkg.build_requires "binutils"
+    pkg.build_requires "gzip"
+    pkg.build_requires "bzip2"
+    pkg.build_requires "make"
+    pkg.build_requires "tar"
+    pkg.build_requires "libstdc++-devel"
+    pkg.build_requires "glibc-devel"
+    pkg.build_requires "expect"
+    pkg.build_requires "dejagnu"
+    pkg.build_requires "tcl"
+    pkg.build_requires "gcc-c++"
+    pkg.requires "glibc-devel"
+  end
+  pkg.requires "binutils"
 
   # don't require this on sles - needed for tests
   unless platform.is_sles?
@@ -20,9 +32,6 @@ component "gcc" do |pkg, settings, platform|
     pkg.build_requires "expect"
     pkg.build_requires "tcl"
   end
-
-  pkg.requires "glibc-devel"
-  pkg.requires "binutils"
 
   pkg.configure do
     [
