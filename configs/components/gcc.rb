@@ -12,10 +12,15 @@ component "gcc" do |pkg, settings, platform|
   pkg.build_requires "tar"
   pkg.build_requires "libstdc++-devel"
   pkg.build_requires "glibc-devel"
-  pkg.build_requires "expect"
-  pkg.build_requires "dejagnu"
-  pkg.build_requires "tcl"
   pkg.build_requires "gcc-c++"
+
+  # don't require this on sles - needed for tests
+  unless platform.is_sles?
+    pkg.build_requires "dejagnu"
+    pkg.build_requires "expect"
+    pkg.build_requires "tcl"
+  end
+
   pkg.requires "glibc-devel"
   pkg.requires "binutils"
 
@@ -40,10 +45,12 @@ component "gcc" do |pkg, settings, platform|
             --disable-libgcj \
             --disable-shared \
             --disable-multilib",
-  "#{platform[:make]}  " ]
+  "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1)" ]
 end
 
   pkg.install do
-    [ "cd ../obj-gcc-build-dir", "make -j2 install" ]
+    [ "cd ../obj-gcc-build-dir",
+      "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1) install"
+    ]
   end
 end
