@@ -5,8 +5,6 @@ component "gcc" do |pkg, settings, platform|
 
 
   if platform.is_deb?
-    pkg.build_requires "debhelper"
-    pkg.build_requires "build-essential"
     pkg.requires "libc6-dev"
   else
     pkg.build_requires "gcc"
