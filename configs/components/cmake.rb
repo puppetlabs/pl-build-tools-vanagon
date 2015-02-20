@@ -4,8 +4,6 @@ component "cmake" do |pkg, settings, platform|
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   if platform.is_deb?
-    pkg.build_requires "debhelper"
-    pkg.build_requires "build-essential"
     pkg.build_requires "libncurses5-dev"
   else
     pkg.build_requires "ncurses-devel"
