@@ -47,7 +47,8 @@ component "cmake" do |pkg, settings, platform|
       "export CC=#{settings[:bindir]}/gcc", "export CXX=#{settings[:bindir]}/g++",
       "export LDFLAGS=-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags",
       "unset DISPLAY",
-      "bin/ctest -V -E ModuleNotices -E CMake.HTML -E CTestTestUpload -j$(shell expr $(shell #{platform[:num_cores]}) + 1)"
+      "bin/ctest -V -E ModuleNotices -E CMake.HTML -E CTestTestUpload -j$(shell expr $(shell #{platform[:num_cores]}) + 1)",
+      "rm #{settings[:prefix]}/share/cmake/Help/generator/*"
     ]
   end
 
