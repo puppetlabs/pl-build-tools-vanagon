@@ -16,12 +16,11 @@ project "pl-gcc" do |proj|
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
-
-
-  # Platform specific
-  proj.setting(:cflags, "-I#{proj.includedir}")
-  proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
-
+  # Platform specific - these flags do not work on AIX
+  unless platform.is_aix?
+    proj.setting(:cflags, "-I#{proj.includedir}")
+    proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
+  end
 
   proj.component "gmp"
   proj.component "mpfr"
