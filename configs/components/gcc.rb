@@ -45,7 +45,15 @@ component "gcc" do |pkg, settings, platform|
    --prefix=#{settings[:prefix]} \
    --disable-nls \
    --enable-languages=c,c++ \
-   --disable-libgcj --disable-shared"
+   --disable-libgcj \
+   --disable-shared  "
+
+  # On the ARM Debian builds, you actually need multilib, so we'll exclude this
+  # exclude flag on ARM.
+  unless platform.architecture =~ /arm/i
+    configure_command << " --disable-multilib"
+  end
+
   # The arm flags were taken from the Debian GCC compile options. (gcc -v)
   # The fpu, float, mode flags are all to ensure the proper floating point
   # type (which is hard) on ARM.
