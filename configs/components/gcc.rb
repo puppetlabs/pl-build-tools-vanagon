@@ -22,7 +22,7 @@ component "gcc" do |pkg, settings, platform|
 
   ##  TESTING
   # In the future we may want to enable the test suite for GCC. If we do we'll
-  # need dejagnu, expect and tcl. Those packages shoudl be available on all RPM
+  # need dejagnu, expect and tcl. Those packages should be available on all RPM
   # systems (other than AIX and SLES10)
 
   pkg.configure do
