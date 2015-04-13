@@ -1,13 +1,18 @@
 component "boost" do |pkg, settings, platform|
-  pkg.version "1.55.0"
-  pkg.md5sum "93780777cfbf999a600f62883bd54b17"
+  pkg.version "1.57.0"
+  pkg.md5sum "25f9a8ac28beeb5ab84aa98510305299"
   # Apparently boost doesn't use dots to version they use underscores....arg
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}_#{pkg.get_version.gsub('.','_')}.tar.gz"
 
   pkg.build_requires "pl-gcc"
 
   pkg.build do
-    [ %Q{echo 'using gcc : 4.8.2 : #{settings[:bindir]}/g++ : <linkflags>"-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64" <cflags>"-fPIC" <cxxflags>"-fPIC" ;' > tools/build/v2/user-config.jam}, "cd tools/build/v2", "PATH=#{settings[:bindir]}:$$PATH" , "./bootstrap.sh --with-toolset=gcc", "./b2 install -d+2 --prefix=#{settings[:prefix]} toolset=gcc --debug-configuration" ]
+    [
+      %Q{echo 'using gcc : 4.8.2 : #{settings[:bindir]}/g++ : <linkflags>"-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64" <cflags>"-fPIC" <cxxflags>"-fPIC" ;' > ~/user-config.jam},
+      "cd tools/build", "PATH=#{settings[:bindir]}:$$PATH",
+      "./bootstrap.sh --with-toolset=gcc",
+      "./b2 install -d+2 --prefix=#{settings[:prefix]} toolset=gcc --debug-configuration"
+    ]
   end
 
   pkg.install do

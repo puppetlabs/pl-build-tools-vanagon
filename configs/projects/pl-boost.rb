@@ -11,13 +11,12 @@ project "pl-boost" do |proj|
   proj.setting(:mandir, File.join(proj.datadir, "man"))
 
   proj.description "Puppet Labs boost"
-  proj.version "1.55.0"
+  proj.version "1.57.0"
   proj.license "Boost and MIT and Python"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
   proj.requires 'pl-gcc'
-  proj.requires 'pl-cmake'
 
   # Platform specific
   proj.setting(:cflags, "-I#{proj.includedir}")
