@@ -24,6 +24,7 @@ component "boost" do |pkg, settings, platform|
     --with-thread \
     --with-locale \
     --with-random \
+    --with-chrono \
     install",
     "chmod 0644 #{settings[:includedir]}/boost/graph/vf2_sub_graph_iso.hpp",
     "chmod 0644 #{settings[:includedir]}/boost/thread/v2/shared_mutex.hpp"
