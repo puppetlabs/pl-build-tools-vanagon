@@ -3,3 +3,4 @@ output/*
 .bundle
 gems
 Gemfile.lock
+*.log
