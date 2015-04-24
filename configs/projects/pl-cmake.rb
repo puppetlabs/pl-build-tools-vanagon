@@ -11,7 +11,7 @@ project "pl-cmake" do |proj|
   proj.setting(:mandir, File.join(proj.datadir, "man"))
 
   proj.description "Puppet Labs cmake"
-  proj.version "3.1.0"
+  proj.version "3.2.2"
   proj.license "Same as cmake"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
