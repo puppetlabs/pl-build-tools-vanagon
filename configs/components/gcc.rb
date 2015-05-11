@@ -3,6 +3,9 @@ component "gcc" do |pkg, settings, platform|
   pkg.md5sum "deca88241c1135e2ff9fa5486ab5957b"
   pkg.url "http://buildsources.delivery.puppetlabs.net/gcc-#{pkg.get_version}.tar.gz"
 
+  # The 10.10 versioning breaks some stuff.
+  pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
+
   pkg.requires "libc6-dev" if platform.is_deb?
   pkg.requires "binutils"
   pkg.build_requires "mktemp" if platform.is_aix?
@@ -80,8 +83,8 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
 
 
    # AIX compilation will fail with this option. I think it's because linking
-   # on AIX is basically crazy.
-   unless platform.is_aix?
+   # on AIX is basically crazy. OSX also fails with this option.
+   unless ( platform.is_aix? or platform.is_osx?)
      configure_command << " --disable-shared"
    end
 
@@ -119,6 +122,13 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
     # attempt to honor any flags passed via environment variables.
     env_setup = %Q{export CFLAGS="${CFLAGS}"; export CXXFLAGS="${CXXFLAGS}" }
   end
+
+  # bootstrap-debug  has to be explicitly passed to configure to suppress 
+  # the bootstrap comparison failures under the more recent clang compilers.
+  if platform.is_osx?
+    configure_command << " --with-build-config=bootstrap-debug"
+  end
+  
 
   pkg.build do
     [
