@@ -83,10 +83,10 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
   # We've abstracted the configure command a bit because of the difference in
   # flags needed for ARM vs x86 and x86_64 vs AIX/ppc
   configure_command << " ../gcc-#{pkg.get_version}/configure \
-   --prefix=#{settings[:prefix]} \
-   --disable-nls \
-   --enable-languages=c,c++ \
-   --disable-libgcj "
+    --prefix=#{settings[:prefix]} \
+    --disable-nls \
+    --enable-languages=c,c++ \
+    --disable-libgcj "
 
   # On the ARM Debian builds, you actually need multilib, so we'll exclude this
   # exclude flag on ARM.
@@ -106,14 +106,14 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
   # type (which is hard) on ARM.
   # The other flags are to instruct GCC on the proper target to look at in
   # libgcc when linking.
-  if  platform.architecture =~ /arm/i
+  if platform.architecture =~ /arm/i
     configure_command << " --with-arch=armv7-a \
-    --with-fpu=vfpv3-d16 \
-    --with-float=hard \
-    --with-mode=thumb \
-    --build=arm-linux-gnueabihf \
-    --host=arm-linux-gnueabihf \
-    --target=arm-linux-gnueabihf"
+      --with-fpu=vfpv3-d16 \
+      --with-float=hard \
+      --with-mode=thumb \
+      --build=arm-linux-gnueabihf \
+      --host=arm-linux-gnueabihf \
+      --target=arm-linux-gnueabihf"
   end
 
   # The target powerpc-ibm-aix6.1.0.0 is used on AIX 6.1 and AIX 7.1 - even by
@@ -141,7 +141,7 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
     env_setup = %Q{export CFLAGS="${CFLAGS}"; export CXXFLAGS="${CXXFLAGS}" }
   end
 
-  # bootstrap-debug has to be explicitly passed to configure to suppress
+  # bootstrap-debug  has to be explicitly passed to configure to suppress
   # the bootstrap comparison failures under the more recent clang compilers.
   if platform.is_osx?
     configure_command << " --with-build-config=bootstrap-debug"
