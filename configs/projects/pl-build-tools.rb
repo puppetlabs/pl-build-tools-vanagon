@@ -1,0 +1,10 @@
+# Contains all common project settings in one place
+proj.setting(:prefix, "/opt/pl-build-tools")
+proj.setting(:sysconfdir, "/etc/pl-build-tools")
+proj.setting(:logdir, "/var/log/pl-build-tools")
+proj.setting(:piddir, "/var/run/pl-build-tools")
+proj.setting(:bindir, File.join(proj.prefix, "bin"))
+proj.setting(:libdir, File.join(proj.prefix, "lib"))
+proj.setting(:includedir, File.join(proj.prefix, "include"))
+proj.setting(:datadir, File.join(proj.prefix, "share"))
+proj.setting(:mandir, File.join(proj.datadir, "man"))
