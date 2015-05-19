@@ -10,7 +10,7 @@ component "gcc" do |pkg, settings, platform|
   pkg.requires "binutils"
   pkg.build_requires "mktemp" if platform.is_aix?
 
-  if platform.is_rpm? and not platform.is_nxos?
+  if platform.is_rpm? && !platform.is_nxos?
     pkg.build_requires "gcc"
     pkg.build_requires "binutils"
     pkg.build_requires "gzip"
