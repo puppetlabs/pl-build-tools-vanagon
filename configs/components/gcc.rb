@@ -6,23 +6,36 @@ component "gcc" do |pkg, settings, platform|
   # The 10.10 versioning breaks some stuff.
   pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
 
-  pkg.requires "libc6-dev" if platform.is_deb?
   pkg.requires "binutils"
-  pkg.build_requires "mktemp" if platform.is_aix?
 
-  if platform.is_rpm? && !platform.is_nxos?
+  if platform.is_deb?
+    pkg.requires "libc6-dev"
+  end
+
+  if platform.is_rpm?
     pkg.build_requires "gcc"
     pkg.build_requires "binutils"
     pkg.build_requires "gzip"
     pkg.build_requires "bzip2"
     pkg.build_requires "make"
     pkg.build_requires "tar"
-    pkg.build_requires "libstdc++-devel"
-    pkg.build_requires "gcc-c++"
-    unless platform.is_aix?
-      pkg.build_requires "gawk"
-      pkg.build_requires "glibc-devel"
+
+    case
+    when platform.is_aix?
       pkg.requires "glibc-devel"
+      pkg.build_requires "mktemp"
+      pkg.build_requires "gawk"
+      pkg.build_requires "libstdc++-devel"
+      pkg.build_requires "gcc-c++"
+      pkg.build_requires "glibc-devel"
+    when platform.is_nxos?
+      pkg.requires "libc6-dev"
+      pkg.build_requires "g++"
+      pkg.build_requires "libstdc++-dev"
+      pkg.build_requires "libc6-dev"
+    else
+      pkg.build_requires "libstdc++-devel"
+      pkg.build_requires "gcc-c++"
     end
   end
 
