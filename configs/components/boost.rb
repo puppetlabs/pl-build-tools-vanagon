@@ -4,7 +4,12 @@ component "boost" do |pkg, settings, platform|
   # Apparently boost doesn't use dots to version they use underscores....arg
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}_#{pkg.get_version.gsub('.','_')}.tar.gz"
 
-  pkg.build_requires "pl-gcc"
+  # This is pretty horrible.  But so is package management on OSX.
+  if platform.is_osx?
+    pkg.build_requires "pl-gcc-4.8.2"
+  else
+    pkg.build_requires "pl-gcc"
+  end
 
   pkg.build do
     [
