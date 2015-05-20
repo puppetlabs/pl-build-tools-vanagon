@@ -9,10 +9,14 @@ component "cmake" do |pkg, settings, platform|
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
-    if platform.is_deb?
-      pkg.build_requires "libncurses5-dev"
-    else
+
+    case
+    when platform.is_nxos?
+      pkg.build_requires "ncurses-dev"
+    when platform.is_rpm?
       pkg.build_requires "ncurses-devel"
+    when platform.is_deb?
+      pkg.build_requires "libncurses5-dev"
     end
   end
 
