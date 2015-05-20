@@ -47,10 +47,16 @@ component "cmake" do |pkg, settings, platform|
     configure_command << " --system-curl"
   end
 
+  pkg.configure do
+    [
+      env_setup,
+      configure_command
+    ]
+  end
+
   pkg.build do
     [ 
       env_setup,
-      configure_command,
       "#{platform[:make]} VERBOSE=1 -j$(shell expr $(shell #{platform[:num_cores]}) + 1)",
       "cd #{settings[:prefix]}; curl -O  http://buildsources.delivery.puppetlabs.net/#{toolchain}.cmake",
       "chmod 644 #{settings[:prefix]}/#{toolchain}.cmake"
