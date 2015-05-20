@@ -3,7 +3,10 @@ component "cmake" do |pkg, settings, platform|
   pkg.md5sum "2da57308071ea98b10253a87d2419281"
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
-  unless platform.is_osx?
+  # This is pretty horrible.  But so is package management on OSX.
+  if platform.is_osx?
+    pkg.build_requires "pl-gcc-4.8.2"
+  else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
     if platform.is_deb?
@@ -12,9 +15,6 @@ component "cmake" do |pkg, settings, platform|
       pkg.build_requires "ncurses-devel"
     end
   end
-
-  # This is pretty horrible.  But so is package management on OSX.
-  pkg.build_requires "pl-gcc-4.8.2" if platform.is_osx?
 
   if platform.is_aix? or platform.is_osx?
     ldflags='LDFLAGS="${LDFLAGS}"'
