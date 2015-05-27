@@ -59,11 +59,12 @@ component "cmake" do |pkg, settings, platform|
   end
 
   pkg.build do
-    [ 
+    [
       env_setup,
+      "export #{ldflags}",
+      "./configure --prefix=#{settings[:prefix]} --docdir=share/doc",
       "#{platform[:make]} VERBOSE=1 -j$(shell expr $(shell #{platform[:num_cores]}) + 1)",
-      "cd #{settings[:prefix]}; curl -O  http://buildsources.delivery.puppetlabs.net/#{toolchain}.cmake",
-      "chmod 644 #{settings[:prefix]}/#{toolchain}.cmake"
+      "chmod 644 #{settings[:prefix]}/pl-build-toolchain.cmake"
     ]
   end
 

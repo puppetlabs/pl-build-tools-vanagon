@@ -24,6 +24,7 @@ project "pl-cmake" do |proj|
   proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
 
 
+  proj.component "toolchain"
   proj.component "cmake"
 
 
