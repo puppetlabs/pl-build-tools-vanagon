@@ -22,6 +22,7 @@ project "pl-autoconf" do |proj|
 
   proj.component "m4"
   proj.component "autoconf"
+  proj.target_repo ""
 
 
   proj.directory proj.prefix

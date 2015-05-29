@@ -25,6 +25,7 @@ project "pl-yaml-cpp" do |proj|
   proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
 
   proj.component "yaml-cpp"
+  proj.target_repo ""
 
   proj.directory proj.prefix
 end
