@@ -24,6 +24,7 @@ project "pl-boost" do |proj|
 
 
   proj.component "boost"
+  proj.target_repo ""
 
   proj.directory proj.prefix
 end

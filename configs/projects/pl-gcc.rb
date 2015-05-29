@@ -27,6 +27,7 @@ project "pl-gcc" do |proj|
   proj.component "mpc"
   proj.component "gcc"
 
+  proj.target_repo ""
 
   proj.directory proj.prefix
 

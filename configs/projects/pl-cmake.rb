@@ -26,6 +26,7 @@ project "pl-cmake" do |proj|
 
   proj.component "toolchain"
   proj.component "cmake"
+  proj.target_repo ""
 
 
   proj.directory proj.prefix

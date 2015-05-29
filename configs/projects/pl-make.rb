@@ -23,6 +23,7 @@ project "pl-make" do |proj|
   proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
 
   proj.component "make"
+  proj.target_repo ""
 
   proj.directory proj.prefix
 end
