@@ -1,0 +1,13 @@
+--- a/ld/ldlang.c 2014-07-29 13:59:34.000000000 -0700
++++ b/ld/ldlang.c	2014-07-29 14:01:23.000000000 -0700
+@@ -7800,9 +7800,7 @@
+   if (link_info.version_info != NULL
+       && (name[0] == '\0' || link_info.version_info->name[0] == '\0'))
+     {
+-      einfo (_("%X%P: anonymous version tag cannot be combined"
+-	       " with other version tags\n"));
+-      free (version);
++      version->vernum = 0;
+       return;
+     }
+ 
