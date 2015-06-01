@@ -10,7 +10,6 @@ component "binutils" do |pkg, settings, platform|
 
   pkg.configure do
     "#{env} ./configure \
-      --target=i386-linux \
       --prefix=#{settings[:prefix]} \
       --disable-nls \
       -v"
