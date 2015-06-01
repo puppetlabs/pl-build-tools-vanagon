@@ -1,0 +1,13 @@
+--- a/include/elf/common.h	Tue Sep  4 05:53:47 2012
++++ b/include/elf/common.h	Wed Oct 16 21:48:40 2013
+@@ -956,8 +956,10 @@
+ #define AT_SUN_LDNAME   2006    /* String giving name of dynamic linker.  */
+ #define AT_SUN_LPAGESZ  2007    /* Large pagesize.   */
+ #define AT_SUN_PLATFORM 2008    /* Platform name string.  */
++#ifndef AT_SUN_HWCAP
+ #define AT_SUN_HWCAP    2009	/* Machine dependent hints about
+ 				   processor capabilities.  */
++#endif
+ #define AT_SUN_IFLUSH   2010    /* Should flush icache? */
+ #define AT_SUN_CPU      2011    /* CPU name string.  */
+ #define AT_SUN_EMUL_ENTRY 2012	/* COFF entry point address.  */
