@@ -120,16 +120,21 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
   # IBM in the way they compile GCC in their Linux Toolbox for AIX. Most of the
   # configure options used on AIX were directly pilfered from their
   # configuration of gcc.
+  # On AIX 5.3 it's powerpc-ibm-aix5.3.0.0
   if platform.is_aix?
+    if platform.os_version =~ /5.3/
+      target_platform = "powerpc-ibm-aix5.3.0.0"
+    else
+      target_platform = "powerpc-ibm-aix6.1.0.0"
+    end
     configure_command << " --with-as=/usr/bin/as \
     --with-ld=/usr/bin/ld \
     --enable-threads \
     --enable-version-specific-runtime-libs \
-    --host=powerpc-ibm-aix6.1.0.0 \
-    --target=powerpc-ibm-aix6.1.0.0 \
-    --build=powerpc-ibm-aix6.1.0.0 \
+    --host=#{target_platform} \
+    --target=#{target_platform} \
+    --build=#{target_platform} \
     --disable-libjava-multilib"
-
 
     # AIX can't use the exact flags that linux does, but we should still
     # attempt to honor any flags passed via environment variables.
