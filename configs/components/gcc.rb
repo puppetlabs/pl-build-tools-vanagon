@@ -95,11 +95,11 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
   end
 
 
-   # AIX compilation will fail with this option. I think it's because linking
-   # on AIX is basically crazy. OSX also fails with this option.
-   unless ( platform.is_aix? or platform.is_osx?)
-     configure_command << " --disable-shared"
-   end
+  # AIX compilation will fail with this option. I think it's because linking
+  # on AIX is basically crazy. OSX also fails with this option.
+  unless ( platform.is_aix? or platform.is_osx?)
+    configure_command << " --disable-shared"
+  end
 
   # The arm flags were taken from the Debian GCC compile options. (gcc -v)
   # The fpu, float, mode flags are all to ensure the proper floating point
@@ -136,12 +136,11 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
     env_setup = %Q{export CFLAGS="${CFLAGS}"; export CXXFLAGS="${CXXFLAGS}" }
   end
 
-  # bootstrap-debug  has to be explicitly passed to configure to suppress 
+  # bootstrap-debug has to be explicitly passed to configure to suppress
   # the bootstrap comparison failures under the more recent clang compilers.
   if platform.is_osx?
     configure_command << " --with-build-config=bootstrap-debug"
   end
-  
 
   pkg.build do
     [
