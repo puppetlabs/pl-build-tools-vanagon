@@ -11,7 +11,7 @@ platform "aix-6.1-ppc" do |plat|
   plat.tar "/opt/freeware/bin/tar"
   plat.rpmbuild "/usr/bin/rpm"
 
-  plat.install_build_dependencies_with "echo Please ensure the following packages are installed:"
+  plat.install_build_dependencies_with "# Please ensure the following packages are installed:"
   # To use vanagon, mktemp is needed, so just leave this line in.
   plat.aix_package 'http://int-resources.corp.puppetlabs.net/AIX_MIRROR', 'mktemp-1.7-1.aix5.1.ppc.rpm'
 
