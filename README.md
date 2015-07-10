@@ -34,6 +34,22 @@ To build a pl-gcc package for Debian 8, Jessie 64bit, first verify the existence
 
 This will access and configure the virtualization engine defined in `configs/platforms/debian-8-amd64.rb`. It will then take the build instructions defined in `configs/projects/pl-gcc.rb`, as well as any dependencies that are defined in `configs/components` that are pulled in for the pl-gcc project. It will then follow the instructions, building out first any needed dependencies, then the final project. The needed files will then be packaged up in a package compatable with dpkg standards, and make it available locally.
 
+## Building with jenkins
+To save time, you can also kick off a build using [Jenkins](http://jenkins-staging.delivery.puppetlabs.net/view/Build%20Toolchain/job/pl-build-tools_dynamic/). The job you want is hosted on jenkins-staging, so it's really slow (as of 2015-07-10). Be patient. This job will build your packages, ship them to builds.delivery.puppetlabs.net, and create repos and repo configs for you.
+
+#### PLATFORMS
+These are the platforms you'll build your package for. A default list has been provided for you, but there is no guarantee that it will be up to date, or will build all that platforms you care about. Make sure you edit this list to contain the build targets you want.
+
+#### PROJECT
+This is the project you want to build. It corresponds to the project file in `configs/projects` in your repo.
+
+#### REPO
+The repo where your vanagon project lives. Although this job was created to make building pl-build-tools-vanagon projects simpler, it can be used to build any vanagon project.
+
+#### BRANCH
+This is the branch you want to build from. This is especially useful when building a topic branch for testing. If you are building from a branch, specify `origin/branch_name` for clarity. If you are building from a tag, use `refs/tags/tag_name`. If you are building from a sha reference, use `sha`.
+
+
 ## Building for AIX
 AIX is a special snowflake.
 
@@ -69,7 +85,7 @@ definition), you *should* be able to build GCC 4.8.2 for AIX 6.1 and 7.1. AIX
 5.3 will likely be a more involved and difficult process and we just haven't
 made it there yet.
 
-# Shipping packages to builds.puppetlabs.lan/pl-build-tools
+# Shipping packages to builds.delivery.puppetlabs.net/pl-build-tools
 This is meant for packages in active development that require testing.
 
 
@@ -77,9 +93,9 @@ To ship a built archive, run
 
     bundle exec ship
 
-This will ship packages to builds.puppetlabs.lan/pl-build-tools, and can be found under the sha associated with the state of the repo when the build was kicked off.
+This will ship packages to builds.delivery.puppetlabs.net/pl-build-tools, and can be found under the sha associated with the state of the repo when the build was kicked off.
 
-To make repos available on builds.puppetlabs.lan/pl-build-tools in order to help make testing easier, run
+To make repos available on builds.delivery.puppetlabs.net/pl-build-tools in order to help make testing easier, run
 
     bundle exec repo
 
@@ -91,15 +107,15 @@ If you are only shipping rpm packages, run
 
     bundle exec repo rpm
 
-This will create repos and repo_configs to allow you to more easily install and test packages you have made available on builds.puppetlabs.lan.
+This will create repos and repo_configs to allow you to more easily install and test packages you have made available on builds.delivery.puppetlabs.net.
 
 # Shipping packages to pl-build-tools.delivery.puppetlabs.net
-This is meant for packages that have been tested, and are ready for a final ship. The packages to be shipped must already be available on builds.puppetlabs.lan.
+This is meant for packages that have been tested, and are ready for a final ship. The packages to be shipped must already be available on builds.delivery.puppetlabs.net.
 
     rake package:implode package:bootstrap
     rake pl:jenkins:uber_ship
 
-This will download packages from builds.puppetlabs.lan, sign them, and ship them to the appropriate repo on pl-build-tools.delivery.puppetlabs.net
+This will download packages from builds.delivery.puppetlabs.net, sign them, and ship them to the appropriate repo on pl-build-tools.delivery.puppetlabs.net. This job requires the RE signing key.
 
 # Adding new platforms
 New platforms require a new platform entry in configs/platforms. Generally, this is all that needs to happen for a new platform, especially if it's a new version of a platform that already exists. However, if it's a new platform entirely, not just a new version, ther will likely be automation changes that are required. Make sure you know how the package management system on the new platform works, and check the vanagon repo to see if there are any vanagon changes required for this new plaform. If we've done things well, you should receive fairly explicit error messages about where the vanagon automation needs to be updated
