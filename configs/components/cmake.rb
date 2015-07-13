@@ -1,6 +1,6 @@
 component "cmake" do |pkg, settings, platform|
-  pkg.version "3.2.2"
-  pkg.md5sum "2da57308071ea98b10253a87d2419281"
+  pkg.version "3.2.3"
+  pkg.md5sum "d51c92bf66b1e9d4fe2b7aaedd51377c"
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   # This is pretty horrible.  But so is package management on OSX.
