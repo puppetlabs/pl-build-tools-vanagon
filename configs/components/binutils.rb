@@ -19,7 +19,9 @@ component "binutils" do |pkg, settings, platform|
     "#{env} #{platform[:make]}"
   end
 
+  # If we don't remove the info files this package conflicts with gcc builds
   pkg.install do
-    "#{env} #{platform[:make]} install"
+    ["#{env} #{platform[:make]} install",
+     "rm -rf #{settings[:prefix]}/share/info"]
   end
 end
