@@ -6,22 +6,22 @@ component "binutils" do |pkg, settings, platform|
   pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-common.h.patch"
   pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-ldlang.c.patch"
 
-  env = "PATH=#{settings[:bindir]}:$$PATH"
+  pkg.environment "PATH" => "#{settings[:bindir]}:$$PATH"
 
   pkg.configure do
-    "#{env} ./configure \
+    "./configure \
       --prefix=#{settings[:prefix]} \
       --disable-nls \
       -v"
   end
 
   pkg.build do
-    "#{env} #{platform[:make]}"
+    "#{platform[:make]}"
   end
 
   # If we don't remove the info files this package conflicts with gcc builds
   pkg.install do
-    ["#{env} #{platform[:make]} install",
+    ["#{platform[:make]} install",
      "rm -rf #{settings[:prefix]}/share/info"]
   end
 end
