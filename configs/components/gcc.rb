@@ -6,7 +6,7 @@ component "gcc" do |pkg, settings, platform|
   # The 10.10 versioning breaks some stuff.
   pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
 
-  pkg.requires "binutils"
+  pkg.requires "binutils" unless platform.is_solaris?
 
   if platform.is_deb?
     pkg.requires "libc6-dev"
@@ -37,6 +37,8 @@ component "gcc" do |pkg, settings, platform|
       pkg.build_requires "libstdc++-devel"
       pkg.build_requires "gcc-c++"
     end
+  elsif platform.is_solaris?
+    pkg.build_requires 'binutils'
   end
 
   ##  TESTING
@@ -56,11 +58,15 @@ component "gcc" do |pkg, settings, platform|
   # Initialize an empty configure_command string
   configure_command = ""
 
-  # We set -fPIC to ensure that our 64 bit builds can correctly link and compile.
-  # We enable it on both 32-bit and 64-bit builds for consistency.
-  env_setup =  %Q{export CFLAGS="${CFLAGS} -fPIC"; \
-export CXXFLAGS="${CXXFLAGS} -fPIC";\
-export CFLAGS_FOR_TARGET="-fPIC"  }
+  unless platform.is_solaris?
+    # We set -fPIC to ensure that our 64 bit builds can correctly link and compile.
+    # We enable it on both 32-bit and 64-bit builds for consistency.
+    env_setup =  %Q{export CFLAGS="${CFLAGS} -fPIC"; \
+      export CXXFLAGS="${CXXFLAGS} -fPIC";\
+      export CFLAGS_FOR_TARGET="-fPIC"  }
+  else
+    env_setup = "PATH=#{settings[:bindir]}:/usr/ccs/bin:/usr/sfw/bin:$$PATH; CC=/usr/sfw/bin/gcc; CXX=/usr/sfw/bin/g++; export PATH; export CC; export CXX"
+  end
 
 
   #  Some notes on AIX.
@@ -147,6 +153,14 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
     configure_command << " --with-build-config=bootstrap-debug"
   end
 
+  if platform.is_solaris?
+    configure_command << " --target=#{settings[:platform_triple]} \
+      --with-gnu-as \
+      --with-as=#{settings[:bindir]}/as \
+      --without-gnu-ld \
+      --with-ld=/usr/ccs/bin/ld -v"
+  end
+
   pkg.build do
     [
       env_setup,
@@ -160,7 +174,11 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
 
   pkg.install do
     [ "cd ../obj-gcc-build-dir",
-      "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1) install"
+      env_setup,
+      "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1) install",
+      "cd $(workdir)",
+      # This cleanup is necessary because of space constraints on some templates
+      "rm -rf obj-gcc-build-dir"
     ]
   end
 end

@@ -18,6 +18,9 @@ project "pl-gcc" do |proj|
   proj.component "mpfr"
   proj.component "mpc"
   proj.component "gcc"
+  if platform.is_solaris?
+    proj.component "binutils"
+  end
 
   proj.target_repo ""
 
