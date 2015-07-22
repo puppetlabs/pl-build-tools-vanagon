@@ -75,7 +75,8 @@ component "cmake" do |pkg, settings, platform|
   pkg.install do
     [
       "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1) install",
+      # Here we replace all files with spaces in them with underscores because solaris 10 absolutely can't have files in packages with spaces
+      %Q[find #{settings[:basedir]} -type f | grep ' ' | while read sfile; do mv "$$sfile" "$${sfile// /_}"; done]
     ]
   end
-
 end
