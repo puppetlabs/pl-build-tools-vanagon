@@ -6,7 +6,7 @@ component "gcc" do |pkg, settings, platform|
   # The 10.10 versioning breaks some stuff.
   pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
 
-  pkg.requires "binutils"
+  pkg.requires "binutils" unless platform.is_solaris?
 
   if platform.is_deb?
     pkg.requires "libc6-dev"
@@ -37,6 +37,8 @@ component "gcc" do |pkg, settings, platform|
       pkg.build_requires "libstdc++-devel"
       pkg.build_requires "gcc-c++"
     end
+  elsif platform.is_solaris?
+    pkg.build_requires 'binutils'
   end
 
   ##  TESTING
@@ -56,11 +58,15 @@ component "gcc" do |pkg, settings, platform|
   # Initialize an empty configure_command string
   configure_command = ""
 
-  # We set -fPIC to ensure that our 64 bit builds can correctly link and compile.
-  # We enable it on both 32-bit and 64-bit builds for consistency.
-  env_setup =  %Q{export CFLAGS="${CFLAGS} -fPIC"; \
-export CXXFLAGS="${CXXFLAGS} -fPIC";\
-export CFLAGS_FOR_TARGET="-fPIC"  }
+  unless platform.is_solaris?
+    # We set -fPIC to ensure that our 64 bit builds can correctly link and compile.
+    # We enable it on both 32-bit and 64-bit builds for consistency.
+    env_setup =  %Q{export CFLAGS="${CFLAGS} -fPIC"; \
+      export CXXFLAGS="${CXXFLAGS} -fPIC";\
+      export CFLAGS_FOR_TARGET="-fPIC"  }
+  else
+    env_setup = "PATH=#{settings[:bindir]}:/usr/ccs/bin:/usr/sfw/bin:$$PATH; CC=/usr/sfw/bin/gcc; CXX=/usr/sfw/bin/g++; export PATH; export CC; export CXX"
+  end
 
 
   #  Some notes on AIX.
@@ -83,10 +89,10 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
   # We've abstracted the configure command a bit because of the difference in
   # flags needed for ARM vs x86 and x86_64 vs AIX/ppc
   configure_command << " ../gcc-#{pkg.get_version}/configure \
-   --prefix=#{settings[:prefix]} \
-   --disable-nls \
-   --enable-languages=c,c++ \
-   --disable-libgcj "
+    --prefix=#{settings[:prefix]} \
+    --disable-nls \
+    --enable-languages=c,c++ \
+    --disable-libgcj "
 
   # On the ARM Debian builds, you actually need multilib, so we'll exclude this
   # exclude flag on ARM.
@@ -106,14 +112,14 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
   # type (which is hard) on ARM.
   # The other flags are to instruct GCC on the proper target to look at in
   # libgcc when linking.
-  if  platform.architecture =~ /arm/i
+  if platform.architecture =~ /arm/i
     configure_command << " --with-arch=armv7-a \
-    --with-fpu=vfpv3-d16 \
-    --with-float=hard \
-    --with-mode=thumb \
-    --build=arm-linux-gnueabihf \
-    --host=arm-linux-gnueabihf \
-    --target=arm-linux-gnueabihf"
+      --with-fpu=vfpv3-d16 \
+      --with-float=hard \
+      --with-mode=thumb \
+      --build=arm-linux-gnueabihf \
+      --host=arm-linux-gnueabihf \
+      --target=arm-linux-gnueabihf"
   end
 
   # The target powerpc-ibm-aix6.1.0.0 is used on AIX 6.1 and AIX 7.1 - even by
@@ -141,10 +147,18 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
     env_setup = %Q{export CFLAGS="${CFLAGS}"; export CXXFLAGS="${CXXFLAGS}" }
   end
 
-  # bootstrap-debug has to be explicitly passed to configure to suppress
+  # bootstrap-debug  has to be explicitly passed to configure to suppress
   # the bootstrap comparison failures under the more recent clang compilers.
   if platform.is_osx?
     configure_command << " --with-build-config=bootstrap-debug"
+  end
+
+  if platform.is_solaris?
+    configure_command << " --target=#{settings[:platform_triple]} \
+      --with-gnu-as \
+      --with-as=#{settings[:bindir]}/as \
+      --without-gnu-ld \
+      --with-ld=/usr/ccs/bin/ld -v"
   end
 
   pkg.build do
@@ -160,7 +174,11 @@ export CFLAGS_FOR_TARGET="-fPIC"  }
 
   pkg.install do
     [ "cd ../obj-gcc-build-dir",
-      "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1) install"
+      env_setup,
+      "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1) install",
+      "cd $(workdir)",
+      # This cleanup is necessary because of space constraints on some templates
+      "rm -rf obj-gcc-build-dir"
     ]
   end
 end

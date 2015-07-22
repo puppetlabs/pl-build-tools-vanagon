@@ -1,14 +1,6 @@
 project "pl-gcc" do |proj|
   # Project level settings our components will care about
-  proj.setting(:prefix, "/opt/pl-build-tools")
-  proj.setting(:sysconfdir, "/etc/pl-build-tools")
-  proj.setting(:logdir, "/var/log/pl-build-tools")
-  proj.setting(:piddir, "/var/run/pl-build-tools")
-  proj.setting(:bindir, File.join(proj.prefix, "bin"))
-  proj.setting(:libdir, File.join(proj.prefix, "lib"))
-  proj.setting(:includedir, File.join(proj.prefix, "include"))
-  proj.setting(:datadir, File.join(proj.prefix, "share"))
-  proj.setting(:mandir, File.join(proj.datadir, "man"))
+  instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Labs GCC"
   proj.version "4.8.2"
@@ -26,6 +18,9 @@ project "pl-gcc" do |proj|
   proj.component "mpfr"
   proj.component "mpc"
   proj.component "gcc"
+  if platform.is_solaris?
+    proj.component "binutils"
+  end
 
   proj.target_repo ""
 
