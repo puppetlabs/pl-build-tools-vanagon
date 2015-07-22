@@ -21,9 +21,9 @@ component "cmake" do |pkg, settings, platform|
   end
 
   if platform.is_aix? or platform.is_osx?
-    ldflags='LDFLAGS="${LDFLAGS}"'
+    pkg.environment "LDFLAGS" => "$${LDFLAGS}"
   else
-    ldflags="LDFLAGS=-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags"
+    pkg.environment "LDFLAGS" => "-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags"
   end
 
   # Different toolchains for different target platforms.
@@ -33,12 +33,9 @@ component "cmake" do |pkg, settings, platform|
     toolchain="pl-build-toolchain"
   end
 
-  # Initialize an empty env_setup string
-  env_setup = ""
-
-  env_setup << %Q{export PATH=$$PATH:/usr/local/bin; \
-  export CC=#{settings[:bindir]}/gcc; export CXX=#{settings[:bindir]}/g++; \
-  export #{ldflags}}
+  pkg.environment "PATH" => "$$PATH:/usr/local/bin"
+  pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
+  pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
 
   # Initialize an empty configure_command string
   configure_command  = ""
@@ -52,16 +49,11 @@ component "cmake" do |pkg, settings, platform|
   end
 
   pkg.configure do
-    [
-      env_setup,
-      configure_command
-    ]
+    configure_command
   end
 
   pkg.build do
     [
-      env_setup,
-      "export #{ldflags}",
       "./configure --prefix=#{settings[:prefix]} --docdir=share/doc",
       "#{platform[:make]} VERBOSE=1 -j$(shell expr $(shell #{platform[:num_cores]}) + 1)",
       "chmod 644 #{settings[:prefix]}/pl-build-toolchain.cmake"
