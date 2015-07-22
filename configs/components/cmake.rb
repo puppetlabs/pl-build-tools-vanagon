@@ -6,6 +6,17 @@ component "cmake" do |pkg, settings, platform|
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
     pkg.build_requires "pl-gcc-4.8.2"
+  elsif platform.name =~ /solaris-10/
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWarc.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWgnu-idn.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWgpch.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWgtar.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWhea.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWlibm.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWwgetu.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWxcu4.pkg.gz'
+
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.i386.pkg.gz'
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
@@ -20,10 +31,10 @@ component "cmake" do |pkg, settings, platform|
     end
   end
 
-  if platform.is_aix? or platform.is_osx?
-    ldflags='LDFLAGS="${LDFLAGS}"'
+  if platform.is_aix? or platform.is_osx? or platform.is_solaris?
+    pkg.environment "LDFLAGS" => "$${LDFLAGS}"
   else
-    ldflags="LDFLAGS=-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags"
+    pkg.environment "LDFLAGS" => "-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags"
   end
 
   # Different toolchains for different target platforms.
@@ -33,12 +44,10 @@ component "cmake" do |pkg, settings, platform|
     toolchain="pl-build-toolchain"
   end
 
-  # Initialize an empty env_setup string
-  env_setup = ""
-
-  env_setup << %Q{export PATH=$$PATH:/usr/local/bin; \
-  export CC=#{settings[:bindir]}/gcc; export CXX=#{settings[:bindir]}/g++; \
-  export #{ldflags}}
+  pkg.environment "PATH" => "$$PATH:/usr/local/bin"
+  pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
+  pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
+  pkg.environment "MAKE" => platform.make
 
   # Initialize an empty configure_command string
   configure_command  = ""
@@ -52,16 +61,11 @@ component "cmake" do |pkg, settings, platform|
   end
 
   pkg.configure do
-    [
-      env_setup,
-      configure_command
-    ]
+    configure_command
   end
 
   pkg.build do
     [
-      env_setup,
-      "export #{ldflags}",
       "./configure --prefix=#{settings[:prefix]} --docdir=share/doc",
       "#{platform[:make]} VERBOSE=1 -j$(shell expr $(shell #{platform[:num_cores]}) + 1)",
       "chmod 644 #{settings[:prefix]}/pl-build-toolchain.cmake"
@@ -71,7 +75,8 @@ component "cmake" do |pkg, settings, platform|
   pkg.install do
     [
       "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1) install",
+      # Here we replace all files with spaces in them with underscores because solaris 10 absolutely can't have files in packages with spaces
+      %Q[find #{settings[:basedir]} -type f | grep ' ' | while read sfile; do mv "$$sfile" "$${sfile// /_}"; done]
     ]
   end
-
 end
