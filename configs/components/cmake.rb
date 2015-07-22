@@ -6,6 +6,17 @@ component "cmake" do |pkg, settings, platform|
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
     pkg.build_requires "pl-gcc-4.8.2"
+  elsif platform.name =~ /solaris-10/
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWarc.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWgnu-idn.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWgpch.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWgtar.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWhea.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWlibm.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWwgetu.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWxcu4.pkg.gz'
+
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.i386.pkg.gz'
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
@@ -20,7 +31,7 @@ component "cmake" do |pkg, settings, platform|
     end
   end
 
-  if platform.is_aix? or platform.is_osx?
+  if platform.is_aix? or platform.is_osx? or platform.is_solaris?
     pkg.environment "LDFLAGS" => "$${LDFLAGS}"
   else
     pkg.environment "LDFLAGS" => "-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags"
@@ -36,6 +47,7 @@ component "cmake" do |pkg, settings, platform|
   pkg.environment "PATH" => "$$PATH:/usr/local/bin"
   pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
   pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
+  pkg.environment "MAKE" => platform.make
 
   # Initialize an empty configure_command string
   configure_command  = ""
