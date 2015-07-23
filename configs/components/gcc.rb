@@ -96,14 +96,14 @@ component "gcc" do |pkg, settings, platform|
 
   # On the ARM Debian builds, you actually need multilib, so we'll exclude this
   # exclude flag on ARM.
-  unless platform.architecture =~ /arm/i
+  unless platform.architecture =~ /arm/i or platform.is_solaris?
     configure_command << " --disable-multilib"
   end
 
 
   # AIX compilation will fail with this option. I think it's because linking
   # on AIX is basically crazy. OSX also fails with this option.
-  unless ( platform.is_aix? or platform.is_osx?)
+  unless ( platform.is_aix? or platform.is_osx? or platform.is_solaris?)
     configure_command << " --disable-shared"
   end
 
