@@ -22,9 +22,9 @@ component "yaml-cpp" do |pkg, settings, platform|
 
   # Different toolchains for different target platforms.
   if platform.is_osx?
-    toolchain="pl-build-toolchain-darwin"
+    toolchain = "pl-build-toolchain-darwin"
   else
-    toolchain="pl-build-toolchain"
+    toolchain = "pl-build-toolchain"
   end
 
   pkg.build do
