@@ -9,16 +9,6 @@ component "binutils" do |pkg, settings, platform|
   if platform.is_solaris?
     pkg.environment "PATH" => "#{settings[:bindir]}:/usr/ccs/bin:/opt/csw/bin:$$PATH"
     target = "--target=#{settings[:platform_triple]}"
-    if platform.os_version == '10'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWarc.pkg.gz'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWgnu-idn.pkg.gz'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWgpch.pkg.gz'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWgtar.pkg.gz'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWhea.pkg.gz'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWlibm.pkg.gz'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWwgetu.pkg.gz'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends/SUNWxcu4.pkg.gz'
-    end
   else
     pkg.environment "PATH" => "#{settings[:bindir]}:$$PATH"
     target = ""
