@@ -42,7 +42,7 @@ component "yaml-cpp" do |pkg, settings, platform|
       "cd ../",
       "rm -rf build-static",
       "mkdir build-static",
-      "cd build-static", "#{settings[:prefix]}/bin/cmake \
+      "cd build-static", "#{settings[:bindir]}/cmake \
     -DCMAKE_TOOLCHAIN_FILE=#{settings[:prefix]}/#{toolchain}.cmake \
     -DCMAKE_INSTALL_PREFIX=#{settings[:prefix]} \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
