@@ -8,6 +8,11 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.build_requires "pl-gcc-4.8.2"
     pkg.build_requires "pl-cmake-3.2.2"
     pkg.build_requires "pl-boost-1.57.0"
+  elsif platform.is_solaris?
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.i386.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-boost-1.57.0.i386.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-cmake-3.2.3.i386.pkg.gz'
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
