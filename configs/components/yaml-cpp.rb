@@ -8,6 +8,11 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.build_requires "pl-gcc-4.8.2"
     pkg.build_requires "pl-cmake-3.2.2"
     pkg.build_requires "pl-boost-1.57.0"
+  elsif platform.is_solaris?
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.i386.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-boost-1.57.0.i386.pkg.gz'
+    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-cmake-3.2.3.i386.pkg.gz'
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
@@ -17,9 +22,9 @@ component "yaml-cpp" do |pkg, settings, platform|
 
   # Different toolchains for different target platforms.
   if platform.is_osx?
-    toolchain="pl-build-toolchain-darwin"
+    toolchain = "pl-build-toolchain-darwin"
   else
-    toolchain="pl-build-toolchain"
+    toolchain = "pl-build-toolchain"
   end
 
   pkg.build do
@@ -37,7 +42,7 @@ component "yaml-cpp" do |pkg, settings, platform|
       "cd ../",
       "rm -rf build-static",
       "mkdir build-static",
-      "cd build-static", "#{settings[:prefix]}/bin/cmake \
+      "cd build-static", "#{settings[:bindir]}/cmake \
     -DCMAKE_TOOLCHAIN_FILE=#{settings[:prefix]}/#{toolchain}.cmake \
     -DCMAKE_INSTALL_PREFIX=#{settings[:prefix]} \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
