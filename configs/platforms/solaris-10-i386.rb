@@ -7,7 +7,10 @@ platform "solaris-10-i386" do |plat|
   plat.patch "/usr/bin/gpatch"
   plat.num_cores "/usr/bin/kstat cpu_info | /opt/csw/bin/ggrep -E '[[:space:]]+core_id[[:space:]]' | wc -l"
 
-  plat.provision_with 'echo "# Write the noask file to a temporary directory
+  base_pkgs = ['arc', 'gnu-idn', 'gpch', 'gtar', 'hea', 'libm', 'wgetu', 'xcu4']
+  base_url = 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends'
+
+  plat.provision_with %Q[echo "# Write the noask file to a temporary directory
 # please see man -s 4 admin for details about this file:
 # http://www.opensolarisforum.org/man/man4/admin.html
 #
@@ -34,9 +37,14 @@ conflict=nocheck
 # We have no action scripts.  Do not check for them.
 action=nocheck
 # Install to the default base directory.
-basedir=default" > vanagon-noask;
+basedir=default" > /var/tmp/vanagon-noask;
   pkgadd -n -a vanagon-noask -G -d http://get.opencsw.org/now all;
   /opt/csw/bin/pkgutil -y -i curl rsync gmake pkgconfig ggrep;
   ln -sf /opt/csw/bin/rsync /usr/bin/rsync;
-  ntpdate pool.ntp.org'
+
+  # Install base build dependencies
+  for pkg in #{base_pkgs.map {|pkg| "SUNW#{pkg}.pkg.gz" }.join(' ')}; do \
+  tmpdir=$(mktemp -p /var/tmp -d); (cd ${tmpdir} && curl -O #{base_url}/${pkg} && gunzip -c ${pkg} | pkgadd -d /dev/stdin -a /var/tmp/vanagon-noask all); \
+  done
+  ntpdate pool.ntp.org]
 end
