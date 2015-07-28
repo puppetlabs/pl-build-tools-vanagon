@@ -107,8 +107,8 @@ component "gcc" do |pkg, settings, platform|
 
 
   # AIX compilation will fail with this option. I think it's because linking
-  # on AIX is basically crazy. OSX also fails with this option.
-  unless ( platform.is_aix? or platform.is_osx? or platform.is_solaris?)
+  # on AIX is basically crazy. OSX also fails with this option. So does solaris.
+  if platform.is_linux?
     configure_command << " --disable-shared"
   end
 
