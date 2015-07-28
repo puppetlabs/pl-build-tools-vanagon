@@ -19,6 +19,10 @@ project "pl-gcc" do |proj|
   proj.component "mpc"
   proj.component "gcc"
 
+  if platform.is_solaris? && platform.architecture.downcase == 'sparc'
+    proj.component "solaris-#{platform.os_version}-sparc-sysroot"
+  end
+
   proj.target_repo ""
 
   proj.directory proj.prefix

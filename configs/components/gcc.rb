@@ -39,7 +39,10 @@ component "gcc" do |pkg, settings, platform|
     end
   elsif platform.is_solaris?
     if platform.os_version == '10'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
+      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
+    end
+    if platform.architecture.downcase == 'sparc'
+      pkg.build_requires "solaris-#{platform.os_version}-sparc-sysroot"
     end
   end
 
@@ -161,6 +164,10 @@ component "gcc" do |pkg, settings, platform|
       --with-as=#{settings[:bindir]}/as \
       --without-gnu-ld \
       --with-ld=/usr/ccs/bin/ld -v"
+
+      if platform.architecture.downcase == 'sparc'
+        configure_command << " --with-sysroot=#{settings[:prefix]}/sysroot"
+      end
   end
 
   pkg.build do
