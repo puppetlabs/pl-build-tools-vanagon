@@ -39,7 +39,10 @@ component "gcc" do |pkg, settings, platform|
     end
   elsif platform.is_solaris?
     if platform.os_version == '10'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
+      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
+    end
+    if platform.architecture.downcase == 'sparc'
+      pkg.build_requires "solaris-#{platform.os_version}-sparc-sysroot"
     end
   end
 
@@ -60,14 +63,23 @@ component "gcc" do |pkg, settings, platform|
   # Initialize an empty configure_command string
   configure_command = ""
 
-  unless platform.is_solaris?
+  # Environment declarations
+  if platform.is_aix?
+    # AIX can't use the exact flags that linux does, but we should still
+    # attempt to honor any flags passed via environment variables.
+    pkg.environment "CFLAGS"   => "$${CFLAGS}"
+    pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
+  elsif platform.is_solaris?
+    # Solaris needs an augmented path to find binutils correctly and to setup CC and CXX
+    pkg.environment "PATH"  => "#{File.join(settings[:basedir], 'bin')}:#{settings[:bindir]}:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
+    pkg.environment "CC"    => "/usr/sfw/bin/gcc"
+    pkg.environment "CXX"   => "/usr/sfw/bin/g++"
+  else
     # We set -fPIC to ensure that our 64 bit builds can correctly link and compile.
     # We enable it on both 32-bit and 64-bit builds for consistency.
-    env_setup =  %Q{export CFLAGS="${CFLAGS} -fPIC"; \
-      export CXXFLAGS="${CXXFLAGS} -fPIC";\
-      export CFLAGS_FOR_TARGET="-fPIC"  }
-  else
-    env_setup = "PATH=#{settings[:bindir]}:/usr/ccs/bin:/usr/sfw/bin:$$PATH; CC=/usr/sfw/bin/gcc; CXX=/usr/sfw/bin/g++; export PATH; export CC; export CXX"
+    pkg.environment "CFLAGS" => "$${CFLAGS} -fPIC"
+    pkg.environment "CXXFLAGS" => "$${CXXFLAGS} -fPIC"
+    pkg.environment "CFLAGS_FOR_TARGET" => "-fPIC"
   end
 
 
@@ -104,8 +116,8 @@ component "gcc" do |pkg, settings, platform|
 
 
   # AIX compilation will fail with this option. I think it's because linking
-  # on AIX is basically crazy. OSX also fails with this option.
-  unless ( platform.is_aix? or platform.is_osx? or platform.is_solaris?)
+  # on AIX is basically crazy. OSX also fails with this option. So does solaris.
+  if platform.is_linux?
     configure_command << " --disable-shared"
   end
 
@@ -143,10 +155,6 @@ component "gcc" do |pkg, settings, platform|
     --target=#{target_platform} \
     --build=#{target_platform} \
     --disable-libjava-multilib"
-
-    # AIX can't use the exact flags that linux does, but we should still
-    # attempt to honor any flags passed via environment variables.
-    env_setup = %Q{export CFLAGS="${CFLAGS}"; export CXXFLAGS="${CXXFLAGS}" }
   end
 
   # bootstrap-debug  has to be explicitly passed to configure to suppress
@@ -161,26 +169,31 @@ component "gcc" do |pkg, settings, platform|
       --with-as=#{settings[:bindir]}/as \
       --without-gnu-ld \
       --with-ld=/usr/ccs/bin/ld -v"
+
+      if platform.architecture.downcase == 'sparc'
+        configure_command << " --with-sysroot=#{settings[:prefix]}/sysroot"
+      end
+  end
+
+  pkg.configure do
+    [
+      'mkdir ../obj-gcc-build-dir',
+      'cd ../obj-gcc-build-dir',
+      configure_command,
+    ]
   end
 
   pkg.build do
     [
-      env_setup,
-      'rm -rf ../obj-gcc-build-dir',
-      'mkdir ../obj-gcc-build-dir',
-      'cd ../obj-gcc-build-dir',
-      configure_command,
+      "cd ../obj-gcc-build-dir",
       "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1)"
     ]
   end
 
   pkg.install do
-    [ "cd ../obj-gcc-build-dir",
-      env_setup,
+    [
+      "cd ../obj-gcc-build-dir",
       "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1) install",
-      "cd $(workdir)",
-      # This cleanup is necessary because of space constraints on some templates
-      "rm -rf obj-gcc-build-dir"
     ]
   end
 end
