@@ -8,11 +8,10 @@ component "toolchain" do |pkg, settings, platform|
     pkg.md5sum "0c256056b814a75a25d3fc16266db057"
     pkg.url "file://files/aix-61-ppc-toolchain.cmake.txt"
   elsif platform.is_solaris?
-    pkg.url "file://files/#{platform.name}-toolchain.cmake.txt"
-    case platform.name
-    when 'solaris-10-i386'
-      pkg.version '2015-07-22'
-      pkg.md5sum '15a8fe018b1130886ba3d4a612b2b1be'
+    if platform.os_version == "10"
+      pkg.url "file://files/solaris-10-toolchains.tar.gz"
+      pkg.md5sum "610d0fd367d0f2182a45b7a45645c4b7"
+      pkg.version '2015-07-29'
     else
       fail "Need to define a toolchain file for #{platform.name} first"
     end
@@ -20,11 +19,24 @@ component "toolchain" do |pkg, settings, platform|
     fail "Need to define a toolchain file for #{platform.name} first"
   end
   filename = pkg.get_url.split('/').last
-  # We still need to add support for OS X and Solaris {10,11}/{i386,sparc}.
-  pkg.install do
-    [
-      "mkdir -p #{settings[:prefix]}",
-      "cp -pr #{filename} #{settings[:prefix]}/pl-build-toolchain.cmake"
-    ]
+  # We still need to add support for OS X and Solaris 11/{i386,sparc}.
+  if platform.is_solaris?
+    pkg.install do
+      [
+        "mkdir -p #{settings[:basedir]}/{i386-pc,sparc-sun}-solaris2.10",
+        "cp -p solaris-10-i386-toolchain.cmake.txt #{settings[:basedir]}/i386-pc-solaris2.10/pl-build-toolchain.cmake",
+        "chmod 644 #{settings[:basedir]}/i386-pc-solaris2.10/pl-build-toolchain.cmake",
+        "cp -p solaris-10-sparc-toolchain.cmake.txt #{settings[:basedir]}/sparc-sun-solaris2.10/pl-build-toolchain.cmake",
+        "chmod 644 #{settings[:basedir]}/sparc-sun-solaris2.10/pl-build-toolchain.cmake",
+      ]
+    end
+  else
+    pkg.install do
+      [
+        "mkdir -p #{settings[:basedir]}",
+        "cp -pr #{filename} #{settings[:prefix]}/pl-build-toolchain.cmake",
+        "chmod 644 #{settings[:prefix]}/pl-build-toolchain.cmake",
+      ]
+    end
   end
 end
