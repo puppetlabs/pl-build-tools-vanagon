@@ -7,14 +7,16 @@ component "boost" do |pkg, settings, platform|
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
     pkg.build_requires "pl-gcc-4.8.2"
+    gpp = "#{settings[:bindir]}/g++"
   elsif platform.is_solaris?
-    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.i386.pkg.gz'
-    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
+    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
+    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
 
     pkg.environment "PATH" => "#{settings[:bindir]}:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
     linkflags = "-Wl,-rpath=#{settings[:libdir]}"
     b2flags = "define=_XOPEN_SOURCE=600"
     cflags = ""
+    gpp = "#{settings[:bindir]}/#{settings[:platform_triple]}-g++"
   else
     pkg.build_requires "pl-gcc"
 
@@ -22,11 +24,12 @@ component "boost" do |pkg, settings, platform|
     linkflags = "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64"
     b2flags = ""
     cflags = "-fPIC"
+    gpp = "#{settings[:bindir]}/g++"
   end
 
   pkg.build do
     [
-      %Q{echo 'using gcc : 4.8.2 : #{settings[:bindir]}/g++ : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cflags}" ;' > ~/user-config.jam},
+      %Q{echo 'using gcc : 4.8.2 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cflags}" ;' > ~/user-config.jam},
       "cd tools/build",
       "./bootstrap.sh --with-toolset=gcc",
       "./b2 install -d+2 --prefix=#{settings[:prefix]} toolset=gcc --debug-configuration"
