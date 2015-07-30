@@ -60,7 +60,6 @@ component "cmake" do |pkg, settings, platform|
     [
       "./configure --prefix=#{settings[:prefix]} --docdir=share/doc",
       "#{platform[:make]} VERBOSE=1 -j$(shell expr $(shell #{platform[:num_cores]}) + 1)",
-      "chmod 644 #{settings[:prefix]}/pl-build-toolchain.cmake"
     ]
   end
 
