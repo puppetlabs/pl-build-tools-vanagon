@@ -23,8 +23,11 @@ component "cmake" do |pkg, settings, platform|
     end
   end
 
-  if platform.is_aix? or platform.is_osx? or platform.is_solaris?
+  if platform.is_aix? or platform.is_osx?
     pkg.environment "LDFLAGS" => "$${LDFLAGS}"
+  elsif platform.is_solaris?
+    pkg.environment "LDFLAGS"  => "-Wl,-rpath=#{settings[:libdir]}"
+    pkg.environment "CXXFLAGS" => "-Wl,-rpath=#{settings[:libdir]}"
   else
     pkg.environment "LDFLAGS" => "-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags"
   end
