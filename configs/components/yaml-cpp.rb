@@ -8,16 +8,21 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.build_requires "pl-gcc-4.8.2"
     pkg.build_requires "pl-cmake-3.2.2"
     pkg.build_requires "pl-boost-1.57.0"
+    cmake = "#{settings[:bindir]}/cmake"
   elsif platform.is_solaris?
-    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.i386.pkg.gz'
-    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
-    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-boost-1.57.0.i386.pkg.gz'
-    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-cmake-3.2.3.i386.pkg.gz'
+    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
+    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
+    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-boost-1.57.0.#{platform.architecture}.pkg.gz"
+    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-cmake-3.2.3.i386.pkg.gz"
+
+    # We always use the i386 build of cmake, even on sparc
+    cmake = "#{settings[:basedir]}/i386-pc-solaris2.10/bin/cmake"
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
     pkg.build_requires "pl-cmake"
     pkg.build_requires "pl-boost"
+    cmake = "#{settings[:bindir]}/cmake"
   end
 
   # Different toolchains for different target platforms.
@@ -31,7 +36,7 @@ component "yaml-cpp" do |pkg, settings, platform|
     [ "rm -rf build-shared",
       "mkdir build-shared",
       "cd build-shared",
-      "#{settings[:prefix]}/bin/cmake \
+      "#{cmake} \
     -DCMAKE_TOOLCHAIN_FILE=#{settings[:prefix]}/#{toolchain}.cmake \
     -DCMAKE_INSTALL_PREFIX=#{settings[:prefix]} \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
@@ -42,7 +47,7 @@ component "yaml-cpp" do |pkg, settings, platform|
       "cd ../",
       "rm -rf build-static",
       "mkdir build-static",
-      "cd build-static", "#{settings[:bindir]}/cmake \
+      "cd build-static", "#{cmake} \
     -DCMAKE_TOOLCHAIN_FILE=#{settings[:prefix]}/#{toolchain}.cmake \
     -DCMAKE_INSTALL_PREFIX=#{settings[:prefix]} \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
