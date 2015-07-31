@@ -10,8 +10,8 @@ component "toolchain" do |pkg, settings, platform|
   elsif platform.is_solaris?
     if platform.os_version == "10"
       pkg.url "file://files/solaris-10-toolchains.tar.gz"
-      pkg.md5sum "610d0fd367d0f2182a45b7a45645c4b7"
-      pkg.version '2015-07-29'
+      pkg.md5sum "fc69eaa223d158956e63d22558a14cb1"
+      pkg.version '2015-07-31'
     else
       fail "Need to define a toolchain file for #{platform.name} first"
     end
@@ -21,22 +21,17 @@ component "toolchain" do |pkg, settings, platform|
   filename = pkg.get_url.split('/').last
   # We still need to add support for OS X and Solaris 11/{i386,sparc}.
   if platform.is_solaris?
+    pkg.install_file "solaris-10-i386-toolchain.cmake.txt", "#{settings[:basedir]}/i386-pc-solaris2.10/pl-build-toolchain.cmake"
+    pkg.install_file "solaris-10-sparc-toolchain.cmake.txt", "#{settings[:basedir]}/sparc-sun-solaris2.10/pl-build-toolchain.cmake"
+
     pkg.install do
       [
-        "mkdir -p #{settings[:basedir]}/{i386-pc,sparc-sun}-solaris2.10",
-        "cp -p solaris-10-i386-toolchain.cmake.txt #{settings[:basedir]}/i386-pc-solaris2.10/pl-build-toolchain.cmake",
-        "chmod 644 #{settings[:basedir]}/i386-pc-solaris2.10/pl-build-toolchain.cmake",
-        "cp -p solaris-10-sparc-toolchain.cmake.txt #{settings[:basedir]}/sparc-sun-solaris2.10/pl-build-toolchain.cmake",
-        "chmod 644 #{settings[:basedir]}/sparc-sun-solaris2.10/pl-build-toolchain.cmake",
+        # We update ownership here to make sure that solaris will put the toolchains in the package
+        "chown root:root #{settings[:basedir]}/i386-pc-solaris2.10/pl-build-toolchain.cmake",
+        "chown root:root #{settings[:basedir]}/sparc-sun-solaris2.10/pl-build-toolchain.cmake",
       ]
     end
   else
-    pkg.install do
-      [
-        "mkdir -p #{settings[:basedir]}",
-        "cp -pr #{filename} #{settings[:prefix]}/pl-build-toolchain.cmake",
-        "chmod 644 #{settings[:prefix]}/pl-build-toolchain.cmake",
-      ]
-    end
+    pkg.install_file filename, "#{settings[:prefix]}/pl-build-toolchain.cmake"
   end
 end
