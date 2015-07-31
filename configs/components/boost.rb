@@ -12,11 +12,11 @@ component "boost" do |pkg, settings, platform|
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
 
-    pkg.environment "PATH" => "#{settings[:bindir]}:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
+    pkg.environment "PATH" => "#{settings[:basedir]}/bin:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
     linkflags = "-Wl,-rpath=#{settings[:libdir]}"
     b2flags = "define=_XOPEN_SOURCE=600"
     cflags = ""
-    gpp = "#{settings[:bindir]}/#{settings[:platform_triple]}-g++"
+    gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   else
     pkg.build_requires "pl-gcc"
 
