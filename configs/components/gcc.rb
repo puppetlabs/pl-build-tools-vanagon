@@ -103,7 +103,7 @@ component "gcc" do |pkg, settings, platform|
   # We've abstracted the configure command a bit because of the difference in
   # flags needed for ARM vs x86 and x86_64 vs AIX/ppc
   configure_command << " ../gcc-#{pkg.get_version}/configure \
-    --prefix=#{settings[:prefix]} \
+    --prefix=#{settings[:basedir]} \
     --disable-nls \
     --enable-languages=c,c++ \
     --disable-libgcj "
