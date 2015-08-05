@@ -9,6 +9,8 @@ component "cmake" do |pkg, settings, platform|
   elsif platform.name =~ /solaris-10/
     pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.i386.pkg.gz'
     pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
+
+    pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
@@ -27,12 +29,18 @@ component "cmake" do |pkg, settings, platform|
 
   if platform.is_aix? or platform.is_osx?
     pkg.environment "LDFLAGS" => "$${LDFLAGS}"
+    pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
+    pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
   elsif platform.is_solaris?
     pkg.environment "LDFLAGS"  => "-Wl,-rpath=#{settings[:libdir]}"
     pkg.environment "CXXFLAGS" => "-Wl,-rpath=#{settings[:libdir]} -static-libstdc++ -static-libgcc"
     pkg.environment "CFLAGS" => "-Wl,-rpath=#{settings[:libdir]} -static-libgcc"
+    pkg.environment "CC" => "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-gcc"
+    pkg.environment "CXX" => "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   else
     pkg.environment "LDFLAGS" => "-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags"
+    pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
+    pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
   end
 
   # Different toolchains for different target platforms.
@@ -43,8 +51,6 @@ component "cmake" do |pkg, settings, platform|
   end
 
   pkg.environment "PATH" => "$$PATH:/usr/local/bin"
-  pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
-  pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
   pkg.environment "MAKE" => platform.make
 
   # Initialize an empty configure_command string
