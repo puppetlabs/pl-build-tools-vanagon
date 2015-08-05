@@ -74,6 +74,9 @@ component "gcc" do |pkg, settings, platform|
     pkg.environment "PATH"  => "#{File.join(settings[:basedir], 'bin')}:#{settings[:bindir]}:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
     pkg.environment "CC"    => "/usr/sfw/bin/gcc"
     pkg.environment "CXX"   => "/usr/sfw/bin/g++"
+    pkg.environment "CFLAGS" => "$${CFLAGS} -fPIC"
+    pkg.environment "CXXFLAGS" => "$${CXXFLAGS} -fPIC"
+    pkg.environment "CFLAGS_FOR_TARGET" => "-fPIC"
   else
     # We set -fPIC to ensure that our 64 bit builds can correctly link and compile.
     # We enable it on both 32-bit and 64-bit builds for consistency.
@@ -119,6 +122,10 @@ component "gcc" do |pkg, settings, platform|
   # on AIX is basically crazy. OSX also fails with this option. So does solaris.
   if platform.is_linux?
     configure_command << " --disable-shared"
+  elsif platform.is_solaris?
+    # Based on https://gcc.gnu.org/bugzilla/show_bug.cgi?id=12250#c2 and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=21277
+    # They suggest that disable-shared will work on solaris as long as --with-pic is also passed.
+    configure_command << " --disable-shared --with-pic"
   end
 
   # The arm flags were taken from the Debian GCC compile options. (gcc -v)
