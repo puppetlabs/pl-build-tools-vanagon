@@ -1,6 +1,6 @@
 component "boost" do |pkg, settings, platform|
-  pkg.version "1.57.0"
-  pkg.md5sum "25f9a8ac28beeb5ab84aa98510305299"
+  pkg.version "1.58.0"
+  pkg.md5sum "5a5d5614d9a07672e1ab2a250b5defc5"
   # Apparently boost doesn't use dots to version they use underscores....arg
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}_#{pkg.get_version.gsub('.','_')}.tar.gz"
 
@@ -19,6 +19,21 @@ component "boost" do |pkg, settings, platform|
     gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   else
     pkg.build_requires "pl-gcc"
+    case platform.name
+    when /el|fedora/
+      pkg.build_requires 'bzip2-devel'
+      pkg.build_requires 'zlib-devel'
+    when /sles-10|aix/
+      pkg.build_requires 'bzip2'
+      pkg.build_requires 'zlib-devel'
+    when /sles-(11|12)/
+      pkg.build_requires 'libbz2-devel'
+      pkg.build_requires 'zlib-devel'
+    when /debian|ubuntu|Cumulus/i
+      pkg.build_requires 'libbz2-dev'
+      pkg.build_requires 'zlib1g-dev'
+    end
+
 
     pkg.environment "PATH" => "#{settings[:bindir]}:$$PATH"
     linkflags = "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64"
@@ -27,9 +42,15 @@ component "boost" do |pkg, settings, platform|
     gpp = "#{settings[:bindir]}/g++"
   end
 
+  if platform.is_osx?
+    userconfigjam = %Q{using darwin : : #{gpp};}
+  else
+    userconfigjam = %Q{using gcc : 4.8.2 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cflags}" ;}
+  end
+
   pkg.build do
     [
-      %Q{echo 'using gcc : 4.8.2 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cflags}" ;' > ~/user-config.jam},
+      %Q{echo #{userconfigjam} > ~/user-config.jam},
       "cd tools/build",
       "./bootstrap.sh --with-toolset=gcc",
       "./b2 install -d+2 --prefix=#{settings[:prefix]} toolset=gcc --debug-configuration"
@@ -43,15 +64,30 @@ component "boost" do |pkg, settings, platform|
     --debug-configuration \
     --build-dir=. \
     --prefix=#{settings[:prefix]} \
-    --with-filesystem \
-    --with-log \
-    --with-program_options \
-    --with-regex \
-    --with-system \
-    --with-thread \
-    --with-locale \
-    --with-random \
+    --with-atomic \
     --with-chrono \
+    --with-container \
+    --with-context \
+    --with-coroutine \
+    --with-date_time \
+    --with-exception \
+    --with-filesystem \
+    --with-graph \
+    --with-graph_parallel \
+    --with-iostreams \
+    --with-locale \
+    --with-log \
+    --with-math \
+    --with-program_options \
+    --with-random \
+    --with-regex \
+    --with-serialization \
+    --with-signals \
+    --with-system \
+    --with-test \
+    --with-thread \
+    --with-timer \
+    --with-wave \
     install",
     "chmod 0644 #{settings[:includedir]}/boost/graph/vf2_sub_graph_iso.hpp",
     "chmod 0644 #{settings[:includedir]}/boost/thread/v2/shared_mutex.hpp"
