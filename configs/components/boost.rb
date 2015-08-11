@@ -11,6 +11,9 @@ component "boost" do |pkg, settings, platform|
 
   boost_libs = [ 'atomic', 'chrono', 'container', 'date_time', 'exception', 'filesystem', 'graph', 'graph_parallel', 'iostreams', 'locale', 'log', 'math', 'program_options', 'random', 'regex', 'serialization', 'signals', 'system', 'test', 'thread', 'timer', 'wave' ]
 
+  cflags = "-fPIC -std=c99"
+  cxxflags = "-std=c++11 -fPIC"
+
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
     pkg.build_requires "pl-gcc-4.8.2"
@@ -22,7 +25,6 @@ component "boost" do |pkg, settings, platform|
     pkg.environment "PATH" => "#{settings[:basedir]}/bin:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
     linkflags = "-Wl,-rpath=#{settings[:libdir]}"
     b2flags = "define=_XOPEN_SOURCE=600"
-    cflags = "-std=c++11 -fPIC"
     gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   else
     pkg.build_requires "pl-gcc"
@@ -41,23 +43,21 @@ component "boost" do |pkg, settings, platform|
       pkg.build_requires 'zlib1g-dev'
     end
 
-
     pkg.environment "PATH" => "#{settings[:bindir]}:$$PATH"
     linkflags = "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64"
     b2flags = ""
-    cflags = "-fPIC"
     gpp = "#{settings[:bindir]}/g++"
   end
 
   if platform.is_osx?
     userconfigjam = %Q{using darwin : : #{gpp};}
   else
-    userconfigjam = %Q{using gcc : 4.8.2 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cflags}" ;}
+    userconfigjam = %Q{using gcc : 4.8.2 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cxxflags}" ;}
   end
 
   pkg.build do
     [
-      %Q{echo #{userconfigjam} > ~/user-config.jam},
+      %Q{echo '#{userconfigjam}' > ~/user-config.jam},
       "cd tools/build",
       "./bootstrap.sh --with-toolset=gcc",
       "./b2 install -d+2 --prefix=#{settings[:prefix]} toolset=gcc --debug-configuration"
