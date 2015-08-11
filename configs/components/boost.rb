@@ -1,6 +1,11 @@
 component "boost" do |pkg, settings, platform|
-  pkg.version "1.58.0"
-  pkg.md5sum "5a5d5614d9a07672e1ab2a250b5defc5"
+  if platform.is_solaris?
+   pkg.version "1.57.0"
+   pkg.md5sum "25f9a8ac28beeb5ab84aa98510305299"
+  else
+    pkg.version "1.58.0"
+    pkg.md5sum "5a5d5614d9a07672e1ab2a250b5defc5"
+  end
   # Apparently boost doesn't use dots to version they use underscores....arg
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}_#{pkg.get_version.gsub('.','_')}.tar.gz"
 
