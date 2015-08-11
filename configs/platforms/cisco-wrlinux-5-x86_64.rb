@@ -1,4 +1,4 @@
-platform "nxos-1-x86_64" do |plat|
+platform "cisco-wrlinux-5-x86_64" do |plat|
   plat.servicedir "/etc/init.d"
   plat.defaultdir "/etc/sysconfig"
   plat.servicetype "sysv"
@@ -6,6 +6,5 @@ platform "nxos-1-x86_64" do |plat|
   plat.provision_with "rpm -e libgmp-dev libmpc-dev libmpfr-dev"
   # NXOS doesn't have any yum repos enabled by default, so this is a no-op:
   plat.install_build_dependencies_with "echo Please ensure the following packages are installed:"
-  plat.docker_image "nxos_base_image"
-  plat.ssh_port 2222
+  plat.vcloud_name "cisco-wrlinux-5-x86_64"
 end
