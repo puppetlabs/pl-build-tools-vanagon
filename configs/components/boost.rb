@@ -9,6 +9,8 @@ component "boost" do |pkg, settings, platform|
   # Apparently boost doesn't use dots to version they use underscores....arg
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}_#{pkg.get_version.gsub('.','_')}.tar.gz"
 
+  boost_libs = [ 'atomic', 'chrono', 'container', 'date_time', 'exception', 'filesystem', 'graph', 'graph_parallel', 'iostreams', 'locale', 'log', 'math', 'program_options', 'random', 'regex', 'serialization', 'signals', 'system', 'test', 'thread', 'timer', 'wave' ]
+
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
     pkg.build_requires "pl-gcc-4.8.2"
@@ -69,30 +71,7 @@ component "boost" do |pkg, settings, platform|
     --debug-configuration \
     --build-dir=. \
     --prefix=#{settings[:prefix]} \
-    --with-atomic \
-    --with-chrono \
-    --with-container \
-    --with-context \
-    --with-coroutine \
-    --with-date_time \
-    --with-exception \
-    --with-filesystem \
-    --with-graph \
-    --with-graph_parallel \
-    --with-iostreams \
-    --with-locale \
-    --with-log \
-    --with-math \
-    --with-program_options \
-    --with-random \
-    --with-regex \
-    --with-serialization \
-    --with-signals \
-    --with-system \
-    --with-test \
-    --with-thread \
-    --with-timer \
-    --with-wave \
+    #{boost_libs.map {|lib| "--with-#{lib}"}.join(" ")} \
     install",
     "chmod 0644 #{settings[:includedir]}/boost/graph/vf2_sub_graph_iso.hpp",
     "chmod 0644 #{settings[:includedir]}/boost/thread/v2/shared_mutex.hpp"
