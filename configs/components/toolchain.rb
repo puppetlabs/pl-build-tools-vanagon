@@ -10,8 +10,8 @@ component "toolchain" do |pkg, settings, platform|
   elsif platform.is_solaris?
     if platform.os_version == "10"
       pkg.url "file://files/solaris-10-toolchains.tar.gz"
-      pkg.md5sum "ba68ad7bfc401e045063cd0cc328d1d7"
-      pkg.version '2015-08-04'
+      pkg.md5sum "dfb2880781e45baa2c702c5a8bd8f5d6"
+      pkg.version '2015-08-12'
     else
       fail "Need to define a toolchain file for #{platform.name} first"
     end
