@@ -122,10 +122,6 @@ component "gcc" do |pkg, settings, platform|
   # on AIX is basically crazy. OSX also fails with this option. So does solaris.
   if platform.is_linux?
     configure_command << " --disable-shared"
-  elsif platform.is_solaris?
-    # Based on https://gcc.gnu.org/bugzilla/show_bug.cgi?id=12250#c2 and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=21277
-    # They suggest that disable-shared will work on solaris as long as --with-pic is also passed.
-    configure_command << " --disable-shared --with-pic"
   end
 
   # The arm flags were taken from the Debian GCC compile options. (gcc -v)
