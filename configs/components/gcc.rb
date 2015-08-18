@@ -120,7 +120,7 @@ component "gcc" do |pkg, settings, platform|
 
   # AIX compilation will fail with this option. I think it's because linking
   # on AIX is basically crazy. OSX also fails with this option. So does solaris.
-  if platform.is_linux?
+  if platform.is_linux? and !platform.os_version =~ /4\./
     configure_command << " --disable-shared"
   elsif platform.is_solaris?
     # Based on https://gcc.gnu.org/bugzilla/show_bug.cgi?id=12250#c2 and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=21277
