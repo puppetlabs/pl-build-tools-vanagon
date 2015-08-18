@@ -74,9 +74,18 @@ component "gcc" do |pkg, settings, platform|
     pkg.environment "PATH"  => "#{File.join(settings[:basedir], 'bin')}:#{settings[:bindir]}:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
     pkg.environment "CC"    => "/usr/sfw/bin/gcc"
     pkg.environment "CXX"   => "/usr/sfw/bin/g++"
-    pkg.environment "CFLAGS" => "$${CFLAGS} -fPIC"
-    pkg.environment "CXXFLAGS" => "$${CXXFLAGS} -fPIC"
-    pkg.environment "CFLAGS_FOR_TARGET" => "-fPIC"
+
+    # Adding -fPIC to the cross-compiler produces a cross-compiler that can't
+    # build executables. They all core dump and segfault. Do not use fPIC with
+    # the cross-compiler.
+    if platform.architecture == "sparc"
+      pkg.environment "CFLAGS" => "$${CFLAGS}"
+      pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
+    else
+      pkg.environment "CFLAGS" => "$${CFLAGS} -fPIC"
+      pkg.environment "CXXFLAGS" => "$${CXXFLAGS} -fPIC"
+      pkg.environment "CFLAGS_FOR_TARGET" => "-fPIC"
+    end
   else
     # We set -fPIC to ensure that our 64 bit builds can correctly link and compile.
     # We enable it on both 32-bit and 64-bit builds for consistency.
