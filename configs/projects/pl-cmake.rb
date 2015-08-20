@@ -20,7 +20,4 @@ project "pl-cmake" do |proj|
   proj.component "cmake"
   proj.target_repo ""
 
-
-  proj.directory proj.prefix
-
 end

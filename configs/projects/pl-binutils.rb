@@ -15,6 +15,5 @@ project "pl-binutils" do |proj|
   proj.component "binutils"
   proj.target_repo ""
 
-  proj.directory proj.prefix
 end
 
