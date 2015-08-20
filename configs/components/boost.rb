@@ -21,7 +21,7 @@ component "boost" do |pkg, settings, platform|
     pkg.apply_patch 'resources/patches/boost/solaris-10-boost-build.patch'
 
     pkg.environment "PATH" => "#{settings[:basedir]}/bin:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
-    linkflags = "-Wl,-L#{settings[:libdir]}"
+    linkflags = "-Wl,-rpath=#{settings[:libdir]}"
     b2flags = "define=_XOPEN_SOURCE=600"
 
     if platform.architecture == "sparc"
@@ -30,12 +30,15 @@ component "boost" do |pkg, settings, platform|
 
     gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   else
+    linkflags = "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64"
     pkg.build_requires "pl-gcc" unless platform.is_aix?
+
     case platform.name
     when /el|fedora/
       pkg.build_requires 'bzip2-devel'
       pkg.build_requires 'zlib-devel'
     when /aix/
+      linkflags = "-Wl,-L#{settings[:libdir]}"
       pkg.environment "PATH" => "/opt/freeware/bin:#{settings[:basedir]}/bin:$$PATH"
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-4.8.2-1.aix#{platform.os_version}.ppc.rpm"
       pkg.build_requires 'http://int-resources.corp.puppetlabs.net/AIX_MIRROR/bzip2-1.0.5-3.aix5.3.ppc.rpm'
@@ -53,11 +56,6 @@ component "boost" do |pkg, settings, platform|
     end
 
     pkg.environment "PATH" => "#{settings[:bindir]}:$$PATH"
-    if platform.is_aix?
-      linkflags = "-Wl,-L#{settings[:libdir]}"
-    else
-      linkflags = "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64"
-    end
     b2flags = ""
     gpp = "#{settings[:bindir]}/g++"
   end
