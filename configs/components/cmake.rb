@@ -11,6 +11,9 @@ component "cmake" do |pkg, settings, platform|
     pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
 
     pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
+  elsif platform.is_aix?
+     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-4.8.2-1.aix#{platform.os_version}.ppc.rpm"
+     pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/make-3.80-1.aix5.1.ppc.rpm"
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"

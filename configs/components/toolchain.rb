@@ -7,6 +7,7 @@ component "toolchain" do |pkg, settings, platform|
     pkg.version "2015.05.11"
     pkg.md5sum "0c256056b814a75a25d3fc16266db057"
     pkg.url "file://files/aix-61-ppc-toolchain.cmake.txt"
+    pkg.environment "PATH" => "/opt/freeware/bin:#{settings[:basedir]}/bin:$$PATH"
   elsif platform.is_solaris?
     if platform.os_version == "10"
       pkg.url "file://files/solaris-10-toolchains.tar.gz"

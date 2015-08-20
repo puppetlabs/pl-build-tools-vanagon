@@ -3,9 +3,14 @@ component "make" do |pkg, settings, platform|
   pkg.md5sum "654f9117957e6fa6a1c49a8f08270ec9"
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
-  pkg.build_requires "gcc"
-  pkg.build_requires "gcc-c++"
-  pkg.build_requires "make"
+  if platform.is_aix?
+     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-4.8.2-1.aix#{platform.os_version}.ppc.rpm"
+     pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/make-3.80-1.aix5.1.ppc.rpm"
+  else
+    pkg.build_requires "gcc"
+    pkg.build_requires "gcc-c++"
+    pkg.build_requires "make"
+  end
 
   pkg.configure do
     [ "./configure --prefix=#{settings[:prefix]}" ]
