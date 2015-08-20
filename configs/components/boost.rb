@@ -1,11 +1,7 @@
 component "boost" do |pkg, settings, platform|
-  if platform.is_solaris?
-   pkg.version "1.57.0"
-   pkg.md5sum "25f9a8ac28beeb5ab84aa98510305299"
-  else
-    pkg.version "1.58.0"
-    pkg.md5sum "5a5d5614d9a07672e1ab2a250b5defc5"
-  end
+  pkg.version "1.58.0"
+  pkg.md5sum "5a5d5614d9a07672e1ab2a250b5defc5"
+
   # Apparently boost doesn't use dots to version they use underscores....arg
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}_#{pkg.get_version.gsub('.','_')}.tar.gz"
 
@@ -22,9 +18,16 @@ component "boost" do |pkg, settings, platform|
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
 
+    pkg.apply_patch 'resources/patches/boost/solaris-10-boost-build.patch'
+
     pkg.environment "PATH" => "#{settings[:basedir]}/bin:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
     linkflags = "-Wl,-rpath=#{settings[:libdir]}"
     b2flags = "define=_XOPEN_SOURCE=600"
+
+    if platform.architecture == "sparc"
+      b2flags = "#{b2flags} instruction-set=v9"
+    end
+
     gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   else
     pkg.build_requires "pl-gcc"
@@ -60,7 +63,7 @@ component "boost" do |pkg, settings, platform|
       %Q{echo '#{userconfigjam}' > ~/user-config.jam},
       "cd tools/build",
       "./bootstrap.sh --with-toolset=gcc",
-      "./b2 install -d+2 --prefix=#{settings[:prefix]} toolset=gcc --debug-configuration"
+      "./b2 install -d+2 --prefix=#{settings[:prefix]} toolset=gcc #{b2flags} --debug-configuration"
     ]
   end
 
