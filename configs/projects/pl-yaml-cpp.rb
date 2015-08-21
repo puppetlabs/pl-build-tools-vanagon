@@ -2,9 +2,9 @@ project "pl-yaml-cpp" do |proj|
   # Project level settings our components will care about
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
-  proj.description "Puppet Labs boost"
+  proj.description "Puppet Yaml CPP"
   proj.version "0.5.1"
-  proj.license "Boost and MIT and Python"
+  proj.license "MIT"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
@@ -19,5 +19,4 @@ project "pl-yaml-cpp" do |proj|
   proj.component "yaml-cpp"
   proj.target_repo ""
 
-  proj.directory proj.prefix
 end

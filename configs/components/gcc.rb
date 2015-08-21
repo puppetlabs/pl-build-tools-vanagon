@@ -13,21 +13,39 @@ component "gcc" do |pkg, settings, platform|
   end
 
   if platform.is_rpm?
-    pkg.build_requires "gcc"
-    pkg.build_requires "binutils"
-    pkg.build_requires "gzip"
-    pkg.build_requires "bzip2"
-    pkg.build_requires "make"
-    pkg.build_requires "tar"
+    unless platform.is_aix?
+      pkg.build_requires "gcc"
+      pkg.build_requires "binutils"
+      pkg.build_requires "gzip"
+      pkg.build_requires "bzip2"
+      pkg.build_requires "make"
+      pkg.build_requires "tar"
+    end
 
     case
     when platform.is_aix?
-      pkg.requires "glibc-devel"
-      pkg.build_requires "mktemp"
-      pkg.build_requires "gawk"
-      pkg.build_requires "libstdc++-devel"
-      pkg.build_requires "gcc-c++"
-      pkg.build_requires "glibc-devel"
+      # not version-specific for AIX
+      pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/binutils-2.14-3.aix5.1.ppc.rpm"
+      pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/mktemp-1.7-1.aix5.1.ppc.rpm"
+      pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/gawk-3.1.3-1.aix5.1.ppc.rpm"
+      pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/gzip-1.2.4a-10.aix5.2.ppc.rpm"
+      pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/bzip2-1.0.5-3.aix5.3.ppc.rpm"
+      pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/make-3.80-1.aix5.1.ppc.rpm"
+      pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/tar-1.14-2.aix5.1.ppc.rpm"
+      if platform.os_version =~ /6.1|7.1/
+        pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/gcc-4.2.0-3.aix6.1.ppc.rpm"
+        pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/6.1/ppc/gcc-aix-boostrap-4.6.4-1.aix6.1.ppc.rpm"
+        pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/libstdcplusplus-4.2.0-3.aix6.1.ppc.rpm"
+        pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/libstdcplusplus-devel-4.2.0-3.aix6.1.ppc.rpm"
+        pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/gcc-cplusplus-4.2.0-3.aix6.1.ppc.rpm"
+      else
+        # AIX 5.3
+        pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/gcc-4.2.0-3.aix5.3.ppc.rpm"
+        pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/gcc-cplusplus-4.2.0-3.aix5.3.ppc.rpm"
+        pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/libstdcplusplus-4.2.0-3.aix5.3.ppc.rpm"
+        pkg.build_requires "http://int-resources.corp.puppetlabs.net/AIX_MIRROR/libstdcplusplus-devel-4.2.0-3.aix5.3.ppc.rpm"
+        # AIX 5.3 gcc464 is currently a tarball that should be built into an rpm
+      end
     when platform.is_nxos?
       pkg.requires "libc6-dev"
       pkg.build_requires "g++"
@@ -101,15 +119,11 @@ component "gcc" do |pkg, settings, platform|
   #    built gcc-4.6.4. Thus far, I've used that 4.6.4 build as my
   #    bootstrapping GCC to build 4.8.2. There is an rpm at
   #    http://pl-build-tools.delivery.puppetlabs.net/aix/6.1/ppc/ for
-  #    booststrapping GCC. Uncomment the boostrapping line in the aix platform
-  #    definition and uncomment the CC and CXX exports below to enable
-  #    boostrapping of GCC mode.
+  #    booststrapping GCC.
   if platform.is_aix?
-    ## If you're bootstrapping GCC 4.8.2 using the 4.6.4 rpm, you'll need to uncomment this
-    #configure_command << "export CC=/opt/gcc464/bin/gcc; export CXX=/opt/gcc464/bin/g++; "
-
+    configure_command << "export CC=/opt/gcc464/bin/gcc; export CXX=/opt/gcc464/bin/g++; "
     # AIX needs higher ulimit parameters to build GCC
-    configure_command << " ulimit -s 1280000; ulimit -d 1048575; "
+    configure_command << " ulimit -s 2560000; ulimit -d 2048575; "
   end
 
   # We've abstracted the configure command a bit because of the difference in
@@ -148,16 +162,18 @@ component "gcc" do |pkg, settings, platform|
       --target=arm-linux-gnueabihf"
   end
 
-  # The target powerpc-ibm-aix6.1.0.0 is used on AIX 6.1 and AIX 7.1 - even by
+  # The target powerpc-ibm-aix6.1.0.0 is used on AIX 6.1, AIX 7.1 - even by
   # IBM in the way they compile GCC in their Linux Toolbox for AIX. Most of the
   # configure options used on AIX were directly pilfered from their
   # configuration of gcc.
   # On AIX 5.3 it's powerpc-ibm-aix5.3.0.0
   if platform.is_aix?
-    if platform.os_version =~ /5.3/
+    if platform.os_version == '5.3'
       target_platform = "powerpc-ibm-aix5.3.0.0"
-    else
+    elsif platform.os_version == '6.1'
       target_platform = "powerpc-ibm-aix6.1.0.0"
+    else
+      target_platform = "powerpc-ibm-aix7.1.0.0"
     end
     configure_command << " --with-as=/usr/bin/as \
     --with-ld=/usr/bin/ld \

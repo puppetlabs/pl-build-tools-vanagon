@@ -25,6 +25,4 @@ project "pl-gcc" do |proj|
 
   proj.target_repo ""
 
-  proj.directory proj.prefix
-
 end

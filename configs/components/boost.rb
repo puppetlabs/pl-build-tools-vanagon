@@ -30,12 +30,21 @@ component "boost" do |pkg, settings, platform|
 
     gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   else
-    pkg.build_requires "pl-gcc"
+    linkflags = "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64"
+    pkg.build_requires "pl-gcc" unless platform.is_aix?
+
     case platform.name
     when /el|fedora/
       pkg.build_requires 'bzip2-devel'
       pkg.build_requires 'zlib-devel'
-    when /sles-10|aix/
+    when /aix/
+      linkflags = "-Wl,-L#{settings[:libdir]}"
+      pkg.environment "PATH" => "/opt/freeware/bin:#{settings[:basedir]}/bin:$$PATH"
+      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-4.8.2-1.aix#{platform.os_version}.ppc.rpm"
+      pkg.build_requires 'http://int-resources.corp.puppetlabs.net/AIX_MIRROR/bzip2-1.0.5-3.aix5.3.ppc.rpm'
+      pkg.build_requires 'http://int-resources.corp.puppetlabs.net/AIX_MIRROR/zlib-devel-1.2.3-4.aix5.2.ppc.rpm'
+      pkg.build_requires 'http://int-resources.corp.puppetlabs.net/AIX_MIRROR/zlib-1.2.3-4.aix5.2.ppc.rpm'
+    when /sles-10/
       pkg.build_requires 'bzip2'
       pkg.build_requires 'zlib-devel'
     when /sles-(11|12)/
@@ -47,7 +56,6 @@ component "boost" do |pkg, settings, platform|
     end
 
     pkg.environment "PATH" => "#{settings[:bindir]}:$$PATH"
-    linkflags = "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64"
     b2flags = ""
     gpp = "#{settings[:bindir]}/g++"
   end
