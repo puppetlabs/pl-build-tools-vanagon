@@ -1,7 +1,7 @@
 component "toolchain" do |pkg, settings, platform|
   if platform.is_linux?
     pkg.version "2015.07.13"
-    pkg.md5sum "3fa1dcf0d8a4bd9635111bc0451b51f5"
+    pkg.md5sum "90bfc55e78dbf184ccb8ae9d50c0ca9f"
     pkg.url "file://files/linux-toolchain.cmake.txt"
   elsif platform.is_aix?
     pkg.version "2015.05.11"
