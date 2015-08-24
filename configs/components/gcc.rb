@@ -93,6 +93,9 @@ component "gcc" do |pkg, settings, platform|
     pkg.environment "CC"    => "/usr/sfw/bin/gcc"
     pkg.environment "CXX"   => "/usr/sfw/bin/g++"
 
+    # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
+    pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
+
     # Adding -fPIC to the cross-compiler produces a cross-compiler that can't
     # build executables. They all core dump and segfault. Do not use fPIC with
     # the cross-compiler.
