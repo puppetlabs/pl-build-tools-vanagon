@@ -113,6 +113,9 @@ component "gcc" do |pkg, settings, platform|
     pkg.environment "CFLAGS" => "$${CFLAGS} -fPIC"
     pkg.environment "CXXFLAGS" => "$${CXXFLAGS} -fPIC"
     pkg.environment "CFLAGS_FOR_TARGET" => "-fPIC"
+
+    # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
+    pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
   end
 
 
