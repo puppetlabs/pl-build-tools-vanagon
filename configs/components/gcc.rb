@@ -46,7 +46,7 @@ component "gcc" do |pkg, settings, platform|
         pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/libstdcplusplus-devel-4.2.0-3.aix5.3.ppc.rpm"
         # AIX 5.3 gcc464 is currently a tarball that should be built into an rpm
       end
-    when platform.is_nxos?
+    when platform.is_nxos?, platform.is_cisco_wrlinux?
       pkg.requires "libc6-dev"
       pkg.build_requires "g++"
       pkg.build_requires "libstdc++-dev"
