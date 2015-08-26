@@ -5,12 +5,13 @@ SET(CMAKE_SYSTEM_VERSION 5.11)
 SET(CMAKE_SYSTEM_PROCESSOR i386)
 
 # specify the cross compiler
-SET(PL_TOOLS_ROOT        /opt/pl-build-tools/i386)
+SET(PL_TOOLS_ROOT        /opt/pl-build-tools)
+SET(PL_TOOLS_PREFIX      ${PL_TOOLS_ROOT}/i386-pc-solaris2.11)
 SET(CMAKE_C_COMPILER     ${PL_TOOLS_ROOT}/bin/i386-pc-solaris2.11-gcc)
 SET(CMAKE_CXX_COMPILER   ${PL_TOOLS_ROOT}/bin/i386-pc-solaris2.11-g++)
-SET(CMAKE_AR             ${PL_TOOLS_ROOT}/i386-pc-solaris2.11/bin/ar CACHE FILEPATH "Archiver")
+SET(CMAKE_AR             ${PL_TOOLS_PREFIX}/bin/ar CACHE FILEPATH "Archiver")
 SET(CMAKE_LINKER         ${PL_TOOLS_ROOT}/bin/i386-pc-solaris2.11-gcc CACHE PATH "Linker Program")
-SET(CMAKE_NM             ${PL_TOOLS_ROOT}/i386-pc-solaris2.11/bin/nm )
+SET(CMAKE_NM             ${PL_TOOLS_PREFIX}/bin/nm )
 
 # where is the target environment
 SET(CMAKE_FIND_ROOT_PATH  ${PL_TOOLS_ROOT})
@@ -22,7 +23,7 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
 SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
 SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
 
-SET(CMAKE_C_FLAGS "-pthreads -fPIC -I ${PL_TOOLS_ROOT}/include ${CMAKE_C_FLAGS}" CACHE STRING "" FORCE)
+SET(CMAKE_C_FLAGS "-pthreads -fPIC -I ${PL_TOOLS_ROOT}/include -I${PL_TOOLS_PREFIX}/include ${CMAKE_C_FLAGS}" CACHE STRING "" FORCE)
 SET(CMAKE_CXX_FLAGS "-pthreads -fPIC ${CMAKE_CXX_FLAGS}" CACHE STRING "" FORCE)
 
 SET(PL_RPATH_FLAGS "-Wl,-rpath=\"${PL_TOOLS_ROOT}/lib:${PL_TOOLS_ROOT}/lib64\"")
