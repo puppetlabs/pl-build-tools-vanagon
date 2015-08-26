@@ -113,6 +113,9 @@ component "gcc" do |pkg, settings, platform|
     pkg.environment "CFLAGS" => "$${CFLAGS} -fPIC"
     pkg.environment "CXXFLAGS" => "$${CXXFLAGS} -fPIC"
     pkg.environment "CFLAGS_FOR_TARGET" => "-fPIC"
+
+    # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
+    pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
   end
 
 
@@ -146,7 +149,7 @@ component "gcc" do |pkg, settings, platform|
 
   # AIX compilation will fail with this option. I think it's because linking
   # on AIX is basically crazy. OSX also fails with this option. So does solaris.
-  if platform.is_linux? and !platform.os_version =~ /4\./
+  if platform.is_linux? && ! platform.name =~ /el-4/
     configure_command << " --disable-shared"
   end
 
