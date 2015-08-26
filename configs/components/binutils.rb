@@ -7,7 +7,7 @@ component "binutils" do |pkg, settings, platform|
   pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-ldlang.c.patch"
 
   if platform.is_solaris?
-    pkg.environment "PATH" => "#{settings[:bindir]}:/usr/ccs/bin:/opt/csw/bin:$$PATH"
+    pkg.environment "PATH" => "#{settings[:bindir]}:/usr/ccs/bin:/usr/sfw/bin:/opt/csw/bin:$$PATH"
     target = "--target=#{settings[:platform_triple]}"
   else
     pkg.environment "PATH" => "#{settings[:bindir]}:$$PATH"
