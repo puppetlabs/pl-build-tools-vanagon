@@ -19,7 +19,7 @@ component "cmake" do |pkg, settings, platform|
     pkg.build_requires "make"
 
     case
-    when platform.is_nxos?
+    when platform.is_nxos?, platform.is_cisco_wrlinux?
       pkg.build_requires "ncurses-dev"
     when platform.is_rpm?
       pkg.build_requires "ncurses-devel"
