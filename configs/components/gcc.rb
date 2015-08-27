@@ -134,6 +134,8 @@ component "gcc" do |pkg, settings, platform|
     configure_command << "export CC=/opt/gcc464/bin/gcc; export CXX=/opt/gcc464/bin/g++; "
     # AIX needs higher ulimit parameters to build GCC
     configure_command << " ulimit -s 2560000; ulimit -d 2048575; "
+    configure_command << " chsec -f /etc/security/limits -s default -a stack=2560000;"
+    configure_command << " chsec -f /etc/security/limits -s default -a data=2560000;"
   end
 
   # We've abstracted the configure command a bit because of the difference in
