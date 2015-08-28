@@ -17,8 +17,8 @@ component "cmake" do |pkg, settings, platform|
 
     pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
   elsif platform.is_aix?
-     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"
-     pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/make-3.80-1.aix5.1.ppc.rpm"
+    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"
+    pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/make-3.80-1.aix5.1.ppc.rpm"
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
@@ -54,19 +54,14 @@ component "cmake" do |pkg, settings, platform|
   pkg.environment "PATH" => "$$PATH:/usr/local/bin"
   pkg.environment "MAKE" => platform.make
 
-  # Initialize an empty configure_command string
-  configure_command  = ""
-
-  configure_command << " ./configure --prefix=#{settings[:prefix]} --docdir=share/doc"
-
   # Even though only system curl is available on the build host,
   # the build on OSX bombs without this.
   if platform.is_osx?
-    configure_command << " --system-curl"
+    extra_flags = " --system-curl"
   end
 
   pkg.configure do
-    configure_command
+    "./configure --prefix=#{settings[:prefix]} --docdir=share/doc #{extra_flags}"
   end
 
   pkg.build do
