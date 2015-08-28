@@ -1,12 +1,20 @@
 component "gcc" do |pkg, settings, platform|
-  pkg.version "4.8.2"
-  pkg.md5sum "deca88241c1135e2ff9fa5486ab5957b"
+  if platform.is_aix?
+    pkg.version "5.2.0"
+    pkg.md5sum "1180e9ef7f5a2e4b1eab3e1a0d3fa228"
+  else
+    pkg.version "4.8.2"
+    pkg.md5sum "deca88241c1135e2ff9fa5486ab5957b"
+  end
   pkg.url "http://buildsources.delivery.puppetlabs.net/gcc-#{pkg.get_version}.tar.gz"
 
   # The 10.10 versioning breaks some stuff.
   pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
+  pkg.apply_patch "resources/patches/gcc/aix-inclhack.patch" if platform.is_aix?
 
-  pkg.requires "binutils" unless platform.is_solaris?
+  if platform.is_linux? or platform.is_osx?
+    pkg.requires "binutils"
+  end
 
   if platform.is_deb?
     pkg.requires "libc6-dev"
@@ -25,25 +33,29 @@ component "gcc" do |pkg, settings, platform|
     case
     when platform.is_aix?
       # not version-specific for AIX
-      pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/binutils-2.14-3.aix5.1.ppc.rpm"
-      pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/mktemp-1.7-1.aix5.1.ppc.rpm"
       pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/gawk-3.1.3-1.aix5.1.ppc.rpm"
       pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/gzip-1.2.4a-10.aix5.2.ppc.rpm"
       pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/bzip2-1.0.5-3.aix5.3.ppc.rpm"
       pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/make-3.80-1.aix5.1.ppc.rpm"
-      pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/tar-1.14-2.aix5.1.ppc.rpm"
       if platform.os_version =~ /6.1|7.1/
+        pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/binutils-2.14-4.aix6.1.ppc.rpm"
         pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/gcc-4.2.0-3.aix6.1.ppc.rpm"
-        pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/6.1/ppc/gcc-aix-boostrap-4.6.4-1.aix6.1.ppc.rpm"
+        pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/6.1/ppc/gcc-aix-bootstrap-4.6.4-1.aix6.1.ppc.rpm"
         pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/libstdcplusplus-4.2.0-3.aix6.1.ppc.rpm"
         pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/libstdcplusplus-devel-4.2.0-3.aix6.1.ppc.rpm"
         pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/gcc-cplusplus-4.2.0-3.aix6.1.ppc.rpm"
+        pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/tar-1.22-1.aix6.1.ppc.rpm"
+        pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/libgcc-4.2.0-3.aix6.1.ppc.rpm"
       else
         # AIX 5.3
+        pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/binutils-2.14-3.aix5.1.ppc.rpm"
         pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/gcc-4.2.0-3.aix5.3.ppc.rpm"
         pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/gcc-cplusplus-4.2.0-3.aix5.3.ppc.rpm"
         pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/libstdcplusplus-4.2.0-3.aix5.3.ppc.rpm"
         pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/libstdcplusplus-devel-4.2.0-3.aix5.3.ppc.rpm"
+        pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/tar-1.14-2.aix5.1.ppc.rpm"
+        pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/libgcc-4.2.0-3.aix5.3.ppc.rpm"
+        pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/5.3/ppc/gcc-aix-bootstrap-4.6.4-1.aix5.3.ppc.rpm"
         # AIX 5.3 gcc464 is currently a tarball that should be built into an rpm
       end
     when platform.is_nxos?, platform.is_cisco_wrlinux?
@@ -130,6 +142,8 @@ component "gcc" do |pkg, settings, platform|
     configure_command << "export CC=/opt/gcc464/bin/gcc; export CXX=/opt/gcc464/bin/g++; "
     # AIX needs higher ulimit parameters to build GCC
     configure_command << " ulimit -s 2560000; ulimit -d 2048575; "
+    configure_command << " chsec -f /etc/security/limits -s default -a stack=2560000;"
+    configure_command << " chsec -f /etc/security/limits -s default -a data=2560000;"
   end
 
   # We've abstracted the configure command a bit because of the difference in

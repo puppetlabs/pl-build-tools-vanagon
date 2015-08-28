@@ -18,9 +18,9 @@ component "yaml-cpp" do |pkg, settings, platform|
     cmake = "#{settings[:basedir]}/i386-pc-solaris2.10/bin/cmake"
   elsif platform.is_aix?
     cmake = "#{settings[:bindir]}/cmake"
-    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-4.8.2-1.aix#{platform.os_version}.ppc.rpm"
-    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-boost-1.57.0-1.aix#{platform.os_version}.ppc.rpm"
-    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-cmake-3.2.2-1.aix#{platform.os_version}.ppc.rpm"
+    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"
+    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-boost-1.58.0-1.aix#{platform.os_version}.ppc.rpm"
+    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-cmake-3.2.3-1.aix#{platform.os_version}.ppc.rpm"
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
