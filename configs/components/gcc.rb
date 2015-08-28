@@ -1,12 +1,20 @@
 component "gcc" do |pkg, settings, platform|
-  pkg.version "4.8.2"
-  pkg.md5sum "deca88241c1135e2ff9fa5486ab5957b"
+  if platform.is_aix?
+    pkg.version "5.2.0"
+    pkg.md5sum "1180e9ef7f5a2e4b1eab3e1a0d3fa228"
+  else
+    pkg.version "4.8.2"
+    pkg.md5sum "deca88241c1135e2ff9fa5486ab5957b"
+  end
   pkg.url "http://buildsources.delivery.puppetlabs.net/gcc-#{pkg.get_version}.tar.gz"
 
   # The 10.10 versioning breaks some stuff.
   pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
+  pkg.apply_patch "resources/patches/gcc/aix-inclhack.patch" if platform.is_aix?
 
-  pkg.requires "binutils" unless platform.is_solaris?
+  if platform.is_linux? or platform.is_osx?
+    pkg.requires "binutils"
+  end
 
   if platform.is_deb?
     pkg.requires "libc6-dev"

@@ -3,7 +3,11 @@ project "pl-gcc" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Labs GCC"
-  proj.version "4.8.2"
+  unless platform.is_aix?
+    proj.version "4.8.2"
+  else
+    proj.version "5.2.0"
+  end
   proj.license "Same as GCC"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
