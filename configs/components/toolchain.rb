@@ -10,9 +10,8 @@ component "toolchain" do |pkg, settings, platform|
     pkg.environment "PATH" => "/opt/freeware/bin:#{settings[:basedir]}/bin:$$PATH"
   elsif platform.is_solaris?
     if platform.os_version == "10"
-      pkg.url "file://files/solaris-10-toolchains.tar.gz"
-      pkg.md5sum "dfb2880781e45baa2c702c5a8bd8f5d6"
-      pkg.version '2015-08-12'
+      pkg.add_source "file://files/solaris-10-i386-toolchain.cmake.txt", sum: "b7591f714801bcad47c6a59b7f902eec"
+      pkg.add_source "file://files/solaris-10-sparc-toolchain.cmake.txt", sum: "123681f5a6aaf9adfa8b5c42cef27daa"
     elsif platform.os_version == "11"
       pkg.add_source "file://files/solaris-11-i386-toolchain.cmake.txt", sum: "189b7abcc50e4915d521db2fd4f30a9e"
       pkg.add_source "file://files/solaris-11-sparc-toolchain.cmake.txt", sum: "3c3cd0e958471844346b7193e2feab0d"
@@ -22,7 +21,6 @@ component "toolchain" do |pkg, settings, platform|
   else
     fail "Need to define a toolchain file for #{platform.name} first"
   end
-  filename = pkg.get_url.split('/').last
   # We still need to add support for OS X
   if platform.is_solaris?
     pkg.install_file "solaris-#{platform.os_version}-i386-toolchain.cmake.txt", "#{settings[:basedir]}/i386-pc-solaris2.#{platform.os_version}/pl-build-toolchain.cmake"
@@ -36,6 +34,7 @@ component "toolchain" do |pkg, settings, platform|
       ]
     end
   else
+    filename = pkg.get_url.split('/').last
     pkg.install_file filename, "#{settings[:prefix]}/pl-build-toolchain.cmake"
   end
 end
