@@ -51,13 +51,6 @@ component "cmake" do |pkg, settings, platform|
     pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
   end
 
-  # Different toolchains for different target platforms.
-  if platform.is_osx?
-    toolchain = "pl-build-toolchain-darwin"
-  else
-    toolchain = "pl-build-toolchain"
-  end
-
   pkg.environment "PATH" => "$$PATH:/usr/local/bin"
   pkg.environment "MAKE" => platform.make
 
