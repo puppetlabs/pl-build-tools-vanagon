@@ -6,9 +6,14 @@ component "cmake" do |pkg, settings, platform|
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
     pkg.build_requires "pl-gcc-4.8.2"
-  elsif platform.name =~ /solaris-10/
-    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.i386.pkg.gz'
-    pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
+  elsif platform.is_solaris?
+    if platform.os_version == "10"
+      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.i386.pkg.gz'
+      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
+    elsif platform.os_version == "11"
+      pkg.build_requires 'pl-binutils'
+      pkg.build_requires 'pl-gcc'
+    end
 
     pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
   elsif platform.is_aix?
