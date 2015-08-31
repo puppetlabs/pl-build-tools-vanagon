@@ -28,4 +28,10 @@ proj.setting(:includedir, File.join(proj.prefix, "include"))
 proj.setting(:datadir, File.join(proj.prefix, "share"))
 proj.setting(:mandir, File.join(proj.datadir, "man"))
 
+if platform.is_osx?
+  proj.identifier "com.puppetlabs"
+elsif platform.is_solaris?
+  proj.identifier "puppetlabs.com"
+end
+
 proj.directory proj.basedir

@@ -15,8 +15,13 @@ component "boost" do |pkg, settings, platform|
     pkg.build_requires "pl-gcc-4.8.2"
     gpp = "#{settings[:bindir]}/g++"
   elsif platform.is_solaris?
-    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
-    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
+    if platform.os_version == "10"
+      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
+      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
+    elsif platform.os_version == "11"
+      pkg.build_requires 'pl-binutils'
+      pkg.build_requires 'pl-gcc'
+    end
 
     pkg.apply_patch 'resources/patches/boost/solaris-10-boost-build.patch'
 
