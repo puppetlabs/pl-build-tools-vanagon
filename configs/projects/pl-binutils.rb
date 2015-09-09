@@ -2,6 +2,11 @@ project "pl-binutils" do |proj|
   # Project level settings our components will care about
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
+  if platform.name =~ /solaris-11/
+    proj.name "pl-binutils-#{platform.architecture}"
+    proj.noarch
+  end
+
   proj.description "Puppet Labs Binutils"
   proj.version "2.25"
   proj.license "GPLv3+"

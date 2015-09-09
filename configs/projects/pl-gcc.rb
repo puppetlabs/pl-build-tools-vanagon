@@ -9,6 +9,12 @@ project "pl-gcc" do |proj|
   else
     proj.version "4.8.2"
   end
+
+  if platform.name =~ /solaris-11/
+    proj.name "pl-gcc-#{platform.architecture}"
+    proj.noarch
+  end
+
   proj.license "Same as GCC"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"

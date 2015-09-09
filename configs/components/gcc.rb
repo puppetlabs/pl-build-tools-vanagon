@@ -71,8 +71,8 @@ component "gcc" do |pkg, settings, platform|
     if platform.os_version == '10'
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
     elsif platform.os_version == '11'
-      pkg.requires 'pl-binutils'
-      pkg.build_requires 'pl-binutils'
+      pkg.requires "pl-binutils-#{platform.architecture}"
+      pkg.build_requires "pl-binutils-#{platform.architecture}"
     end
     if platform.architecture.downcase == 'sparc'
       pkg.build_requires "sysroot"
