@@ -75,7 +75,7 @@ component "gcc" do |pkg, settings, platform|
       pkg.build_requires 'pl-binutils'
     end
     if platform.architecture.downcase == 'sparc'
-      pkg.build_requires "solaris-#{platform.os_version}-sparc-sysroot"
+      pkg.build_requires "sysroot"
     end
   end
 
