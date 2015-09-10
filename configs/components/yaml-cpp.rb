@@ -16,9 +16,9 @@ component "yaml-cpp" do |pkg, settings, platform|
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-boost-1.57.0.#{platform.architecture}.pkg.gz"
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-cmake-3.2.3.i386.pkg.gz"
     elsif platform.os_version == "11"
-      pkg.build_requires "pl-gcc"
-      pkg.build_requires "pl-binutils"
-      pkg.build_requires "pl-boost"
+      pkg.build_requires "pl-binutils-#{platform.architecture}"
+      pkg.build_requires "pl-gcc-#{platform.architecture}"
+      pkg.build_requires "pl-boost-#{platform.architecture}"
       pkg.build_requires "pl-cmake"
     end
     # We always use the i386 build of cmake, even on sparc
