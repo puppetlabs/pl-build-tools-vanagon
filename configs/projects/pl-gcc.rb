@@ -3,11 +3,18 @@ project "pl-gcc" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Labs GCC"
-  unless platform.is_aix?
-    proj.version "4.8.2"
-  else
+
+  if platform.is_aix?
     proj.version "5.2.0"
+  else
+    proj.version "4.8.2"
   end
+
+  if platform.name =~ /solaris-11/
+    proj.name "pl-gcc-#{platform.architecture}"
+    proj.noarch
+  end
+
   proj.license "Same as GCC"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
@@ -24,7 +31,7 @@ project "pl-gcc" do |proj|
   proj.component "gcc"
 
   if platform.is_solaris? && platform.architecture.downcase == 'sparc'
-    proj.component "solaris-#{platform.os_version}-sparc-sysroot"
+    proj.component "sysroot"
   end
 
   proj.target_repo ""
