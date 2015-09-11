@@ -8,9 +8,14 @@ project "pl-yaml-cpp" do |proj|
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
-  proj.requires 'pl-gcc'
-  proj.requires 'pl-cmake'
-  proj.requires 'pl-boost'
+  if platform.name =~ /solaris-11/
+    proj.name "pl-yaml-cpp-#{platform.architecture}"
+    proj.noarch
+  else
+    proj.requires "pl-gcc"
+    proj.requires "pl-cmake"
+    proj.requires "pl-boost"
+  end
 
   # Platform specific
   proj.setting(:cflags, "-I#{proj.includedir}")

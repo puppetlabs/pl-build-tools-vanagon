@@ -8,7 +8,12 @@ project "pl-boost" do |proj|
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
-  proj.requires 'pl-gcc'
+  if platform.name =~ /solaris-11/
+    proj.name "pl-boost-#{platform.architecture}"
+    proj.noarch
+  else
+    proj.requires "pl-gcc"
+  end
 
   # Platform specific
   proj.setting(:cflags, "-I#{proj.includedir}")
