@@ -2,9 +2,9 @@ platform "solaris-10-i386" do |plat|
   plat.servicedir "/var/svc/manifest"
   plat.defaultdir "/lib/svc/method"
   plat.servicetype "smf"
-  plat.vmpooler_template "solaris-10-x86_64"
+  plat.vmpooler_template "solaris-10-u8-x86_64"
 
-  base_pkgs = ['arc', 'gnu-idn', 'gpch', 'gtar', 'hea', 'libm', 'wgetu', 'xcu4']
+  base_pkgs = ['arc', 'gcc', 'gccruntime', 'gccS', 'gnu-idn', 'gpch', 'gtar', 'hea', 'libm', 'wgetu', 'xcu4']
   base_url = 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends'
 
   plat.provision_with %[echo "# Write the noask file to a temporary directory
@@ -36,12 +36,12 @@ action=nocheck
 # Install to the default base directory.
 basedir=default" > /var/tmp/vanagon-noask;
   pkgadd -n -a /var/tmp/vanagon-noask -G -d http://get.opencsw.org/now all;
-  /opt/csw/bin/pkgutil -y -i curl rsync gmake pkgconfig ggrep;
+  /opt/csw/bin/pkgutil -y -i curl rsync gmake pkgconfig ggrep gsed;
   ln -sf /opt/csw/bin/rsync /usr/bin/rsync;
+  ln -sf /opt/csw/bin/curl /usr/bin/curl;
 
   # Install base build dependencies
   for pkg in #{base_pkgs.map { |pkg| "SUNW#{pkg}.pkg.gz" }.join(' ') }; do \
   tmpdir=$(mktemp -p /var/tmp -d); (cd ${tmpdir} && curl -O #{base_url}/${pkg} && gunzip -c ${pkg} | pkgadd -d /dev/stdin -a /var/tmp/vanagon-noask all); \
-  done
-  ntpdate pool.ntp.org]
+  done]
 end
