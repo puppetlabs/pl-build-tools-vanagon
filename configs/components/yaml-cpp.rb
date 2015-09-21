@@ -3,12 +3,13 @@ component "yaml-cpp" do |pkg, settings, platform|
   pkg.md5sum "0fa47a5ed8fedefab766592785c85ee7"
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
+  cmake = "#{settings[:bindir]}/cmake"
+
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
     pkg.build_requires "pl-gcc-4.8.2"
     pkg.build_requires "pl-cmake-3.2.2"
     pkg.build_requires "pl-boost-1.57.0"
-    cmake = "#{settings[:bindir]}/cmake"
   elsif platform.is_solaris?
     if platform.os_version == "10"
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
@@ -24,7 +25,6 @@ component "yaml-cpp" do |pkg, settings, platform|
     # We always use the i386 build of cmake, even on sparc
     cmake = "#{settings[:basedir]}/i386-pc-solaris2.#{platform.os_version}/bin/cmake"
   elsif platform.is_aix?
-    cmake = "#{settings[:bindir]}/cmake"
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-boost-1.58.0-1.aix#{platform.os_version}.ppc.rpm"
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-cmake-3.2.3-1.aix#{platform.os_version}.ppc.rpm"
@@ -37,7 +37,6 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.build_requires "make"
     pkg.build_requires "pl-cmake"
     pkg.build_requires "pl-boost"
-    cmake = "#{settings[:bindir]}/cmake"
   end
 
   # Different toolchains for different target platforms.
