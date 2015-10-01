@@ -8,7 +8,6 @@ component "toolchain" do |pkg, settings, platform|
     pkg.md5sum "12b9bd46ec9b16b502135d685a67d39e"
     # Despite the name, this toolchain applies to all aix versions
     pkg.url "file://files/aix-61-ppc-toolchain.cmake.txt"
-    pkg.environment "PATH" => "/opt/freeware/bin:#{settings[:basedir]}/bin:$$PATH"
   elsif platform.is_solaris?
     if platform.os_version == "10"
       pkg.add_source "file://files/solaris-10-i386-toolchain.cmake.txt", sum: "5197cb02f5d1a099125a80a6d4333308"
