@@ -1,20 +1,21 @@
 component "toolchain" do |pkg, settings, platform|
   if platform.is_linux?
-    pkg.version "2015.07.13"
-    pkg.md5sum "90bfc55e78dbf184ccb8ae9d50c0ca9f"
+    pkg.version "2015.10.01"
+    pkg.md5sum "3b607682a02e7811d730261326d2f02c"
     pkg.url "file://files/linux-toolchain.cmake.txt"
   elsif platform.is_aix?
-    pkg.version "2015.05.11"
-    pkg.md5sum "0c256056b814a75a25d3fc16266db057"
+    pkg.version "2015.10.01"
+    pkg.md5sum "12b9bd46ec9b16b502135d685a67d39e"
+    # Despite the name, this toolchain applies to all aix versions
     pkg.url "file://files/aix-61-ppc-toolchain.cmake.txt"
     pkg.environment "PATH" => "/opt/freeware/bin:#{settings[:basedir]}/bin:$$PATH"
   elsif platform.is_solaris?
     if platform.os_version == "10"
-      pkg.add_source "file://files/solaris-10-i386-toolchain.cmake.txt", sum: "b7591f714801bcad47c6a59b7f902eec"
-      pkg.add_source "file://files/solaris-10-sparc-toolchain.cmake.txt", sum: "123681f5a6aaf9adfa8b5c42cef27daa"
+      pkg.add_source "file://files/solaris-10-i386-toolchain.cmake.txt", sum: "5197cb02f5d1a099125a80a6d4333308"
+      pkg.add_source "file://files/solaris-10-sparc-toolchain.cmake.txt", sum: "479b3c7ff43926b7bd8b82aeb9cc7636"
     elsif platform.os_version == "11"
-      pkg.add_source "file://files/solaris-11-i386-toolchain.cmake.txt", sum: "189b7abcc50e4915d521db2fd4f30a9e"
-      pkg.add_source "file://files/solaris-11-sparc-toolchain.cmake.txt", sum: "3c3cd0e958471844346b7193e2feab0d"
+      pkg.add_source "file://files/solaris-11-i386-toolchain.cmake.txt", sum: "75686df5820423db0110c8396aeab4da"
+      pkg.add_source "file://files/solaris-11-sparc-toolchain.cmake.txt", sum: "43d6e9878b94d59c78053f6b959884ce"
     else
       fail "Need to define a toolchain file for #{platform.name} first"
     end
