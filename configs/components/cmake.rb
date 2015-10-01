@@ -48,7 +48,7 @@ component "cmake" do |pkg, settings, platform|
     pkg.environment "CC" => "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-gcc"
     pkg.environment "CXX" => "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   else
-    pkg.environment "LDFLAGS" => "-Wl,-rpath=#{settings[:bindir]}/lib,-rpath=#{settings[:bindir]}/lib64,--enable-new-dtags"
+    pkg.environment "LDFLAGS" => "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:prefix]}/lib64,--enable-new-dtags"
     pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
     pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
   end
