@@ -6,6 +6,15 @@ The pl-build-tools-vanagon repo is where all the automation lives to build packa
 
 The [Gemfile](https://github.com/puppetlabs/pl-build-tools-vanagon/blob/master/Gemfile) specifies all of the needed ruby libraries to build a given project in this repo. Additionally, the automation requires a virtualization engine to build within for each desired package. More information on the different virtualization engine options is available in [the vanagon repo](https://github.com/puppetlabs/vanagon#-e-engine---engine-engine).
 
+## Environment variables
+#### VANAGON\_LOCATION
+The location of Vanagon in the Gemfile can be overridden with the environment variable `VANAGON_LOCATION`. Can be set prior to `bundle install` or updated with `bundle update`.
+
+* `0.3.14` - Specific tag from the Vanagon git repo
+* `git@github.com:puppetlabs/vanagon#master` - Remote git location and tag
+* `file:///workspace/vanagon` - Absolute file path
+* `file://../vanagon` - File path relative to the project directory
+
 # Building packages
 This repo uses automation in [vanagon](https://github.com/puppetlabs/vanagon) to build packages.
 
