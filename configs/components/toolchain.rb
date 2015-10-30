@@ -10,11 +10,11 @@ component "toolchain" do |pkg, settings, platform|
     pkg.url "file://files/aix-61-ppc-toolchain.cmake.txt"
   elsif platform.is_solaris?
     if platform.os_version == "10"
-      pkg.add_source "file://files/solaris-10-i386-toolchain.cmake.txt", sum: "5197cb02f5d1a099125a80a6d4333308"
-      pkg.add_source "file://files/solaris-10-sparc-toolchain.cmake.txt", sum: "479b3c7ff43926b7bd8b82aeb9cc7636"
+      pkg.add_source "file://files/solaris-10-i386-toolchain.cmake.txt", sum: "4ea64aac45e2e1a52bbf75b5e95acf2b"
+      pkg.add_source "file://files/solaris-10-sparc-toolchain.cmake.txt", sum: "e5e679389baaeaa2656750c6481312dc"
     elsif platform.os_version == "11"
-      pkg.add_source "file://files/solaris-11-i386-toolchain.cmake.txt", sum: "75686df5820423db0110c8396aeab4da"
-      pkg.add_source "file://files/solaris-11-sparc-toolchain.cmake.txt", sum: "43d6e9878b94d59c78053f6b959884ce"
+      pkg.add_source "file://files/solaris-11-i386-toolchain.cmake.txt", sum: "406e7febf6b83f9102980ae52055c4e2"
+      pkg.add_source "file://files/solaris-11-sparc-toolchain.cmake.txt", sum: "4a16423fda546c4d50006179b9f013e7"
     else
       fail "Need to define a toolchain file for #{platform.name} first"
     end
