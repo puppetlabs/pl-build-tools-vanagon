@@ -5,7 +5,7 @@ component "toolchain" do |pkg, settings, platform|
     pkg.url "file://files/linux-toolchain.cmake.txt"
   elsif platform.is_aix?
     pkg.version "2015.10.01"
-    pkg.md5sum "12b9bd46ec9b16b502135d685a67d39e"
+    pkg.md5sum "07bd7c98f0e2ac90c0282a5a98bd3b4c"
     # Despite the name, this toolchain applies to all aix versions
     pkg.url "file://files/aix-61-ppc-toolchain.cmake.txt"
   elsif platform.is_solaris?
