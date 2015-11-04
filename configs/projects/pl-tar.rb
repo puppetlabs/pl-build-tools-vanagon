@@ -4,6 +4,7 @@ project "pl-tar" do |proj|
 
   proj.description "Puppet Labs Gnu Tar"
   proj.version "1.28"
+  proj.release "2"
   proj.license "GPLv3"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
