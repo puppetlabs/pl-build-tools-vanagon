@@ -15,6 +15,9 @@ component "tar" do |pkg, settings, platform|
   end
 
   pkg.install do
-    "#{platform[:make]} install"
+    [
+      "#{platform[:make]} install",
+      "rm -rf #{settings[:basedir]}/share/info"
+    ]
   end
 end
