@@ -11,6 +11,11 @@ component "autoconf" do |pkg, settings, platform|
     pkg.build_requires "gcc"
     pkg.build_requires "make"
   end
+
+  if platform.name =~ /el-4/
+    pkg.build_requires "pl-tar"
+  end
+
   pkg.build_requires "m4"
 
   pkg.configure do

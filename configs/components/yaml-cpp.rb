@@ -39,6 +39,10 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.build_requires "pl-boost"
   end
 
+  if platform.name =~ /el-4/
+    pkg.build_requires "pl-tar"
+  end
+
   # Different toolchains for different target platforms.
   if platform.is_osx?
     toolchain = "pl-build-toolchain-darwin"

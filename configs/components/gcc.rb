@@ -79,6 +79,10 @@ component "gcc" do |pkg, settings, platform|
     end
   end
 
+  if platform.name =~ /el-4/
+    pkg.build_requires "pl-tar"
+  end
+
   ##  TESTING
   # In the future we may want to enable the test suite for GCC. If we do we'll
   # need dejagnu, expect and tcl. Those packages should be available on all RPM

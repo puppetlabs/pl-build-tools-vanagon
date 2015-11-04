@@ -21,6 +21,11 @@ component "toolchain" do |pkg, settings, platform|
   else
     fail "Need to define a toolchain file for #{platform.name} first"
   end
+
+  if platform.name =~ /el-4/
+    pkg.build_requires "pl-tar"
+  end
+
   # We still need to add support for OS X
   if platform.is_solaris?
     pkg.install_file "solaris-#{platform.os_version}-i386-toolchain.cmake.txt", "#{settings[:basedir]}/i386-pc-solaris2.#{platform.os_version}/pl-build-toolchain.cmake"

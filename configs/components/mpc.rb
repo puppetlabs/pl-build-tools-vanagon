@@ -3,4 +3,7 @@ component "mpc" do |pkg, settings, platform|
   pkg.version "0.8.1"
   pkg.md5sum "5b34aa804d514cc295414a963aedb6bf"
   pkg.url "http://buildsources.delivery.puppetlabs.net/mpc-#{pkg.get_version}.tar.gz"
+  if platform.name =~ /el-4/
+    pkg.build_requires "pl-tar"
+  end
 end
