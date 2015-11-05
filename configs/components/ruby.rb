@@ -10,6 +10,10 @@ component "ruby" do |pkg, settings, platform|
   pkg.apply_patch "resources/patches/ruby/fix-date-compilation.patch" if platform.is_solaris?
   pkg.environment "PATH" => "/usr/sfw/bin:/usr/ccs/bin:$$PATH"
 
+  if platform.name =~ /el-4/
+    pkg.build_requires "pl-tar"
+  end
+
   # Here we set --enable-bundled-libyaml to ensure that the libyaml included in
   # ruby is used, even if the build system has a copy of libyaml available
   pkg.configure do

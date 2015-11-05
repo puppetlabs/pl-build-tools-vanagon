@@ -23,6 +23,10 @@ component "binutils" do |pkg, settings, platform|
     target = ""
   end
 
+  if platform.name =~ /el-4/
+    pkg.build_requires "pl-tar"
+  end
+
   pkg.configure do
     "./configure \
       --prefix=#{settings[:basedir]} \

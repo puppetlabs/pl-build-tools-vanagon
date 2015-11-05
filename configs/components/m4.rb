@@ -12,6 +12,10 @@ component "m4" do |pkg, settings, platform|
     pkg.build_requires "make"
   end
 
+  if platform.name =~ /el-4/
+    pkg.build_requires "pl-tar"
+  end
+
   pkg.configure do
     [ "./configure --prefix=#{settings[:prefix]}" ]
   end
