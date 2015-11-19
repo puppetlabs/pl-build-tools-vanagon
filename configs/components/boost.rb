@@ -86,6 +86,7 @@ component "boost" do |pkg, settings, platform|
     ]
   end
 
+  #the following will remove the user-config.jam (from build) at the end of installation
   pkg.install do
     [ "#{settings[:prefix]}/bin/b2 \
     -d+2 \
@@ -96,7 +97,8 @@ component "boost" do |pkg, settings, platform|
     #{boost_libs.map {|lib| "--with-#{lib}"}.join(" ")} \
     install",
     "chmod 0644 #{settings[:includedir]}/boost/graph/vf2_sub_graph_iso.hpp",
-    "chmod 0644 #{settings[:includedir]}/boost/thread/v2/shared_mutex.hpp"
+    "chmod 0644 #{settings[:includedir]}/boost/thread/v2/shared_mutex.hpp",
+    "rm -f ~/user-config.jam"
     ]
   end
 
