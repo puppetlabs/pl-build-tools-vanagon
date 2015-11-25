@@ -8,6 +8,17 @@ component "toolchain" do |pkg, settings, platform|
     pkg.md5sum "07bd7c98f0e2ac90c0282a5a98bd3b4c"
     # Despite the name, this toolchain applies to all aix versions
     pkg.url "file://files/aix-61-ppc-toolchain.cmake.txt"
+  elsif platform.is_windows?
+    pkg.version "2015.11.23"
+    if platform.architecture == "x64"
+      pkg.md5sum "6c1d144addb6e5c3d810156a7e2d1ca0"
+      pkg.url "file://files/windows-x64-toolchain.cmake.txt"
+    elsif platform.architecture == "x86"
+      pkg.md5sum "522a6c5e2d86c1bbb22292ef792502a9"
+      pkg.url "file://files/windows-x86-toolchain.cmake.txt"
+    else
+      fail "Need to define a toolchain file for #{platform.name} first"
+    end
   elsif platform.is_solaris?
     pkg.version "2015.10.01"
     if platform.os_version == "10"
