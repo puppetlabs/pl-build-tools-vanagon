@@ -4,6 +4,7 @@ component "yaml-cpp" do |pkg, settings, platform|
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   cmake = "#{settings[:bindir]}/cmake"
+  addtl_flags = ""
 
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
@@ -24,6 +25,30 @@ component "yaml-cpp" do |pkg, settings, platform|
     end
     # We always use the i386 build of cmake, even on sparc
     cmake = "#{settings[:basedir]}/i386-pc-solaris2.#{platform.os_version}/bin/cmake"
+  elsif platform.is_windows?
+    opts = ""
+    arch = "64"
+    if platform.architecture == 'x86'
+      opts = "-x86"
+      arch = "32"
+    end
+    pkg.build_requires "mingw-w#{arch}"
+    pkg.build_requires "pl-boost-#{platform.architecture}"
+    pkg.build_requires "cmake"
+    pkg.build_requires "toolchain"
+
+    pkg.environment "PATH" => "#{platform.drive_root}/tools/mingw#{arch}/bin:$$PATH"
+    pkg.environment "CYGWIN" => "nodosfilewarning"
+    pkg.environment "LIB" => "#{platform.drive_root}/tools/mingw#{arch}/lib"
+    pkg.environment "INCLUDE" => "#{platform.drive_root}/tools/mingw#{arch}/include"
+    pkg.environment "CC" => "#{platform.drive_root}/tools/mingw#{arch}/bin/gcc"
+    pkg.environment "CXX" => "#{platform.drive_root}/tools/mingw#{arch}/bin/g++"
+
+    cmake = "#{platform.drive_root}/Program Files (x86)/CMake/bin/cmake.exe"
+    special_prefix = platform.convert_to_windows_path(settings[:prefix])
+
+    special_path = "PATH=#{platform.drive_root}/tools/mingw#{arch}/bin:#{platform.drive_root}/Windows/system32:#{platform.drive_root}/Windows:#{platform.drive_root}/Windows/System32/Wbem:#{platform.drive_root}/Windows/System32/WindowsPowerShell/v1.0:#{platform.drive_root}/pstools"
+    addtl_flags = "-G \"MinGW Makefiles\""
   elsif platform.is_aix?
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-boost-1.58.0-1.aix#{platform.os_version}.ppc.rpm"
@@ -54,9 +79,11 @@ component "yaml-cpp" do |pkg, settings, platform|
     [ "rm -rf build-shared",
       "mkdir build-shared",
       "cd build-shared",
-      "#{cmake} \
-    -DCMAKE_TOOLCHAIN_FILE=#{settings[:prefix]}/#{toolchain}.cmake \
-    -DCMAKE_INSTALL_PREFIX=#{settings[:prefix]} \
+      "#{special_path ? special_path : ''} \
+      \"#{cmake}\" \
+      #{addtl_flags} \
+    -DCMAKE_TOOLCHAIN_FILE=#{special_prefix ? special_prefix : settings[:prefix]}/#{toolchain}.cmake \
+    -DCMAKE_INSTALL_PREFIX=#{special_prefix ? special_prefix : settings[:prefix]} \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DYAML_CPP_BUILD_TOOLS=0 \
     -DBUILD_SHARED_LIBS=ON \
@@ -65,9 +92,12 @@ component "yaml-cpp" do |pkg, settings, platform|
       "cd ../",
       "rm -rf build-static",
       "mkdir build-static",
-      "cd build-static", "#{cmake} \
-    -DCMAKE_TOOLCHAIN_FILE=#{settings[:prefix]}/#{toolchain}.cmake \
-    -DCMAKE_INSTALL_PREFIX=#{settings[:prefix]} \
+      "cd build-static",
+      "#{special_path ? special_path : ''} \
+      \"#{cmake}\" \
+      #{addtl_flags} \
+    -DCMAKE_TOOLCHAIN_FILE=#{special_prefix ? special_prefix : settings[:prefix]}/#{toolchain}.cmake \
+    -DCMAKE_INSTALL_PREFIX=#{special_prefix ? special_prefix : settings[:prefix]} \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DYAML_CPP_BUILD_TOOLS=0 \
     -DBUILD_SHARED_LIBS=OFF \

@@ -1,4 +1,4 @@
-platform "win-2012-x64" do |plat|
+platform "win-2012-x86" do |plat|
   plat.vmpooler_template "win-2012r2-x86_64"
 
   # We need to ensure we install chocolatey prior to adding any nuget repos. Otherwise, everything will fall over
@@ -8,5 +8,5 @@ platform "win-2012-x64" do |plat|
 
   plat.install_build_dependencies_with "C:/ProgramData/chocolatey/bin/choco.exe install -y"
 
-  plat.make "/cygdrive/c/tools/mingw64/bin/mingw32-make"
+  plat.make "/cygdrive/c/tools/mingw32/bin/mingw32-make"
 end

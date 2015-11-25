@@ -22,6 +22,14 @@ project "pl-yaml-cpp" do |proj|
   proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
 
   proj.component "yaml-cpp"
+
+  # On windows, we aren't yet building the cmake dependency. As a result,
+  # we need to ensure anything that uses cmake also has access to the toolchain file.
+  # This will prove a challenge for puppet-agent
+  if platform.is_windows?
+    proj.component "toolchain"
+  end
+
   proj.target_repo ""
 
 end
