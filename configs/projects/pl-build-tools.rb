@@ -13,11 +13,16 @@ end
 
 # Project level settings our components will care about
 proj.setting(:platform_triple, platform_triple)
-proj.setting(:basedir, "/opt/pl-build-tools")
-if platform_triple.nil?
-  proj.setting(:prefix, "/opt/pl-build-tools")
+if platform.is_windows?
+  proj.setting(:basedir, "#{platform.drive_root}/tools/pl-build-tools")
+  proj.setting(:prefix, "#{platform.drive_root}/tools/pl-build-tools")
 else
-  proj.setting(:prefix, "/opt/pl-build-tools/#{platform_triple}")
+  proj.setting(:basedir, "/opt/pl-build-tools")
+  if platform_triple.nil?
+    proj.setting(:prefix, "/opt/pl-build-tools")
+  else
+    proj.setting(:prefix, "/opt/pl-build-tools/#{platform_triple}")
+  end
 end
 proj.setting(:sysconfdir, "/etc/pl-build-tools")
 proj.setting(:logdir, "/var/log/pl-build-tools")

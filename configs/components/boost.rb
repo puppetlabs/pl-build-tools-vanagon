@@ -10,6 +10,12 @@ component "boost" do |pkg, settings, platform|
   cflags = "-fPIC -std=c99"
   cxxflags = "-std=c++11 -fPIC"
 
+  # These are all places where windows differs from *nix. These are the default *nix settings.
+  toolset = "--with-toolset=gcc"
+  boost_dir = ""
+  bootstrap_suffix = ".sh"
+  execute = "./"
+
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
     pkg.build_requires "pl-gcc-4.8.2"
@@ -34,6 +40,34 @@ component "boost" do |pkg, settings, platform|
     end
 
     gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
+  elsif platform.is_windows?
+    # Temporary until buid_requires for windows is finalized
+    # this method should take package_name, version, and options as arguments
+    # and put them into the right place in the install command
+    opts = ""
+    arch = "64"
+    if platform.architecture == 'x86'
+      opts = "-x86"
+      arch = "32"
+    end
+    pkg.build_requires "mingw-w#{arch} -version 5.2.0 -debug #{opts}"
+
+    pkg.environment "PATH" => "#{platform.drive_root}/tools/mingw#{arch}/bin:$$PATH"
+    pkg.environment "CYGWIN" => "nodosfilewarning"
+
+    # bootstrap.bat does not take the `--with-toolset` flag
+    toolset = "mingw"
+    # boost is installed with this extra subdirectory on windows
+    boost_dir = "boost-1_58"
+    # we do not need to reference the .bat suffix when calling the bootstrap script
+    bootstrap_suffix = ""
+    # we need to make sure we link against non-cygwin libraries
+    execute = "cmd.exe /c "
+
+    # Sometimes we need to pass in the windows-specific path
+    special_prefix = platform.convert_to_windows_path(settings[:prefix])
+
+    gpp = platform.convert_to_windows_path("#{platform.drive_root}/tools/mingw#{arch}/bin/g++")
   else
     linkflags = "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64"
     pkg.build_requires "pl-gcc" unless platform.is_aix?
@@ -73,16 +107,27 @@ component "boost" do |pkg, settings, platform|
 
   if platform.is_osx?
     userconfigjam = %Q{using darwin : : #{gpp};}
+  elsif platform.is_windows?
+    userconfigjam = %Q{using gcc : : #{gpp} ;}
   else
     userconfigjam = %Q{using gcc : 4.8.2 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cxxflags}" ;}
   end
 
+  # On some platforms, we have multiple means of specifying paths. Sometimes, we need to use either one
+  # form or another. `special_prefix` allows us to do this. i.e., on windows, we need to have the
+  # windows specific path (C:/), whereas for everything else, we can default to the drive root currently
+  # in use (/cygdrive/c). This has to do with how the program is built, where it is expecting to find
+  # libraries and binaries, and how it tries to find them.
   pkg.build do
     [
       %Q{echo '#{userconfigjam}' > ~/user-config.jam},
       "cd tools/build",
-      "./bootstrap.sh --with-toolset=gcc",
-      "./b2 install -d+2 --prefix=#{settings[:prefix]} toolset=gcc #{b2flags} --debug-configuration"
+      "#{execute}bootstrap#{bootstrap_suffix} #{toolset}",
+      "./b2 install -d+2 \
+      --prefix=#{special_prefix ? special_prefix : settings[:prefix]} \
+      toolset=gcc \
+      #{b2flags} \
+      --debug-configuration"
     ]
   end
 
@@ -90,16 +135,16 @@ component "boost" do |pkg, settings, platform|
   pkg.install do
     [ "#{settings[:prefix]}/bin/b2 \
     -d+2 \
+    toolset=gcc \
     #{b2flags} \
     --debug-configuration \
     --build-dir=. \
-    --prefix=#{settings[:prefix]} \
+    --prefix=#{special_prefix ? special_prefix : settings[:prefix]} \
     #{boost_libs.map {|lib| "--with-#{lib}"}.join(" ")} \
     install",
-    "chmod 0644 #{settings[:includedir]}/boost/graph/vf2_sub_graph_iso.hpp",
-    "chmod 0644 #{settings[:includedir]}/boost/thread/v2/shared_mutex.hpp",
+    "chmod 0644 #{settings[:includedir]}/#{boost_dir}/boost/graph/vf2_sub_graph_iso.hpp",
+    "chmod 0644 #{settings[:includedir]}/#{boost_dir}/boost/thread/v2/shared_mutex.hpp",
     "rm -f ~/user-config.jam"
     ]
   end
-
 end
