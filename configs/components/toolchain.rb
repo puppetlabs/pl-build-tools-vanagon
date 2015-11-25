@@ -9,6 +9,7 @@ component "toolchain" do |pkg, settings, platform|
     # Despite the name, this toolchain applies to all aix versions
     pkg.url "file://files/aix-61-ppc-toolchain.cmake.txt"
   elsif platform.is_solaris?
+    pkg.version "2015.10.01"
     if platform.os_version == "10"
       pkg.add_source "file://files/solaris-10-i386-toolchain.cmake.txt", sum: "4ea64aac45e2e1a52bbf75b5e95acf2b"
       pkg.add_source "file://files/solaris-10-sparc-toolchain.cmake.txt", sum: "e5e679389baaeaa2656750c6481312dc"
