@@ -41,17 +41,7 @@ component "boost" do |pkg, settings, platform|
 
     gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   elsif platform.is_windows?
-    # Temporary until buid_requires for windows is finalized
-    # this method should take package_name, version, and options as arguments
-    # and put them into the right place in the install command
-    opts = ""
-    arch = "64"
-    if platform.architecture == 'x86'
-      opts = "-x86"
-      arch = "32"
-    end
-    pkg.build_requires "mingw-w#{arch} -version 5.2.0 -debug #{opts}"
-
+    arch = platform.architecture == "x64" ? "64" : "32"
     pkg.environment "PATH" => "#{platform.drive_root}/tools/mingw#{arch}/bin:$$PATH"
     pkg.environment "CYGWIN" => "nodosfilewarning"
 

@@ -26,16 +26,10 @@ component "yaml-cpp" do |pkg, settings, platform|
     # We always use the i386 build of cmake, even on sparc
     cmake = "#{settings[:basedir]}/i386-pc-solaris2.#{platform.os_version}/bin/cmake"
   elsif platform.is_windows?
-    opts = ""
-    arch = "64"
-    if platform.architecture == 'x86'
-      opts = "-x86"
-      arch = "32"
-    end
-    pkg.build_requires "mingw-w#{arch}"
+    arch = platform.architecture == 'x64' ? "64" : "32"
     pkg.build_requires "pl-boost-#{platform.architecture}"
+    pkg.build_requires "pl-toolchain-#{platform.architecture}"
     pkg.build_requires "cmake"
-    pkg.build_requires "toolchain"
 
     pkg.environment "PATH" => "#{platform.drive_root}/tools/mingw#{arch}/bin:$$PATH"
     pkg.environment "CYGWIN" => "nodosfilewarning"
