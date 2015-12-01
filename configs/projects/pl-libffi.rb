@@ -3,7 +3,7 @@ project "pl-libffi" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet lib ffi"
-  proj.version "3.0.12"
+  proj.version "3.0.13"
   proj.license "MIT"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
@@ -11,7 +11,4 @@ project "pl-libffi" do |proj|
   proj.component "libffi"
   proj.target_repo ""
 
-  #if platform.is_windows?
-    #proj.component "toolchain"
-  #end
 end
