@@ -15,7 +15,7 @@ component "boost" do |pkg, settings, platform|
   boost_dir = ""
   bootstrap_suffix = ".sh"
   execute = "./"
-  addtl_falgs = ""
+  addtl_flags = ""
 
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
