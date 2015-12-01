@@ -15,6 +15,7 @@ component "boost" do |pkg, settings, platform|
   boost_dir = ""
   bootstrap_suffix = ".sh"
   execute = "./"
+  addtl_falgs = ""
 
   # This is pretty horrible.  But so is package management on OSX.
   if platform.is_osx?
@@ -58,6 +59,9 @@ component "boost" do |pkg, settings, platform|
     special_prefix = platform.convert_to_windows_path(settings[:prefix])
 
     gpp = platform.convert_to_windows_path("#{platform.drive_root}/tools/mingw#{arch}/bin/g++")
+
+    # We don't have iconv available on windows yet
+    addtl_flags = "boost.locale.iconv=off"
   else
     linkflags = "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:libdir]}64"
     pkg.build_requires "pl-gcc" unless platform.is_aix?
@@ -131,6 +135,7 @@ component "boost" do |pkg, settings, platform|
     --build-dir=. \
     --prefix=#{special_prefix ? special_prefix : settings[:prefix]} \
     #{boost_libs.map {|lib| "--with-#{lib}"}.join(" ")} \
+    #{addtl_flags} \
     install",
     "chmod 0644 #{settings[:includedir]}/#{boost_dir}/boost/graph/vf2_sub_graph_iso.hpp",
     "chmod 0644 #{settings[:includedir]}/#{boost_dir}/boost/thread/v2/shared_mutex.hpp",
