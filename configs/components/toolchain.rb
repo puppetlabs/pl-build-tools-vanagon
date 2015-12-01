@@ -11,10 +11,10 @@ component "toolchain" do |pkg, settings, platform|
   elsif platform.is_windows?
     pkg.version "2015.11.23"
     if platform.architecture == "x64"
-      pkg.md5sum "6c1d144addb6e5c3d810156a7e2d1ca0"
+      pkg.md5sum "fea8f450c347cd3a3ab7e307a177510d"
       pkg.url "file://files/windows-x64-toolchain.cmake.txt"
     elsif platform.architecture == "x86"
-      pkg.md5sum "522a6c5e2d86c1bbb22292ef792502a9"
+      pkg.md5sum "15d9619ffd19dbe0991b01f3c6217b93"
       pkg.url "file://files/windows-x86-toolchain.cmake.txt"
     else
       fail "Need to define a toolchain file for #{platform.name} first"
