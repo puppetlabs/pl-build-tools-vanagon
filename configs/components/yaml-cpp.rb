@@ -38,7 +38,7 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.environment "CC" => "#{platform.drive_root}/tools/mingw#{arch}/bin/gcc"
     pkg.environment "CXX" => "#{platform.drive_root}/tools/mingw#{arch}/bin/g++"
 
-    cmake = "#{platform.drive_root}/Program Files (x86)/CMake/bin/cmake.exe"
+    cmake = "#{platform.drive_root}/ProgramData/chocolatey/bin/cmake.exe"
     special_prefix = platform.convert_to_windows_path(settings[:prefix])
 
     special_path = "PATH=#{platform.drive_root}/tools/mingw#{arch}/bin:#{platform.drive_root}/Windows/system32:#{platform.drive_root}/Windows:#{platform.drive_root}/Windows/System32/Wbem:#{platform.drive_root}/Windows/System32/WindowsPowerShell/v1.0:#{platform.drive_root}/pstools"
