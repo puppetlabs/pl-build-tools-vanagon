@@ -18,7 +18,7 @@ component "libffi" do |pkg, settings, platform|
   end
 
   pkg.configure do
-    [ "./configure --prefix=#{settings[:prefix]}"]
+    [ "./configure --prefix=#{settings[:prefix]} #{settings[:host]}"]
   end
 
   pkg.build do
