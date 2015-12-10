@@ -9,7 +9,16 @@ if platform.is_solaris?
   else
     platform_triple = "#{platform.architecture}-sun-solaris2.#{platform.os_version}"
   end
+elsif platform.is_windows?
+  if platform.architecture == "x64"
+    platform_triple = "x86_64-unknown-mingw32"
+  else
+    platform_triple = "i686-unknown-mingw32"
+  end
+  host = "--host #{platform_triple}"
 end
+
+proj.setting(:host, host)
 
 # Project level settings our components will care about
 proj.setting(:platform_triple, platform_triple)
