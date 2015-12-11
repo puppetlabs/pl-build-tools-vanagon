@@ -26,7 +26,7 @@ component "iconv" do |pkg, settings, platform|
   end
 
   pkg.configure do
-    " ./configure --prefix=#{installation_prefix}"
+    " ./configure --prefix=#{installation_prefix} #{settings[:host]}"
   end
 
   pkg.build do
