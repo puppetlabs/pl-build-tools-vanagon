@@ -11,5 +11,5 @@ platform "el-4-x86_64" do |plat|
   # multilib was even more terrible than it is today.
   plat.provision_with "yum install -y libstdc++-devel"
   plat.install_build_dependencies_with "yum install -y"
-  plat.vcloud_name "centos-4-x86_64"
+  plat.vmpooler_template "centos-4-x86_64"
 end
