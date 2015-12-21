@@ -35,6 +35,10 @@ component "cmake" do |pkg, settings, platform|
     end
   end
 
+  if platform.name =~ /sles-12/
+    pkg.apply_patch 'resources/patches/cmake/avoid-select-sles-12.patch'
+  end
+
   if platform.name =~ /el-4/
     pkg.build_requires "pl-tar"
   end
