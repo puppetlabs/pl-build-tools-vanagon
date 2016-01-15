@@ -1,4 +1,4 @@
-platform "win-2012-x86" do |plat|
+platform "windows-2012r2-x64" do |plat|
   plat.vmpooler_template "win-2012r2-x86_64.make"
 
   # We need to ensure we install chocolatey prior to adding any nuget repos. Otherwise, everything will fall over
@@ -8,10 +8,10 @@ platform "win-2012-x86" do |plat|
 
   # We don't want to install any packages from the chocolatey repo by accident
   plat.provision_with "C:/ProgramData/chocolatey/bin/choco.exe sources remove -name chocolatey"
-  plat.provision_with "C:/ProgramData/chocolatey/bin/choco.exe install -y mingw-w32 -version 5.2.0 -debug -x86"
+  plat.provision_with "C:/ProgramData/chocolatey/bin/choco.exe install -y mingw-w64 -version 5.2.0 -debug"
 
   plat.install_build_dependencies_with "C:/ProgramData/chocolatey/bin/choco.exe install -y"
 
-  plat.make "/cygdrive/c/tools/mingw32/bin/mingw32-make"
+  plat.make "/cygdrive/c/tools/mingw64/bin/mingw32-make"
   plat.patch "TMP=/var/tmp /usr/bin/patch.exe --binary"
 end
