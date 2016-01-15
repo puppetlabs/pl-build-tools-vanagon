@@ -12,12 +12,12 @@ component "iconv" do |pkg, settings, platform|
     arch = platform.architecture == "x64" ? "64" : "32"
     platform.make = "/usr/bin/make"
 
-    pkg.environment "PATH" => "#{platform.drive_root}/tools/mingw#{arch}/bin:$$PATH"
+    pkg.environment "PATH" => "C:/tools/mingw#{arch}/bin:$$PATH"
     pkg.environment "CYGWIN" => "nodosfilewarning winsymlinks:native"
-    pkg.environment "LIB" => "#{platform.drive_root}/tools/mingw#{arch}/lib"
-    pkg.environment "INCLUDE" => "#{platform.drive_root}/tools/mingw#{arch}/include"
-    pkg.environment "CC" => "#{platform.drive_root}/tools/mingw#{arch}/bin/gcc"
-    pkg.environment "CXX" => "#{platform.drive_root}/tools/mingw#{arch}/bin/g++"
+    pkg.environment "LIB" => "C:/tools/mingw#{arch}/lib"
+    pkg.environment "INCLUDE" => "C:/tools/mingw#{arch}/include"
+    pkg.environment "CC" => "C:/tools/mingw#{arch}/bin/gcc"
+    pkg.environment "CXX" => "C:/tools/mingw#{arch}/bin/g++"
     pkg.environment "MAKE" => "/usr/bin/make"
     pkg.environment "RANLIB" => "/usr/bin/ranlib"
 

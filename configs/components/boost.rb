@@ -43,7 +43,7 @@ component "boost" do |pkg, settings, platform|
     gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   elsif platform.is_windows?
     arch = platform.architecture == "x64" ? "64" : "32"
-    pkg.environment "PATH" => "#{platform.drive_root}/tools/mingw#{arch}/bin:$$PATH"
+    pkg.environment "PATH" => "C:/tools/mingw#{arch}/bin:$$PATH"
     pkg.environment "CYGWIN" => "nodosfilewarning"
 
     # bootstrap.bat does not take the `--with-toolset` flag
@@ -58,7 +58,7 @@ component "boost" do |pkg, settings, platform|
     # Sometimes we need to pass in the windows-specific path
     special_prefix = platform.convert_to_windows_path(settings[:prefix])
 
-    gpp = platform.convert_to_windows_path("#{platform.drive_root}/tools/mingw#{arch}/bin/g++")
+    gpp = platform.convert_to_windows_path("C:/tools/mingw#{arch}/bin/g++")
 
     # We don't have iconv available on windows yet
     addtl_flags = "boost.locale.iconv=off"
