@@ -8,12 +8,12 @@ component "libffi" do |pkg, settings, platform|
 
   if platform.is_windows?
     arch = platform.architecture == "x64" ? "64" : "32"
-    pkg.environment "PATH" => "$$PATH:#{platform.drive_root}/tools/mingw#{arch}/bin"
+    pkg.environment "PATH" => "$$PATH:C:/tools/mingw#{arch}/bin"
     pkg.environment "CYGWIN" => "nodosfilewarning winsymlinks:native"
-    pkg.environment "LIB" => "#{platform.drive_root}/tools/mingw#{arch}/lib"
-    pkg.environment "INCLUDE" => "#{platform.drive_root}/tools/mingw#{arch}/include"
-    pkg.environment "CC" => "#{platform.drive_root}/tools/mingw#{arch}/bin/gcc"
-    pkg.environment "CXX" => "#{platform.drive_root}/tools/mingw#{arch}/bin/g++"
+    pkg.environment "LIB" => "C:/tools/mingw#{arch}/lib"
+    pkg.environment "INCLUDE" => "C:/tools/mingw#{arch}/include"
+    pkg.environment "CC" => "C:/tools/mingw#{arch}/bin/gcc"
+    pkg.environment "CXX" => "C:/tools/mingw#{arch}/bin/g++"
     platform.make = "/usr/bin/make"
   end
 

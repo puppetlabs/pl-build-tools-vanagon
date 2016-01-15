@@ -31,17 +31,17 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.build_requires "pl-toolchain-#{platform.architecture}"
     pkg.build_requires "cmake"
 
-    pkg.environment "PATH" => "#{platform.drive_root}/tools/mingw#{arch}/bin:$$PATH"
+    pkg.environment "PATH" => "C:/tools/mingw#{arch}/bin:$$PATH"
     pkg.environment "CYGWIN" => "nodosfilewarning"
-    pkg.environment "LIB" => "#{platform.drive_root}/tools/mingw#{arch}/lib"
-    pkg.environment "INCLUDE" => "#{platform.drive_root}/tools/mingw#{arch}/include"
-    pkg.environment "CC" => "#{platform.drive_root}/tools/mingw#{arch}/bin/gcc"
-    pkg.environment "CXX" => "#{platform.drive_root}/tools/mingw#{arch}/bin/g++"
+    pkg.environment "LIB" => "C:/tools/mingw#{arch}/lib"
+    pkg.environment "INCLUDE" => "C:/tools/mingw#{arch}/include"
+    pkg.environment "CC" => "C:/tools/mingw#{arch}/bin/gcc"
+    pkg.environment "CXX" => "C:/tools/mingw#{arch}/bin/g++"
 
-    cmake = "#{platform.drive_root}/ProgramData/chocolatey/bin/cmake.exe"
+    cmake = "C:/ProgramData/chocolatey/bin/cmake.exe"
     special_prefix = platform.convert_to_windows_path(settings[:prefix])
 
-    special_path = "PATH=#{platform.drive_root}/tools/mingw#{arch}/bin:#{platform.drive_root}/Windows/system32:#{platform.drive_root}/Windows:#{platform.drive_root}/Windows/System32/Wbem:#{platform.drive_root}/Windows/System32/WindowsPowerShell/v1.0:#{platform.drive_root}/pstools"
+    special_path = "PATH=C:/tools/mingw#{arch}/bin:C:/Windows/system32:C:/Windows:C:/Windows/System32/Wbem:C:/Windows/System32/WindowsPowerShell/v1.0:C:/pstools"
     addtl_flags = "-G \"MinGW Makefiles\""
   elsif platform.is_aix?
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"

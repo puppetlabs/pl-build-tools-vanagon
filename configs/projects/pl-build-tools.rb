@@ -23,8 +23,8 @@ proj.setting(:host, host)
 # Project level settings our components will care about
 proj.setting(:platform_triple, platform_triple)
 if platform.is_windows?
-  proj.setting(:basedir, "#{platform.drive_root}/tools/pl-build-tools")
-  proj.setting(:prefix, "#{platform.drive_root}/tools/pl-build-tools")
+  proj.setting(:basedir, "C:/tools/pl-build-tools")
+  proj.setting(:prefix, "C:/tools/pl-build-tools")
 else
   proj.setting(:basedir, "/opt/pl-build-tools")
   if platform_triple.nil?

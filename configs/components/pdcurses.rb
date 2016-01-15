@@ -8,7 +8,7 @@ component "pdcurses" do |pkg, settings, platform|
   if platform.is_windows?
     arch = platform.architecture == "x64" ? "64" : "32"
 
-    mingw_root = "#{platform.drive_root}/tools/mingw#{arch}"
+    mingw_root = "C:/tools/mingw#{arch}"
     pkg.environment "PATH" => "$$PATH:#{mingw_root}/bin"
     pkg.environment "CYGWIN" => "nodosfilewarning winsymlinks:native"
     pkg.environment "LIB" => "#{mingw_root}/lib"
