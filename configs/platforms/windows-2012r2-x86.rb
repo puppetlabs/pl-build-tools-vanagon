@@ -1,5 +1,5 @@
 platform "windows-2012r2-x86" do |plat|
-  plat.vmpooler_template "win-2012r2-x86_64.make"
+  plat.vmpooler_template "win-2012r2-x86_64"
 
   # We need to ensure we install chocolatey prior to adding any nuget repos. Otherwise, everything will fall over
   plat.add_build_repository "http://buildsources.delivery.puppetlabs.net/windows/chocolatey/install-chocolatey.ps1"
