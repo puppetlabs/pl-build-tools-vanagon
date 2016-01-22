@@ -2,8 +2,10 @@ project "pl-binutils" do |proj|
   # Project level settings our components will care about
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
-  if platform.name =~ /solaris-11/
+  if platform.name =~ /huaweios|solaris-11/
     proj.name "pl-binutils-#{platform.architecture}"
+    # We need to set noarch here - otherwise the generated packages
+    # will specify the target arch and not be installable
     proj.noarch
   end
 

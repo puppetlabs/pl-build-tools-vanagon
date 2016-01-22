@@ -27,6 +27,10 @@ component "binutils" do |pkg, settings, platform|
     pkg.build_requires "pl-tar"
   end
 
+  if platform.is_huaweios?
+    target = "--target=#{settings[:platform_triple]}"
+  end
+
   pkg.configure do
     "./configure \
       --prefix=#{settings[:basedir]} \
