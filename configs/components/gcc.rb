@@ -67,6 +67,9 @@ component "gcc" do |pkg, settings, platform|
       pkg.build_requires "libstdc++-devel"
       pkg.build_requires "gcc-c++"
     end
+  elsif platform.is_huaweios?
+    pkg.build_requires "pl-binutils-ppc"
+    pkg.build_requires "sysroot"
   elsif platform.is_solaris?
     if platform.os_version == '10'
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
@@ -105,6 +108,13 @@ component "gcc" do |pkg, settings, platform|
     # AIX can't use the exact flags that linux does, but we should still
     # attempt to honor any flags passed via environment variables.
     pkg.environment "CFLAGS"   => "$${CFLAGS}"
+    pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
+  elsif platform.is_huaweios?
+    # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
+    pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
+
+    # Do not use fPIC with the cross-compiler.
+    pkg.environment "CFLAGS" => "$${CFLAGS}"
     pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
   elsif platform.is_solaris?
     # Solaris needs an augmented path to find binutils correctly and to setup CC and CXX
@@ -216,6 +226,11 @@ component "gcc" do |pkg, settings, platform|
   # the bootstrap comparison failures under the more recent clang compilers.
   if platform.is_osx?
     configure_command << " --with-build-config=bootstrap-debug"
+  end
+
+  if platform.is_huaweios?
+    configure_command << " --target=#{settings[:platform_triple]} \
+      --with-sysroot=#{settings[:prefix]}/sysroot"
   end
 
   if platform.is_solaris?

@@ -10,7 +10,7 @@ project "pl-gcc" do |proj|
     proj.version "4.8.2"
   end
 
-  if platform.name =~ /solaris-11/
+  if platform.name =~ /huaweios|solaris-11/
     proj.name "pl-gcc-#{platform.architecture}"
     proj.noarch
   end
@@ -29,6 +29,10 @@ project "pl-gcc" do |proj|
   proj.component "mpfr"
   proj.component "mpc"
   proj.component "gcc"
+
+  if platform.is_huaweios?
+    proj.component "sysroot"
+  end
 
   if platform.is_solaris? && platform.architecture.downcase == 'sparc'
     proj.component "sysroot"
