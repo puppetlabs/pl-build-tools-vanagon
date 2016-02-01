@@ -9,7 +9,7 @@ project "pl-yaml-cpp" do |proj|
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
-  if platform.name =~ /solaris-11/
+  if platform.name =~ /huaweios|solaris-11/
     proj.name "pl-yaml-cpp-#{platform.architecture}"
     proj.noarch
   else
