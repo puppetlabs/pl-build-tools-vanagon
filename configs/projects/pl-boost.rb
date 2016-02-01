@@ -9,7 +9,7 @@ project "pl-boost" do |proj|
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
-  if platform.name =~ /solaris-11/
+  if platform.name =~ /huaweios|solaris-11/
     proj.name "pl-boost-#{platform.architecture}"
     proj.noarch
   else
@@ -20,8 +20,6 @@ project "pl-boost" do |proj|
   proj.setting(:cflags, "-I#{proj.includedir}")
   proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
 
-
   proj.component "boost"
   proj.target_repo ""
-
 end
