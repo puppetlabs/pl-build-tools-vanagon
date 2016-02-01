@@ -21,6 +21,14 @@ component "boost" do |pkg, settings, platform|
   if platform.is_osx?
     pkg.build_requires "pl-gcc-4.8.2"
     gpp = "#{settings[:bindir]}/g++"
+  elsif platform.is_huaweios?
+    pkg.build_requires "pl-binutils-#{platform.architecture}"
+    pkg.build_requires "pl-gcc-#{platform.architecture}"
+
+    pkg.environment "PATH" => "#{settings[:basedir]}/bin:$$PATH"
+    linkflags = "-Wl,-rpath=#{settings[:libdir]}"
+
+    gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   elsif platform.is_solaris?
     if platform.os_version == "10"
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
@@ -80,9 +88,6 @@ component "boost" do |pkg, settings, platform|
       pkg.build_requires 'http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/bzip2-1.0.5-3.aix5.3.ppc.rpm'
       pkg.build_requires 'http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/zlib-devel-1.2.3-4.aix5.2.ppc.rpm'
       pkg.build_requires 'http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/zlib-1.2.3-4.aix5.2.ppc.rpm'
-    when /huaweios/
-      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/HuaweiOS/#{platform.os_version}/ppce500mc/pl-gcc-4.8.2-1.huaweios6.ppce500mc.rpm"
-      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/HuaweiOS/#{platform.os_version}/ppce500mc/pl-cmake-3.2.3-1.huaweios6.ppce500mc.rpm"
     when /sles-10/
       pkg.build_requires 'bzip2'
       pkg.build_requires 'zlib-devel'
