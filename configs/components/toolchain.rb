@@ -1,5 +1,9 @@
 component "toolchain" do |pkg, settings, platform|
-  if platform.is_linux?
+  if platform.is_huaweios?
+    pkg.version "2016.01.25"
+    pkg.md5sum "f4f890cbe0a6da83a510acb4a11d85ad"
+    pkg.url "file://files/huaweios-toolchain.cmake.txt"
+  elsif platform.is_linux?
     pkg.version "2015.10.01"
     pkg.md5sum "3b607682a02e7811d730261326d2f02c"
     pkg.url "file://files/linux-toolchain.cmake.txt"
@@ -39,7 +43,9 @@ component "toolchain" do |pkg, settings, platform|
   end
 
   # We still need to add support for OS X
-  if platform.is_solaris?
+  if platform.is_huaweios?
+    pkg.install_file "huaweios-toolchain.cmake.txt", "#{settings[:basedir]}/powerpc-unknown-linux-gnu/pl-build-toolchain.cmake"
+  elsif platform.is_solaris?
     pkg.install_file "solaris-#{platform.os_version}-i386-toolchain.cmake.txt", "#{settings[:basedir]}/i386-pc-solaris2.#{platform.os_version}/pl-build-toolchain.cmake"
     pkg.install_file "solaris-#{platform.os_version}-sparc-toolchain.cmake.txt", "#{settings[:basedir]}/sparc-sun-solaris2.#{platform.os_version}/pl-build-toolchain.cmake"
 
