@@ -4,7 +4,7 @@ project "pl-cmake" do |proj|
 
   proj.description "Puppet Labs cmake"
   proj.version "3.2.3"
-  proj.release "3"
+  proj.release "4"
   proj.license "Same as cmake"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
@@ -13,9 +13,7 @@ project "pl-cmake" do |proj|
   proj.setting(:cflags, "-I#{proj.includedir}")
   proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
 
-
   proj.component "toolchain"
   proj.component "cmake"
   proj.target_repo ""
-
 end
