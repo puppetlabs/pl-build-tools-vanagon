@@ -43,10 +43,7 @@ component "toolchain" do |pkg, settings, platform|
   end
 
   # We still need to add support for OS X
-  if platform.name =~ /debian-8-amd64/
-    # Install toolchain file for huaweios, which builds on debian-8-amd64
-    pkg.install_file "huaweios-toolchain.cmake.txt", "#{settings[:basedir]}/powerpc-unknown-linux-gnu/pl-build-toolchain.cmake"
-  elsif platform.is_solaris?
+  if platform.is_solaris?
     pkg.install_file "solaris-#{platform.os_version}-i386-toolchain.cmake.txt", "#{settings[:basedir]}/i386-pc-solaris2.#{platform.os_version}/pl-build-toolchain.cmake"
     pkg.install_file "solaris-#{platform.os_version}-sparc-toolchain.cmake.txt", "#{settings[:basedir]}/sparc-sun-solaris2.#{platform.os_version}/pl-build-toolchain.cmake"
 
@@ -60,5 +57,9 @@ component "toolchain" do |pkg, settings, platform|
   else
     filename = pkg.get_url.split('/').last
     pkg.install_file filename, "#{settings[:prefix]}/pl-build-toolchain.cmake"
+    if platform.name =~ /debian-8-amd64/
+      # Install toolchain file for huaweios, which builds on debian-8-amd64
+      pkg.install_file "huaweios-toolchain.cmake.txt", "#{settings[:basedir]}/powerpc-unknown-linux-gnu/pl-build-toolchain.cmake"
+    end
   end
 end
