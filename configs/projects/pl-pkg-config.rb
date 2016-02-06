@@ -4,6 +4,7 @@ project "pl-pkg-config" do |proj|
 
   proj.description "Puppet Labs Pkg-config"
   proj.version "0.28"
+  proj.release "2"
   proj.license "GPLv2+"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
@@ -16,5 +17,4 @@ project "pl-pkg-config" do |proj|
   proj.target_repo ""
 
   proj.register_rewrite_rule 'http', 'http://buildsources.delivery.puppetlabs.net'
-
 end
