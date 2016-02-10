@@ -4,7 +4,7 @@ project "pl-yaml-cpp" do |proj|
 
   proj.description "Puppet Yaml CPP"
   proj.version "0.5.1"
-  proj.release "2"
+  proj.release "3"
   proj.license "MIT"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
