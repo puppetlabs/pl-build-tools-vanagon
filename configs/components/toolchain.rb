@@ -5,7 +5,7 @@ component "toolchain" do |pkg, settings, platform|
     pkg.url "file://files/linux-toolchain.cmake.txt"
     if platform.name =~ /debian-8-amd64/
       # Add toolchain file for huaweios, which builds on debian-8-amd64
-      pkg.add_source "file://files/huaweios-toolchain.cmake.txt", sum: "83b31ac4158ea16bda33b044e4aeef0d"
+      pkg.add_source "file://files/huaweios-toolchain.cmake.txt", sum: "60cb70b191fa1a9ddd1ce9b797e5e32b"
     end
   elsif platform.is_aix?
     pkg.version "2015.10.01"
@@ -59,7 +59,7 @@ component "toolchain" do |pkg, settings, platform|
     pkg.install_file filename, "#{settings[:prefix]}/pl-build-toolchain.cmake"
     if platform.name =~ /debian-8-amd64/
       # Install toolchain file for huaweios, which builds on debian-8-amd64
-      pkg.install_file "huaweios-toolchain.cmake.txt", "#{settings[:basedir]}/powerpc-unknown-linux-gnu/pl-build-toolchain.cmake"
+      pkg.install_file "huaweios-toolchain.cmake.txt", "#{settings[:basedir]}/powerpc-linux-gnu/pl-build-toolchain.cmake"
     end
   end
 end
