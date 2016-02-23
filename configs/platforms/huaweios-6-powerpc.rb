@@ -1,4 +1,4 @@
-platform "huaweios-6-ppc" do |plat|
+platform "huaweios-6-powerpc" do |plat|
   plat.servicedir "/lib/systemd/system"
   plat.defaultdir "/etc/default"
   plat.servicetype "systemd"
