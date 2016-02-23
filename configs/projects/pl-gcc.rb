@@ -9,7 +9,7 @@ project "pl-gcc" do |proj|
   else
     proj.version "4.8.2"
   end
-  proj.release "2"
+  proj.release "3"
 
   if platform.name =~ /huaweios|solaris-11/
     proj.name "pl-gcc-#{platform.architecture}"

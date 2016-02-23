@@ -68,7 +68,7 @@ component "gcc" do |pkg, settings, platform|
       pkg.build_requires "gcc-c++"
     end
   elsif platform.is_huaweios?
-    pkg.build_requires "pl-binutils-ppc"
+    pkg.build_requires "pl-binutils-#{platform.architecture}"
     pkg.build_requires "sysroot"
   elsif platform.is_solaris?
     if platform.os_version == '10'

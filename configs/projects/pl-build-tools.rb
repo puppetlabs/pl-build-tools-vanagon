@@ -9,8 +9,8 @@ if platform.is_solaris?
   else
     platform_triple = "#{platform.architecture}-sun-solaris2.#{platform.os_version}"
   end
-elsif platform.architecture == "ppc" and platform.is_deb?
-  platform_triple = "powerpc-unknown-linux-gnu"
+elsif platform.architecture == "powerpc" and platform.is_deb?
+  platform_triple = "powerpc-linux-gnu"
 elsif platform.is_windows?
   if platform.architecture == "x64"
     platform_triple = "x86_64-unknown-mingw32"

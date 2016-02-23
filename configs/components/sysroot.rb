@@ -1,6 +1,6 @@
 component "sysroot" do |pkg, settings, platform|
   case platform.name
-    when "huaweios-6-ppc"
+    when "huaweios-6-powerpc"
       pkg.version "2016.02.08"
       pkg.md5sum "3cd82ea48a9e44669e63f7f4e6d8d6b4"
     when "solaris-10-sparc"
