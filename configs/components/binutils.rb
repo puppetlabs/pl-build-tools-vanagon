@@ -1,6 +1,6 @@
 component "binutils" do |pkg, settings, platform|
-  pkg.version "2.25"
-  pkg.md5sum "ab6719fd7434caf07433ec834db8ad4f"
+  pkg.version "2.26"
+  pkg.md5sum "d66e2b663757cbf5d4b060feb4ef6b4b"
   pkg.url "http://buildsources.delivery.puppetlabs.net/binutils-#{pkg.get_version}.tar.gz"
 
 
