@@ -1,5 +1,5 @@
 component "gcc" do |pkg, settings, platform|
-  if platform.is_aix?
+  if platform.is_aix? or platform.architecture == "s390x"
     pkg.version "5.2.0"
     pkg.md5sum "1180e9ef7f5a2e4b1eab3e1a0d3fa228"
   else
@@ -63,6 +63,12 @@ component "gcc" do |pkg, settings, platform|
       pkg.build_requires "g++"
       pkg.build_requires "libstdc++-dev"
       pkg.build_requires "libc6-dev"
+    when platform.architecture == "s390x"
+      # The s390x platforms we support are all RPM-based (SLES and RHEL)
+      pkg.build_requires "pl-binutils-#{platform.architecture}"
+      pkg.build_requires "sysroot"
+      pkg.build_requires "libstdc++-devel"
+      pkg.build_requires "gcc-c++"
     else
       pkg.build_requires "libstdc++-devel"
       pkg.build_requires "gcc-c++"
@@ -110,6 +116,13 @@ component "gcc" do |pkg, settings, platform|
     pkg.environment "CFLAGS"   => "$${CFLAGS}"
     pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
   elsif platform.is_huaweios?
+    # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
+    pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
+
+    # Do not use fPIC with the cross-compiler.
+    pkg.environment "CFLAGS" => "$${CFLAGS}"
+    pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
+  elsif platform.architecture == "s390x"
     # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
     pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
 
@@ -228,7 +241,7 @@ component "gcc" do |pkg, settings, platform|
     configure_command << " --with-build-config=bootstrap-debug"
   end
 
-  if platform.is_huaweios?
+  if platform.is_huaweios? or platform.architecture == "s390x"
     configure_command << " --target=#{settings[:platform_triple]} \
       --with-sysroot=#{settings[:prefix]}/sysroot"
   end
