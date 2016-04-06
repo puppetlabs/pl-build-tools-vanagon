@@ -9,7 +9,7 @@ project "pl-boost" do |proj|
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
-  if platform.name =~ /huaweios|solaris-11/
+  if platform.name =~ /huaweios|solaris-11/ or platform.architecture == "s390x"
     proj.name "pl-boost-#{platform.architecture}"
     proj.noarch
   else
