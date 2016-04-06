@@ -4,14 +4,14 @@ project "pl-gcc" do |proj|
 
   proj.description "Puppet Labs GCC"
 
-  if platform.is_aix?
+  if platform.is_aix? or platform.architecture == "s390x"
     proj.version "5.2.0"
   else
     proj.version "4.8.2"
   end
   proj.release "3"
 
-  if platform.name =~ /huaweios|solaris-11/
+  if platform.name =~ /huaweios|solaris-11/ or platform.architecture == "s390x"
     proj.name "pl-gcc-#{platform.architecture}"
     proj.noarch
   end
@@ -31,7 +31,7 @@ project "pl-gcc" do |proj|
   proj.component "mpc"
   proj.component "gcc"
 
-  if platform.is_huaweios?
+  if platform.is_huaweios? or platform.architecture == "s390x"
     proj.component "sysroot"
   end
 
@@ -40,5 +40,4 @@ project "pl-gcc" do |proj|
   end
 
   proj.target_repo ""
-
 end

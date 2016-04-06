@@ -3,6 +3,9 @@ component "sysroot" do |pkg, settings, platform|
     when "huaweios-6-powerpc"
       pkg.version "2016.02.08"
       pkg.md5sum "82589b28efdc5ccf6181499c4f49a1ac"
+    when "sles-11-s390x"
+      pkg.version "2016.04.03"
+      pkg.md5sum "a7dd949d0c2d143289eb181a63f51de7"
     when "solaris-10-sparc"
       pkg.version "2015.07.28"
       pkg.md5sum "4eed18c2ddcc609f2f404094ce539ce2"
@@ -17,6 +20,8 @@ component "sysroot" do |pkg, settings, platform|
 
   if platform.name =~ /huaweios/
     pkg.url "http://pl-build-tools.delivery.puppetlabs.net/HuaweiOS/#{platform.os_version}/#{platform.name}-sysroot.tar.gz"
+  elsif platform.name =~ /sles-\d\d-s390x/
+    pkg.url "http://pl-build-tools.delivery.puppetlabs.net/sles/#{platform.os_version}/#{platform.name}-sysroot.tar.gz"
   elsif platform.name =~ /solaris/
     pkg.url "http://pl-build-tools.delivery.puppetlabs.net/solaris/#{platform.os_version}/#{platform.name}-sysroot.tar.gz"
   end
@@ -30,9 +35,11 @@ component "sysroot" do |pkg, settings, platform|
   sysroot_base = File.join(settings[:prefix], 'sysroot')
   pkg.directory sysroot_base
 
+  libdirs = "lib"
+  libdirs = "lib lib64" if platform.architecture == "s390x"
   pkg.install do
     [
-      "mv lib #{sysroot_base}/",
+      "mv #{libdirs} #{sysroot_base}/",
       "mv usr #{sysroot_base}/",
     ]
   end
