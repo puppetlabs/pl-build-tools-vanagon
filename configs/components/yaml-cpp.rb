@@ -11,14 +11,13 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.build_requires "pl-gcc-4.8.2"
     pkg.build_requires "pl-cmake-3.2.3"
     pkg.build_requires "pl-boost-1.58.0"
-  elsif platform.is_huaweios?
+  elsif platform.is_huaweios? or platform.architecture == "s390x"
     pkg.build_requires "pl-binutils-#{platform.architecture}"
     pkg.build_requires "pl-gcc-#{platform.architecture}"
     pkg.build_requires "pl-boost-#{platform.architecture}"
     pkg.build_requires "pl-cmake"
     # We're using the x86_64 version of cmake
     cmake = "#{settings[:basedir]}/bin/cmake"
-    ###pkg.environment "PATH" => "/opt/pl-build-tools/bin:$$PATH"
   elsif platform.is_solaris?
     if platform.os_version == "10"
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
