@@ -15,7 +15,7 @@ zypper rm aspell autofs boost-license cups-libs emacs emacs-info freetype2 git-c
 Then install the libaries we do need for building gcc and our various dependencies:
 
 ```
-zypper in zlib-devel libbz2-devel libcurl-devel readline-devel
+zypper in zlib-devel libbz2-devel libcurl-devel readline-devel e2fsprogs-devel
 ```
 
 This final zypper rm command ends up removing the zypper package, so you won't be able to make any further changes with it after this point:
@@ -83,14 +83,22 @@ rm libanl.so
 ln -s ../../lib64/libanl.so.1 libanl.so
 rm libBrokenLocale.so
 ln -s ../../lib64/libBrokenLocale.so.1 libBrokenLocale.so
+rm libblkid.so
+ln -s ../../lib64/libblkid.so.1.1.0 libblkid.so
 rm libbz2.so
 ln -s ../../lib64/libbz2.so.1.0.5 libbz2.so
 rm libcidn.so
 ln -s ../../lib64/libcidn.so.1 libcidn.so
+rm libcom_err.so
+ln -s ../../lib64/libcom_err.so.2 libcom_err.so
 rm libcrypt.so
 ln -s ../../lib64/libcrypt.so.1 libcrypt.so
 rm libdl.so
 ln -s ../../lib64/libdl.so.2 libdl.so
+rm libe2p.so
+ln -s ../../lib64/libext2fs.so.2 libe2p.so
+rm libext2fs.so
+ln -s ../../lib64/libext2fs.so.2 libext2fs.so
 rm libhistory.so
 ln -s ../../lib64/libhistory.so.5.2
 rm libm.so
@@ -121,12 +129,16 @@ rm libresolv.so
 ln -s ../../lib64/libresolv.so.2 libresolv.so
 rm librt.so
 ln -s ../../lib64/librt.so.1 librt.so
+rm libss.so
+ln -s ../../lib64/libss.so.2
 rm libsysfs.so
 ln -s ../../lib64/libsysfs.so.2 libsysfs.so
 rm libthread_db.so
 ln -s ../../lib64/libthread_db.so.1 libthread_db.so
 rm libutil.so
 ln -s ../../lib64/libutil.so.1 libutil.so
+rm libuuid.so
+ln -s ../../lib64/libuuid.so.1.3.0 libuuid.so
 rm libz.so
 ln -s ../../lib64/libz.so.1 libz.so
 
