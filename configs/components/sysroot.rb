@@ -5,7 +5,7 @@ component "sysroot" do |pkg, settings, platform|
       pkg.md5sum "82589b28efdc5ccf6181499c4f49a1ac"
     when "sles-11-s390x"
       pkg.version "2016.04.12"
-      pkg.md5sum "c39548f438eca8ed76cfcab159718e0a"
+      pkg.md5sum "788e232032a489b32c314fb97373fd4f"
     when "solaris-10-sparc"
       pkg.version "2015.07.28"
       pkg.md5sum "4eed18c2ddcc609f2f404094ce539ce2"
