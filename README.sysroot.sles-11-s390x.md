@@ -156,7 +156,7 @@ cp -a sles-11-s390x-sysroot/usr/include/c++/4.3/s390x-suse-linux/bits sles-11-s3
 s390x is a 64-bit platform and keeps those libs in /lib64 and /usr/lib64. But when building gcc, you'll run into errors finding libraries if you use "lib64" in the sysroot, but also when using a sysroot that stored the libraries in "lib" instead. A *temporary* workaround to this is to just have both directories. This is ripe for a refactoring.
 
 ```
-cp sles-11-s390x-sysroot/lib64 sles-11-s390x-sysroot/lib
+cp -a sles-11-s390x-sysroot/lib64 sles-11-s390x-sysroot/lib
 cp -a sles-11-s390x-sysroot/usr/lib64 sles-11-s390x-sysroot/usr/lib
 ```
 
