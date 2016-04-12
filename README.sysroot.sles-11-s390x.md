@@ -6,16 +6,16 @@ This document describes how to (re)create the sysroot tarball for the sles-11-x3
 
 All of the commands in this guide should be run as root.
 
-First install the libaries we need for building gcc and our various dependencies:
+First we remove a bunch of unneeded junk. The SLES 11 s390x environment we have access to has 32-bit multilib packages installed, which we don't need. The purpose of this is to try to get rid of unneeded library files, even though we'll still be manually prunning the libdirs in a later step.
+
+```
+zypper rm aspell autofs boost-license cups-libs emacs emacs-info freetype2 git-core glibc-32bit glibc-devel-32bit gstreamer libFLAC8 libfortran3 libicu libncurses6 libpixman-1-0 libqt4 libsmbclient0 libtiff libvorbis mozilla-xulrunner192 nautilus orbit2 pango perl qt3 ruby sssd subversion tcl xorg-x11-libX11 xorg-x11-libXau zsh 
+```
+
+Then install the libaries we do need for building gcc and our various dependencies:
 
 ```
 zypper in zlib-devel libbz2-devel libcurl-devel readline-devel
-```
-
-Then we can remove a bunch of unneeded junk. The SLES 11 s390x environment we have access to has 32-bit multilib packages installed, which we don't need. The purpose of this is to try to get rid of unneeded library files, even though we'll still be manually prunning the libdirs in a later step.
-
-```
-zypper rm aspell autofs boost-license cups-libs emacs emacs-info freetype2 git-core glibc-32bit glibc-devel-32bit gstreamer libFLAC8 libfortran3 libicu libncurses6 libpixman-1-0 libqt4 libsmbclient0 libtiff libvorbis mozilla-xulrunner192 nautilus orbit2 pango perl python python-base qt3 ruby sssd subversion tcl xorg-x11-libX11 xorg-x11-libXau zsh 
 ```
 
 This final zypper rm command ends up removing the zypper package, so you won't be able to make any further changes with it after this point:
@@ -55,11 +55,15 @@ rm -rf sles-11-s390x-sysroot/usr/lib64/e*
 rm -rf sles-11-s390x-sysroot/usr/lib64/g*
 rm -rf sles-11-s390x-sysroot/usr/lib64/h*
 rm -rf sles-11-s390x-sysroot/usr/lib64/k*
+rm -rf sles-11-s390x-sysroot/usr/lib64/ldscripts*
 rm -rf sles-11-s390x-sysroot/usr/lib64/libblas*
+rm -rf sles-11-s390x-sysroot/usr/lib64/libgfortran*
+rm -rf sles-11-s390x-sysroot/usr/lib64/libgphoto2*
 rm -rf sles-11-s390x-sysroot/usr/lib64/liblapack*
 rm -rf sles-11-s390x-sysroot/usr/lib64/m*
 rm -rf sles-11-s390x-sysroot/usr/lib64/o*
 rm -rf sles-11-s390x-sysroot/usr/lib64/pkcs*
+rm -rf sles-11-s390x-sysroot/usr/lib64/python*
 rm -rf sles-11-s390x-sysroot/usr/lib64/q*
 rm -rf sles-11-s390x-sysroot/usr/lib64/r*
 rm -rf sles-11-s390x-sysroot/usr/lib64/s*
@@ -87,8 +91,14 @@ rm libcrypt.so
 ln -s ../../lib64/libcrypt.so.1 libcrypt.so
 rm libdl.so
 ln -s ../../lib64/libdl.so.2 libdl.so
+rm libhistory.so
+ln -s ../../lib64/libhistory.so.5.2
 rm libm.so
 ln -s ../../lib64/libm.so.6 libm.so
+rm libncurses.so
+ln -s ../../lib64/libncurses.so.5.6 libncurses.so
+rm libncursesw.so
+ln -s ../../lib64/libncursesw.so.5.6 libncursesw.so
 rm libnet.so
 ln -s ../../lib64/libnet.so.0.0.0 libnet.so
 rm libnsl.so
@@ -105,6 +115,8 @@ rm libnss_nisplus.so
 ln -s ../../lib64/libnss_nisplus.so.2 libnss_nisplus.so
 rm libnss_nis.so
 ln -s ../../lib64/libnss_nis.so.2 libnss_nis.so
+rm libreadline.so
+ln -s ../../lib64/libreadline.so.5.2 libreadline.so
 rm libresolv.so
 ln -s ../../lib64/libresolv.so.2 libresolv.so
 rm librt.so
@@ -118,7 +130,13 @@ ln -s ../../lib64/libutil.so.1 libutil.so
 rm libz.so
 ln -s ../../lib64/libz.so.1 libz.so
 
-cd ../../..
+cd ncurses6
+rm libncurses.so
+ln -s ../../../lib64/libncurses.so.6 libncurses.so
+rm libncursesw.so
+ln -s ../../../lib64/libncursesw.so.6 libncursesw.so
+
+cd ../../../..
 ```
 
 # Get rid of symlinks to directories
