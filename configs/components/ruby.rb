@@ -14,8 +14,11 @@ component "ruby" do |pkg, settings, platform|
     pkg.build_requires "pl-tar"
   end
 
+  # Ensure ruby is built with zlib support
   if platform.is_deb?
     pkg.build_requires "zlib1g-dev"
+  elsif platform.is_rpm?
+    pkg.build_requires "zlib-devel"
   end
 
   # Here we set --enable-bundled-libyaml to ensure that the libyaml included in

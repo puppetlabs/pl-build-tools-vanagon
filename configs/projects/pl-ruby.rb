@@ -8,7 +8,7 @@ project "pl-ruby" do |proj|
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
   proj.version "2.1.6"
-  proj.release "2"
+  proj.release "3"
 
   # Platform specific - these flags do not work on AIX
   unless platform.is_aix?
