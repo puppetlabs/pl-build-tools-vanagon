@@ -8,6 +8,6 @@ platform "sles-11-s390x" do |plat|
   plat.zypper_repo "http://pl-build-tools.delivery.puppetlabs.net/yum/sles/11/x86_64/pl-build-tools-sles-11-x86_64.repo"
   plat.provision_with "zypper -n --no-gpg-checks install -y aaa_base autoconf automake rsync gcc make"
   plat.install_build_dependencies_with "zypper -n --no-gpg-checks install -y"
-  # We're cross-compiling most packages on x86_64
+  plat.cross_compiled true
   plat.vmpooler_template "sles-11-x86_64"
 end
