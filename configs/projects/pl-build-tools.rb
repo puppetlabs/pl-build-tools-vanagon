@@ -1,17 +1,16 @@
 # Contains all common project settings in one place
-
 platform = proj.get_platform
 
-# For solaris, we build cross-compilers
+# platform_triple
 if platform.is_solaris?
   if platform.architecture == 'i386'
     platform_triple = "#{platform.architecture}-pc-solaris2.#{platform.os_version}"
   else
     platform_triple = "#{platform.architecture}-sun-solaris2.#{platform.os_version}"
   end
-elsif platform.architecture == "s390x" and platform.is_rpm?
+elsif platform.architecture == "s390x" && platform.is_rpm?
   platform_triple = "s390x-linux-gnu"
-elsif platform.architecture == "powerpc" and platform.is_deb?
+elsif platform.architecture == "powerpc" && platform.is_deb?
   platform_triple = "powerpc-linux-gnu"
 elsif platform.is_windows?
   if platform.architecture == "x64"
@@ -24,7 +23,7 @@ end
 
 proj.setting(:host, host)
 
-# Project level settings our components will care about
+# Project-level settings our components will care about
 proj.setting(:platform_triple, platform_triple)
 if platform.is_windows?
   proj.setting(:basedir, "C:/tools/pl-build-tools")
@@ -50,6 +49,7 @@ proj.setting(:includedir, File.join(proj.prefix, "include"))
 proj.setting(:datadir, File.join(proj.prefix, "share"))
 proj.setting(:mandir, File.join(proj.datadir, "man"))
 
+# proj.identifier
 if platform.is_osx?
   proj.identifier "com.puppetlabs"
 elsif platform.is_solaris?
