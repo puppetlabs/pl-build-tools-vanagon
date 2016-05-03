@@ -21,7 +21,7 @@ component "boost" do |pkg, settings, platform|
   if platform.is_osx?
     pkg.build_requires "pl-gcc-4.8.2"
     gpp = "#{settings[:bindir]}/g++"
-  elsif platform.is_huaweios? or platform.architecture == "s390x"
+  elsif platform.is_cross_compiled_linux?
     pkg.build_requires "pl-binutils-#{platform.architecture}"
     pkg.build_requires "pl-gcc-#{platform.architecture}"
 
