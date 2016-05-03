@@ -11,7 +11,7 @@ project "pl-gcc" do |proj|
   end
   proj.release "5"
 
-  if platform.name =~ /huaweios|solaris-11/ or platform.architecture == "s390x"
+  if platform.is_cross_compiled?
     proj.name "pl-gcc-#{platform.architecture}"
     proj.noarch
   end
@@ -31,11 +31,7 @@ project "pl-gcc" do |proj|
   proj.component "mpc"
   proj.component "gcc"
 
-  if platform.is_huaweios? or platform.architecture == "s390x"
-    proj.component "sysroot"
-  end
-
-  if platform.is_solaris? && platform.architecture.downcase == 'sparc'
+  if platform.is_cross_compiled?
     proj.component "sysroot"
   end
 

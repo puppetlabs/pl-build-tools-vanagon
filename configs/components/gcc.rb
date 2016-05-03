@@ -241,7 +241,7 @@ component "gcc" do |pkg, settings, platform|
     configure_command << " --with-build-config=bootstrap-debug"
   end
 
-  if platform.is_huaweios? or platform.architecture == "s390x"
+  if platform.is_cross_compiled_linux?
     configure_command << " --target=#{settings[:platform_triple]} \
       --with-sysroot=#{settings[:prefix]}/sysroot"
   end
