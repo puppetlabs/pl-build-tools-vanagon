@@ -4,12 +4,12 @@ project "pl-gcc" do |proj|
 
   proj.description "Puppet Labs GCC"
 
-  if platform.is_aix? or platform.architecture == "s390x"
+  if platform.is_aix? or platform.architecture == "s390x" or platform.architecture =~ /arm/
     proj.version "5.2.0"
   else
     proj.version "4.8.2"
   end
-  proj.release "5"
+  proj.release "6"
 
   if platform.is_cross_compiled?
     proj.name "pl-gcc-#{platform.architecture}"

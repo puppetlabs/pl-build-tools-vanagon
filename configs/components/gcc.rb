@@ -1,5 +1,5 @@
 component "gcc" do |pkg, settings, platform|
-  if platform.is_aix? or platform.architecture == "s390x"
+  if platform.is_aix? or platform.architecture == "s390x" or platform.architecture =~ /arm/
     pkg.version "5.2.0"
     pkg.md5sum "1180e9ef7f5a2e4b1eab3e1a0d3fa228"
   else
@@ -73,7 +73,7 @@ component "gcc" do |pkg, settings, platform|
       pkg.build_requires "libstdc++-devel"
       pkg.build_requires "gcc-c++"
     end
-  elsif platform.is_huaweios?
+  elsif platform.is_cross_compiled_linux?
     pkg.build_requires "pl-binutils-#{platform.architecture}"
     pkg.build_requires "sysroot"
   elsif platform.is_solaris?
@@ -115,17 +115,12 @@ component "gcc" do |pkg, settings, platform|
     # attempt to honor any flags passed via environment variables.
     pkg.environment "CFLAGS"   => "$${CFLAGS}"
     pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
-  elsif platform.is_huaweios?
+  elsif platform.is_cross_compiled_linux?
     # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
     pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
-
     # Do not use fPIC with the cross-compiler.
     pkg.environment "CFLAGS" => "$${CFLAGS}"
-    pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
   elsif platform.architecture == "s390x"
-    # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
-    pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
-
     # Do not use fPIC with the cross-compiler.
     pkg.environment "CFLAGS" => "$${CFLAGS}"
     pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
@@ -159,7 +154,6 @@ component "gcc" do |pkg, settings, platform|
     # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
     pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
   end
-
 
   #  Some notes on AIX.
   #    AIX ships with gcc-4.2.4. We want 4.8.2 or higher. To get to 4.8.2 you
@@ -198,18 +192,14 @@ component "gcc" do |pkg, settings, platform|
   end
 
   # The arm flags were taken from the Debian GCC compile options. (gcc -v)
-  # The fpu, float, mode flags are all to ensure the proper floating point
+  # The fpu, float, flags are all to ensure the proper floating point
   # type (which is hard) on ARM.
   # The other flags are to instruct GCC on the proper target to look at in
   # libgcc when linking.
   if platform.architecture =~ /arm/i
-    configure_command << " --with-arch=armv7-a \
-      --with-fpu=vfpv3-d16 \
-      --with-float=hard \
-      --with-mode=thumb \
-      --build=arm-linux-gnueabihf \
-      --host=arm-linux-gnueabihf \
-      --target=arm-linux-gnueabihf"
+    configure_command << " --with-fpu=vfp \
+      --with-arch-directory=arm \
+      --with-float=hard \ "
   end
 
   # The target powerpc-ibm-aix6.1.0.0 is used on AIX 6.1, AIX 7.1 - even by
@@ -260,7 +250,7 @@ component "gcc" do |pkg, settings, platform|
 
   pkg.configure do
     [
-      'mkdir ../obj-gcc-build-dir',
+      'mkdir -p ../obj-gcc-build-dir',
       'cd ../obj-gcc-build-dir',
       configure_command,
     ]
