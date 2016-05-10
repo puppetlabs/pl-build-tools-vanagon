@@ -6,7 +6,7 @@ component "gcc" do |pkg, settings, platform|
     pkg.version "4.8.2"
     pkg.md5sum "deca88241c1135e2ff9fa5486ab5957b"
   end
-  pkg.url "http://buildsources.delivery.puppetlabs.net/gcc-#{pkg.get_version}.tar.gz"
+  pkg.url "http://ftp.gnu.org/gnu/gcc/gcc-#{pkg.get_version}/gcc-#{pkg.get_version}.tar.gz"
 
   # The 10.10 versioning breaks some stuff.
   pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
@@ -101,7 +101,7 @@ component "gcc" do |pkg, settings, platform|
     [
       #TODO figure out a better way to find the version number than hard-code it
       "ln -s ../gmp-4.3.2 gmp",
-      "ln -s ../mpc-0.8.1 mpc",
+      "ln -s ../mpc-1.0.3 mpc",
       "ln -s ../mpfr-2.4.2 mpfr"
     ]
   end
