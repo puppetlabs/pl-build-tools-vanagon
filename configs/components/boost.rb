@@ -109,7 +109,11 @@ component "boost" do |pkg, settings, platform|
   elsif platform.is_windows?
     userconfigjam = %Q{using gcc : : #{gpp} ;}
   else
-    userconfigjam = %Q{using gcc : 4.8.2 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cxxflags}" ;}
+    if platform.architecture =~ /arm/ or platform.is_aix?
+      userconfigjam = %Q{using gcc : 5.2.0 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cxxflags}" ;}
+    else
+      userconfigjam = %Q{using gcc : 4.8.2 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cxxflags}" ;}
+    end
   end
 
   # On some platforms, we have multiple means of specifying paths. Sometimes, we need to use either one
