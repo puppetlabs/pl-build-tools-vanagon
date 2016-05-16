@@ -1,8 +1,8 @@
 component "binutils" do |pkg, settings, platform|
   # Source-Related Metadata
   pkg.version "2.26"
-  pkg.url "http://buildsources.delivery.puppetlabs.net/binutils-#{pkg.get_version}.tar.gz"
   pkg.md5sum "d66e2b663757cbf5d4b060feb4ef6b4b"
+  pkg.url "https://ftp.gnu.org/gnu/binutils/binutils-#{pkg.get_version}.tar.gz"
 
   pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-common.h.patch"
   pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-ldlang.c.patch"

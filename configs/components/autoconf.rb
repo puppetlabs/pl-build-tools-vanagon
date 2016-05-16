@@ -1,7 +1,7 @@
 component "autoconf" do |pkg, settings, platform|
   pkg.version "2.69"
   pkg.md5sum "82d05e03b93e45f5a39b828dc9c6c29b"
-  pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  pkg.url "http://ftp.gnu.org/gnu/autoconf/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   if platform.is_aix?
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"

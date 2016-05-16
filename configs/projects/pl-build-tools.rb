@@ -57,3 +57,9 @@ elsif platform.is_solaris?
 end
 
 proj.directory proj.basedir
+
+# Here we rewrite public http urls to use our internal source host instead.
+# Something like https://www.openssl.org/source/openssl-1.0.0r.tar.gz gets
+# rewritten as
+# http://buildsources.delivery.puppetlabs.net/openssl-1.0.0r.tar.gz
+proj.register_rewrite_rule 'http', 'http://buildsources.delivery.puppetlabs.net'
