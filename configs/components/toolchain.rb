@@ -6,6 +6,7 @@ component "toolchain" do |pkg, settings, platform|
     if platform.name =~ /debian-8-amd64/
       # Add toolchain file for huaweios, which builds on debian-8-amd64
       pkg.add_source "file://files/huaweios-toolchain.cmake.txt", sum: "60cb70b191fa1a9ddd1ce9b797e5e32b"
+      pkg.add_source "file://files/debian-8-armhf-toolchain.cmake.txt", sum: "5e3b0ebf98296bab806b5c8d6ea33b59"
     elsif platform.name =~ /sles-\d\d-x86_64/
       # Toolchain file for sles running on zLinux, which builds on sles x86_64
       pkg.add_source "file://files/sles-s390x-toolchain.cmake.txt", sum: "c5f6dc921e0a83e7c5768db9d00413a2"
@@ -61,8 +62,9 @@ component "toolchain" do |pkg, settings, platform|
     filename = pkg.get_url.split('/').last
     pkg.install_file filename, "#{settings[:prefix]}/pl-build-toolchain.cmake"
     if platform.name =~ /debian-8-amd64/
-      # Install toolchain file for huaweios, which builds on debian-8-amd64
+      # Install toolchain file for huaweios and debian-8-armhf, which builds on debian-8-amd64
       pkg.install_file "huaweios-toolchain.cmake.txt", "#{settings[:basedir]}/powerpc-linux-gnu/pl-build-toolchain.cmake"
+      pkg.install_file "debian-8-armhf-toolchain.cmake.txt", "#{settings[:basedir]}/arm-linux-gnueabihf/pl-build-toolchain.cmake"
     elsif platform.name =~ /sles-\d\d-x86_64/
       # Install toolchain file used the s390x sles platfoms, which are built on sles x86_64
       pkg.install_file "sles-s390x-toolchain.cmake.txt", "#{settings[:basedir]}/s390x-linux-gnu/pl-build-toolchain.cmake"
