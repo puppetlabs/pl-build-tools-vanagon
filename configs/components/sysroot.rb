@@ -1,5 +1,8 @@
 component "sysroot" do |pkg, settings, platform|
   case platform.name
+    when "debian-8-armhf"
+      pkg.version "2016.05.18"
+      pkg.md5sum "906c60e460ea848f49fb2885202d0f18"
     when "huaweios-6-powerpc"
       pkg.version "2016.02.08"
       pkg.md5sum "82589b28efdc5ccf6181499c4f49a1ac"
@@ -15,9 +18,6 @@ component "sysroot" do |pkg, settings, platform|
     when "solaris-11-sparc"
       pkg.version "2015.09.09"
       pkg.md5sum "4edff510767d114bde1419743bc34d69"
-    when "debian-8-armhf"
-      pkg.version "2016.05.09"
-      pkg.md5sum "475477abf0b8ebf1e36e9abb1a478c61"
   end
 
   if platform.is_cross_compiled?

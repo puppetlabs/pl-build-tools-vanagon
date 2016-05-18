@@ -1,4 +1,6 @@
-#!/bin/bash  -x
+#!/bin/bash
+set -e
+set -x
 
 # This script should be able to generate a sysroot that we use for
 # cross-compiling anything debian-releated. To execute, you should just be able
@@ -22,8 +24,11 @@ if [ -z "$1" ] ; then
 
     cp /usr/bin/qemu-${SHORTARCH}-static debian-${VERSION}-${ARCH}-sysroot/usr/bin/
     cp /etc/resolv.conf debian-${VERSION}-${ARCH}-sysroot/etc
-    cp sysroot debian-${VERSION}-${ARCH}-sysroot
-    chroot debian-${VERSION}-${ARCH}-sysroot /bin/bash ./"${0}" chroot
+    cp -pr "${0}" debian-${VERSION}-${ARCH}-sysroot/
+    chroot debian-${VERSION}-${ARCH}-sysroot /bin/bash "${0}" chroot
+    rm -rf debian-${VERSION}-${ARCH}-sysroot/usr/bin
+    rm -rf debian-${VERSION}-${ARCH}-sysroot/bin
+    find debian-${VERSION}-${ARCH}-sysroot -maxdepth 2 -mindepth 1 -type d  | egrep -v 'usr|lib'
     tar czf debian-${VERSION}-${ARCH}-sysroot.tar.gz --owner=0 --group=0 debian-${VERSION}-${ARCH}-sysroot
 fi
 
@@ -34,7 +39,6 @@ if [ "$1"  ==  "chroot" ] ; then
 
     echo "deb http://httpredir.debian.org/debian ${DISTRO} main contrib" >> /etc/apt/sources.list
     echo "deb http://httpredir.debian.org/debian ${DISTRO}-updates main contrib" >> /etc/apt.sources.list
-    echo "deb http://security.debian.org/debian-${VERSION}-security ${DISTRO}/updates main contrib" >> /etc/apt/sources.list
 
     apt-get update
 
@@ -103,10 +107,17 @@ if [ "$1"  ==  "chroot" ] ; then
     ln -s  ${TRIPLE}/* .
     popd
 
+    # For some reason Debian treats their libraries on an arch as if it were a
+    # multiarch install, putting them not in /lib but in /lib/${TRIPLE}/.
+    # Rather than cluttering our build configs with additional linker paths,
+    # let's just copy the libs into /lib in the sysroot and aim for simplicity at
+    # the expense of some extra disk space used by the sysroot.
+    pushd /lib
+    cp -a /lib/${TRIPLE}/* /lib
+    popd
+
     # Clean up stuff we're not going to need/use
     pushd /
-    rm -rf ./usr/games  ./usr/local  ./usr/sbin  ./usr/share  ./usr/src ./usr/lib/man-db ./usr/lib/systemd  ./usr/lib/ssl
-    find / -maxdepth 1 | grep -v usr  | grep -v lib | xargs rm -rf
-    rm -rf /usr/bin
+    rm --no-preserve-root -rf ./usr/games  ./usr/local  ./usr/sbin  ./usr/share  ./usr/src ./usr/lib/man-db ./usr/lib/systemd  ./usr/lib/ssl
     popd
 fi
