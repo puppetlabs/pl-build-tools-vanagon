@@ -1,5 +1,5 @@
 # this one is important
-SET(CMAKE_SYSTEM_NAME AIX)
+SET(CMAKE_SYSTEM_NAME Linux)
 #this one not so much
 SET(CMAKE_SYSTEM_VERSION 1)
 
@@ -20,12 +20,8 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
 SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
 SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
 
-SET(CMAKE_C_FLAGS "-I${PL_INSTALL_ROOT}/include -I${PL_TOOLS_PREFIX}/include ${CMAKE_C_FLAGS}" CACHE STRING "" FORCE)
+SET(CMAKE_C_FLAGS "-fPIC -pthread -I${PL_INSTALL_ROOT}/include -I${PL_TOOLS_PREFIX}/include ${CMAKE_C_FLAGS}" CACHE STRING "" FORCE)
 SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS}" CACHE STRING "" FORCE)
-
-SET(PL_RPATH_FLAGS "-L${PL_TOOLS_ROOT}/lib -L${PL_INSTALL_ROOT}/lib")
-SET(CMAKE_EXE_LINKER_FLAGS "${PL_RPATH_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "" FORCE)
-SET(CMAKE_SHARED_LINKER_FLAGS "${PL_RPATH_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS} -Wl,-bbigtoc" CACHE STRING "" FORCE)
 
 # update RPATH so our custom libraries can be found
 # use, i.e. don't skip the full RPATH for the build tree
@@ -34,9 +30,6 @@ SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 # when building, don't use the install RPATH already
 # (but later on when installing)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-
 
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
