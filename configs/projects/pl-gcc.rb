@@ -6,10 +6,11 @@ project "pl-gcc" do |proj|
 
   if platform.is_aix? or platform.architecture == "s390x" or platform.architecture =~ /arm/
     proj.version "5.2.0"
+    proj.release "7"
   else
     proj.version "4.8.2"
+    proj.release "6"
   end
-  proj.release "6"
 
   if platform.is_cross_compiled?
     proj.name "pl-gcc-#{platform.architecture}"
