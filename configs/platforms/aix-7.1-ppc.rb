@@ -1,8 +1,5 @@
 platform "aix-7.1-ppc" do |plat|
-  # These probably aren't right, but we haven't gotten to building any daemons yet.
-  plat.servicedir "/etc/init.d"
-  plat.defaultdir "/etc/sysconfig"
-  plat.servicetype "sysv"
+  plat.servicetype "aix"
 
   plat.make "gmake"
   plat.tar "/opt/freeware/bin/tar"
@@ -16,4 +13,5 @@ platform "aix-7.1-ppc" do |plat|
   plat.provision_with "rm -rf /opt/pl-build-tools; rm -rf /var/tmp/tmp.* /var/tmp/*root-root /var/tmp/rpm* /root/*.jam"
 
   plat.install_build_dependencies_with "rpm -Uvh --replacepkgs "
+  plat.build_host ["pe-aix-71-builder.delivery.puppetlabs.net"]
 end
