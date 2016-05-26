@@ -6,7 +6,7 @@ project "pl-gcc" do |proj|
 
   if platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
     proj.version "5.2.0"
-    proj.release "7"
+    proj.release "8"
   else
     proj.version "4.8.2"
     proj.release "6"
