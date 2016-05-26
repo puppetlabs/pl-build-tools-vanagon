@@ -1,5 +1,5 @@
 component "gcc" do |pkg, settings, platform|
-  if platform.is_aix? or platform.architecture == "s390x" or platform.architecture =~ /arm/
+  if platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
     pkg.version "5.2.0"
     pkg.md5sum "1180e9ef7f5a2e4b1eab3e1a0d3fa228"
   else
@@ -12,7 +12,7 @@ component "gcc" do |pkg, settings, platform|
   pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
   pkg.apply_patch "resources/patches/gcc/aix-inclhack.patch" if platform.is_aix?
 
-  if platform.is_linux? or platform.is_osx?
+  if platform.is_linux? || platform.is_osx?
     pkg.requires "binutils"
   end
 

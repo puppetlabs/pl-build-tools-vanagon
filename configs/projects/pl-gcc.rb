@@ -4,7 +4,7 @@ project "pl-gcc" do |proj|
 
   proj.description "Puppet Labs GCC"
 
-  if platform.is_aix? or platform.architecture == "s390x" or platform.architecture =~ /arm/
+  if platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
     proj.version "5.2.0"
     proj.release "7"
   else
