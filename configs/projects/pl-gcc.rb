@@ -4,9 +4,9 @@ project "pl-gcc" do |proj|
 
   proj.description "Puppet Labs GCC"
 
-  if platform.name =~ /fedora-f24|fedora-f25|ubuntu-16\.04-ppc64el|ubuntu-16\.10/
+  if platform.name =~ /fedora-f24|fedora-f25|ubuntu-16\.04-ppc64el|ubuntu-16\.10|debian-8-armel/
     proj.version "6.1.0"
-    proj.release "0"
+    proj.release "2"
   elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
     proj.version "5.2.0"
     proj.release "11"
