@@ -43,9 +43,9 @@ proj.setting(:logdir, "/var/log/pl-build-tools")
 proj.setting(:piddir, "/var/run/pl-build-tools")
 proj.setting(:bindir, File.join(proj.prefix, "bin"))
 if platform.architecture == "s390x"
-  proj.setting(:libdir, File.join(proj.prefix, "lib"))
-else
   proj.setting(:libdir, File.join(proj.prefix, "lib64"))
+else
+  proj.setting(:libdir, File.join(proj.prefix, "lib"))
 end
 proj.setting(:includedir, File.join(proj.prefix, "include"))
 proj.setting(:datadir, File.join(proj.prefix, "share"))
