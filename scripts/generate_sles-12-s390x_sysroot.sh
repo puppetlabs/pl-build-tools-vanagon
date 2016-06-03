@@ -7,6 +7,7 @@
 # Therefore, you must run this script as root on a zLinux server running
 # SLES 12 SP1.
 
+
 SYSROOTDIR="sles-12-s390x-sysroot"
 
 # First we remove a bunch of unneeded junk. The SLES 12 s390x environment
@@ -81,10 +82,11 @@ pushd $SYSROOTDIR/lib64
 find . -maxdepth 1 -lname '/*' |
 while read link ; do
   echo "Converting $link from absolute to relative..."
-  target=`readlink $link`
-  reltarget=`echo $target | sed 's|/usr/lib64|../usr/lib64|g'`
-  rm $link
-  ln -sf $reltarget $link
+  target=$(readlink "$link")
+  # shellcheck disable=SC2001
+  reltarget=$(echo "$target" | sed 's|/usr/lib64|../usr/lib64|g')
+  rm "$link"
+  ln -sf "$reltarget" "$link"
 done
 popd
 
@@ -92,10 +94,11 @@ pushd $SYSROOTDIR/usr/lib64
 find . -maxdepth 1 -lname '/*' |
 while read link ; do
   echo "Converting $link from absolute to relative..."
-  target=`readlink $link`
-  reltarget=`echo $target | sed 's|/lib64|../../lib64|g'`
-  rm $link
-  ln -sf $reltarget $link
+  target=$(readlink "$link")
+  # shellcheck disable=SC2001
+  reltarget=$(echo "$target" | sed 's|/lib64|../../lib64|g')
+  rm "$link"
+  ln -sf "$reltarget" "$link"
 done
 popd
 
@@ -103,10 +106,11 @@ pushd $SYSROOTDIR/usr/lib64/ncurses6
 find . -maxdepth 1 -lname '/*' |
 while read link ; do
   echo "Converting $link from absolute to relative..."
-  target=`readlink $link`
-  reltarget=`echo $target | sed 's|/lib64|../../../lib64|g'`
-  rm $link
-  ln -sf $reltarget $link
+  target=$(readlink "$link")
+  # shellcheck disable=SC2001
+  reltarget=$(echo "$target" | sed 's|/lib64|../../../lib64|g')
+  rm "$link"
+  ln -sf "$reltarget" "$link"
 done
 popd
 
