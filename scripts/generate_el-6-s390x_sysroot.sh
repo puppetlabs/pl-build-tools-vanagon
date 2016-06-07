@@ -40,11 +40,12 @@ echo "Converting absolute library symlinks to relative ones..."
 pushd $sysrootdir/usr/lib64
 find . -maxdepth 1 -lname '/*' |
 while read -r link ; do
-echo "Converting $link from absolute to relative..."
-	target=$(readlink "$link")
-	reltarget=$(echo "$target" | sed 's|/lib64|../../lib64|g')
-	rm "$link"
-	ln -sf "$reltarget" "$link"
+  echo "Converting $link from absolute to relative..."
+  target=$(readlink "$link")
+  # shellcheck disable=SC2001
+  reltarget=$(echo "$target" | sed 's|/lib64|../../lib64|g')
+  rm "$link"
+  ln -sf "$reltarget" "$link"
 done
 popd
 
@@ -59,7 +60,7 @@ cp -a $sysrootdir/usr/lib64 $sysrootdir/usr/lib
 
 echo "Generating the sysroot tarball..."
 if [ -e $sysrootdir.tar.gz ]; then
-	rm $sysrootdir.tar.gz
+  rm $sysrootdir.tar.gz
 fi
 tar --create --gzip --file $sysrootdir.tar.gz --owner=0 --group=0 $sysrootdir
 

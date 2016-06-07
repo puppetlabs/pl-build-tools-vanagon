@@ -43,6 +43,7 @@ find . -maxdepth 1 -lname '/*' |
 while read -r link ; do
   echo "Converting $link from absolute to relative..."
   target=$(readlink "$link")
+  # shellcheck disable=SC2001
   reltarget=$(echo "$target" | sed 's|/lib64|../../lib64|g')
   rm "$link"
   ln -sf "$reltarget" "$link"
@@ -54,6 +55,7 @@ find . -maxdepth 1 -lname '/*' |
 while read -r link ; do
   echo "Converting $link from absolute to relative..."
   target=$(readlink "$link")
+  # shellcheck disable=SC2001
   reltarget=$(echo "$target" | sed 's|/lib64|../../../lib64|g')
   rm "$link"
   ln -sf "$reltarget" "$link"
