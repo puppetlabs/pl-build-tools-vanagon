@@ -3,8 +3,13 @@ project "pl-yaml-cpp" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Yaml CPP"
-  proj.version "0.5.1"
-  proj.release "5"
+  if platform.architecture =~ /arm/
+    proj.version "0.5.3"
+    proj.release "1"
+  else
+    proj.version "0.5.1"
+    proj.release "5"
+  end
   proj.license "MIT"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
