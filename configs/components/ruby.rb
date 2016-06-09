@@ -1,14 +1,17 @@
 component "ruby" do |pkg, settings, platform|
-  pkg.version "2.1.6"
-  pkg.md5sum "6e5564364be085c45576787b48eeb75f"
+  pkg.version "2.1.9"
+  pkg.md5sum "d9d2109d3827789344cc3aceb8e1d697"
   pkg.url "http://buildsources.delivery.puppetlabs.net/ruby-#{pkg.get_version}.tar.gz"
 
   pkg.apply_patch "resources/patches/ruby/libyaml_cve-2014-9130.patch"
-  pkg.apply_patch "resources/patches/ruby/CVE-2015-4020.patch"
 
   # This is needed for date_core to correctly compile on solaris 10. Breaks gem installations.
-  pkg.apply_patch "resources/patches/ruby/fix-date-compilation.patch" if platform.is_solaris?
   pkg.environment "PATH" => "/usr/sfw/bin:/usr/ccs/bin:$$PATH"
+
+  if platform.is_cross_compiled_linux?
+    pkg.build_requires "pl-binutils-#{platform.architecture}"
+    pkg.build_requires "pl-gcc-#{platform.architecture}"
+  end
 
   if platform.name =~ /el-4/
     pkg.build_requires "pl-tar"
