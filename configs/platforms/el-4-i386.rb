@@ -4,8 +4,9 @@ platform "el-4-i386" do |plat|
   plat.servicetype "sysv"
   plat.tar "/opt/pl-build-tools/bin/tar"
 
-  plat.yum_repo  "http://pl-build-tools.delivery.puppetlabs.net/yum/el/4/i386/pl-build-tools-el-4.repo"
+  plat.add_build_repository  "http://pl-build-tools.delivery.puppetlabs.net/yum/el/4/i386/pl-build-tools-el-4.repo"
   plat.provision_with "yum install -y autoconf automake createrepo rsync gcc make rpm-build rpm-libs yum-utils; yum update -y pkgconfig"
+
   plat.install_build_dependencies_with "yum install -y"
   plat.vmpooler_template "centos-4-i386"
 end
