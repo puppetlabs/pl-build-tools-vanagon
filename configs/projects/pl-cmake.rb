@@ -4,7 +4,7 @@ project "pl-cmake" do |proj|
 
   proj.description "Puppet Labs cmake"
   proj.version "3.2.3"
-  proj.release "13"
+  proj.release "14"
   proj.license "Same as cmake"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"

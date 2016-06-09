@@ -184,12 +184,12 @@ component "gcc" do |pkg, settings, platform|
     configure_command << " --disable-multilib"
   end
 
-
-  # AIX compilation will fail with this option. I think it's because linking
-  # on AIX is basically crazy. OSX also fails with this option. So does solaris.
-  if platform.is_linux? && ! platform.name =~ /el-4/
-    configure_command << " --disable-shared"
-  end
+  # We used to run with --disable-shared on several platforms (or attempt to).
+  # After a logic issue was discovered, and more discussion was had we've
+  # elected to always build shared and copy over the components required into
+  # the agent via the runtime component. See RE-7315 for more info.
+  #
+  # #TODO what impact does this have with client-tools.
 
   # The arm flags were taken from the Debian GCC compile options. (gcc -v)
   # The fpu, float, flags are all to ensure the proper floating point
