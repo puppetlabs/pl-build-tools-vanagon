@@ -3,7 +3,7 @@ project "pl-yaml-cpp" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Yaml CPP"
-  if platform.architecture =~ /arm/
+  if platform.architecture =~ /arm/ || platform.name =~ /fedora-f24/
     proj.version "0.5.3"
     proj.release "1"
   else

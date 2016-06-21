@@ -1,6 +1,6 @@
 component "yaml-cpp" do |pkg, settings, platform|
 
-  if platform.architecture =~ /arm/
+  if platform.architecture =~ /arm/ || platform.name =~ /fedora-f24/
     pkg.version "0.5.3"
     pkg.md5sum "9a60a3051c2ef01980c78a2d6be40ed9"
   else
