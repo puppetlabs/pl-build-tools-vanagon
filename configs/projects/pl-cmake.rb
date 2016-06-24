@@ -3,8 +3,13 @@ project "pl-cmake" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Labs cmake"
-  proj.version "3.2.3"
-  proj.release "14"
+  if platform.name =~ /fedora-f24/
+    proj.version "3.5.2"
+    proj.release "0"
+  else
+    proj.version "3.2.3"
+    proj.release "14"
+  end
   proj.license "Same as cmake"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"

@@ -1,5 +1,8 @@
 component "gcc" do |pkg, settings, platform|
-  if platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
+  if platform.name =~ /fedora-f24/
+    pkg.version "6.1.0"
+    pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
+  elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
     pkg.version "5.2.0"
     pkg.md5sum "1180e9ef7f5a2e4b1eab3e1a0d3fa228"
   else

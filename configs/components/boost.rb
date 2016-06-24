@@ -2,7 +2,7 @@ component "boost" do |pkg, settings, platform|
   pkg.version "1.58.0"
   pkg.md5sum "5a5d5614d9a07672e1ab2a250b5defc5"
 
-  if platform.architecture =~ /arm/
+  if platform.architecture =~ /arm/ || platform.name =~ /fedora-f24/
     pkg.version "1.61.0"
     pkg.md5sum "874805ba2e2ee415b1877ef3297bf8ad"
   end

@@ -6,6 +6,7 @@ component "binutils" do |pkg, settings, platform|
 
   pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-common.h.patch"
   pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-ldlang.c.patch"
+  pkg.apply_patch "resources/patches/binutils/binutils-2.26-tci386-BFD.patch"
 
   # Package Dependency Metadata
 
