@@ -3,7 +3,7 @@ project "pl-boost" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Labs boost"
-  if platform.architecture =~ /arm/ || platform.name =~ /fedora-f24/
+  if platform.architecture =~ /arm/
     proj.version "1.61.0"
     proj.release "0"
   else
