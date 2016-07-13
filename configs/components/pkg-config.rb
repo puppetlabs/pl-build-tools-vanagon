@@ -5,7 +5,7 @@ component "pkg-config" do |pkg, settings, platform|
 
   if platform.is_solaris?
     pkg.environment "PATH" => "#{settings[:bindir]}:/usr/ccs/bin:/usr/sfw/bin:/opt/csw/bin:$$PATH"
-  elsif platform.is_huaweios?
+  else
     pkg.environment "PATH" => "#{settings[:bindir]}:$$PATH"
   end
 
