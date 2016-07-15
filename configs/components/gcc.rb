@@ -1,4 +1,5 @@
 component "gcc" do |pkg, settings, platform|
+  # Source-Related Metadata
   if platform.name =~ /fedora-f24/
     pkg.version "6.1.0"
     pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
@@ -15,14 +16,25 @@ component "gcc" do |pkg, settings, platform|
   pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
   pkg.apply_patch "resources/patches/gcc/aix-inclhack.patch" if platform.is_aix?
 
+  # Package Dependency Metadata
   if platform.is_linux? || platform.is_osx?
     pkg.requires "binutils"
   end
 
-  if platform.is_deb?
+  if platform.is_deb? || platform.is_cisco_wrlinux?
     pkg.requires "libc6-dev"
   end
 
+  if platform.is_solaris? && platform.os_version == "11"
+    pkg.requires "pl-binutils-#{platform.architecture}"
+  end
+
+  # Build Requirements
+
+  # TODO: TESTING
+  # In the future we may want to enable the test suite for GCC. If we do we'll
+  # need dejagnu, expect and tcl. Those packages should be available on all RPM
+  # systems (other than AIX and SLES10)
   if platform.is_rpm?
     unless platform.is_aix?
       pkg.build_requires "gcc"
@@ -62,7 +74,6 @@ component "gcc" do |pkg, settings, platform|
         # AIX 5.3 gcc464 is currently a tarball that should be built into an rpm
       end
     when platform.is_cisco_wrlinux?
-      pkg.requires "libc6-dev"
       pkg.build_requires "g++"
       pkg.build_requires "libstdc++-dev"
       pkg.build_requires "libc6-dev"
@@ -83,7 +94,6 @@ component "gcc" do |pkg, settings, platform|
     if platform.os_version == '10'
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
     elsif platform.os_version == '11'
-      pkg.requires "pl-binutils-#{platform.architecture}"
       pkg.build_requires "pl-binutils-#{platform.architecture}"
     end
     if platform.architecture.downcase == 'sparc'
@@ -95,31 +105,15 @@ component "gcc" do |pkg, settings, platform|
     pkg.build_requires "pl-tar"
   end
 
-  ##  TESTING
-  # In the future we may want to enable the test suite for GCC. If we do we'll
-  # need dejagnu, expect and tcl. Those packages should be available on all RPM
-  # systems (other than AIX and SLES10)
-
-  pkg.configure do
-    [
-      #TODO figure out a better way to find the version number than hard-code it
-      "ln -s ../gmp-4.3.2 gmp",
-      "ln -s ../mpc-1.0.3 mpc",
-      "ln -s ../mpfr-2.4.2 mpfr"
-    ]
-  end
-
-  # Initialize an empty configure_command string
-  configure_command = ""
-
-  # Environment declarations
+  # Build-time Configuration
   if platform.is_aix?
     # AIX can't use the exact flags that linux does, but we should still
     # attempt to honor any flags passed via environment variables.
     pkg.environment "CFLAGS"   => "$${CFLAGS}"
     pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
   elsif platform.is_cross_compiled_linux?
-    # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
+    # Without this, libstdc++ and libssp get built with a dependency on
+    # libgcc_s, but with no way to find it.
     pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
     # Do not use fPIC with the cross-compiler.
     pkg.environment "CFLAGS" => "$${CFLAGS}"
@@ -133,7 +127,8 @@ component "gcc" do |pkg, settings, platform|
     pkg.environment "CC"    => "/usr/sfw/bin/gcc"
     pkg.environment "CXX"   => "/usr/sfw/bin/g++"
 
-    # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
+    # Without this, libstdc++ and libssp get built with a dependency on
+    # libgcc_s, but with no way to find it.
     pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
 
     # Adding -fPIC to the cross-compiler produces a cross-compiler that can't
@@ -154,9 +149,28 @@ component "gcc" do |pkg, settings, platform|
     pkg.environment "CXXFLAGS" => "$${CXXFLAGS} -fPIC"
     pkg.environment "CFLAGS_FOR_TARGET" => "-fPIC"
 
-    # Without this, libstdc++ and libssp get built with a dependency on libgcc_s, but with no way to find it.
+    # Without this, libstdc++ and libssp get built with a dependency on
+    # libgcc_s, but with no way to find it.
     pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
   end
+
+  # Initialize an empty configure_command string
+  configure_command = ""
+
+  # We've abstracted the configure command a bit because of the difference in
+  # flags needed for ARM vs x86 and x86_64 vs AIX/ppc
+  configure_command << " ../gcc-#{pkg.get_version}/configure \
+    --prefix=#{settings[:basedir]} \
+    --disable-nls \
+    --enable-languages=c,c++ \
+    --disable-libgcj "
+
+  # We used to run with --disable-shared on several platforms (or attempt to).
+  # After a logic issue was discovered, and more discussion was had we've
+  # elected to always build shared and copy over the components required into
+  # the agent via the runtime component. See RE-7315 for more info.
+  #
+  # TODO: what impact does this have with client-tools?
 
   #  Some notes on AIX.
   #    AIX ships with gcc-4.2.4. We want 4.8.2 or higher. To get to 4.8.2 you
@@ -173,26 +187,11 @@ component "gcc" do |pkg, settings, platform|
     configure_command << " chsec -f /etc/security/limits -s default -a data=2560000;"
   end
 
-  # We've abstracted the configure command a bit because of the difference in
-  # flags needed for ARM vs x86 and x86_64 vs AIX/ppc
-  configure_command << " ../gcc-#{pkg.get_version}/configure \
-    --prefix=#{settings[:basedir]} \
-    --disable-nls \
-    --enable-languages=c,c++ \
-    --disable-libgcj "
-
   # On the ARM Debian builds, you actually need multilib, so we'll exclude this
   # exclude flag on ARM.
   unless platform.architecture =~ /arm/i or platform.is_solaris?
     configure_command << " --disable-multilib"
   end
-
-  # We used to run with --disable-shared on several platforms (or attempt to).
-  # After a logic issue was discovered, and more discussion was had we've
-  # elected to always build shared and copy over the components required into
-  # the agent via the runtime component. See RE-7315 for more info.
-  #
-  # #TODO what impact does this have with client-tools.
 
   # The arm flags were taken from the Debian GCC compile options. (gcc -v)
   # The fpu, float, flags are all to ensure the proper floating point
@@ -251,8 +250,13 @@ component "gcc" do |pkg, settings, platform|
       end
   end
 
+  # Build Commands
   pkg.configure do
     [
+      #TODO figure out a better way to find the version number than hard-code it
+      'ln -s ../gmp-4.3.2 gmp',
+      'ln -s ../mpc-1.0.3 mpc',
+      'ln -s ../mpfr-2.4.2 mpfr',
       'mkdir -p ../obj-gcc-build-dir',
       'cd ../obj-gcc-build-dir',
       configure_command,
