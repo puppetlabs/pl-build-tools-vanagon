@@ -3,33 +3,47 @@ set -e
 set -x
 
 # This script should be able to generate a sysroot that we use for
-# cross-compiling anything debian-releated. To execute, you should just be able
-# to edit the constant below. In the end, you'll have a tar.gz file that is a
+# cross-compiling anything debian-based. To execute, you should just be able
+# to edit the constants below. In the end, you'll have a tar.gz file that is a
 # sysroot that needs to be placed on buildsources.
 
-ARCH=armhf
-SHORTARCH=arm
-VERSION=8
+# For huaweios-6-powerpc:
+ARCH=powerpc
+QEMUARCH=ppc
+DEBIANVER=8
 DISTRO=jessie
-TRIPLE=arm-linux-gnueabihf
+TRIPLE=powerpc-linux-gnu
+
+#ARCH=armhf
+#QEMUARCH=arm
+#DEBIANVER=8
+#DISTRO=jessie
+#TRIPLE=arm-linux-gnueabihf
+
 export LANG=C
 
+if [ "$(whoami)" != "root" ] ; then
+    echo "Error: this script must be run as root"
+    exit 1
+fi
 
 if [ -z "$1" ] ; then
+    echo "Installing required packages for build host..."
     apt-get update
-    apt-get install qemu-user-static debootstrap binfmt-support
+    apt-get install qemu-user-static debootstrap debian-archive-keyring binfmt-support rsync
 
-    mkdir -p debian-${VERSION}-${ARCH}-sysroot
-    debootstrap --arch=${ARCH} --foreign ${DISTRO} debian-${VERSION}-${ARCH}-sysroot
+    mkdir -p debian-${DEBIANVER}-${ARCH}-sysroot
+    echo "Running debootstrap under debian-${DEBIANVER}-${ARCH}-sysroot..."
+    debootstrap --arch=${ARCH} --foreign ${DISTRO} debian-${DEBIANVER}-${ARCH}-sysroot
 
-    cp /usr/bin/qemu-${SHORTARCH}-static debian-${VERSION}-${ARCH}-sysroot/usr/bin/
-    cp /etc/resolv.conf debian-${VERSION}-${ARCH}-sysroot/etc
-    cp -pr "${0}" debian-${VERSION}-${ARCH}-sysroot/
-    chroot debian-${VERSION}-${ARCH}-sysroot /bin/bash "${0}" chroot
-    rm -rf debian-${VERSION}-${ARCH}-sysroot/usr/bin
-    rm -rf debian-${VERSION}-${ARCH}-sysroot/bin
-    find debian-${VERSION}-${ARCH}-sysroot -maxdepth 2 -mindepth 1 -type d  | egrep -v 'usr|lib'
-    tar czf debian-${VERSION}-${ARCH}-sysroot.tar.gz --owner=0 --group=0 debian-${VERSION}-${ARCH}-sysroot
+    cp /usr/bin/qemu-${QEMUARCH}-static debian-${DEBIANVER}-${ARCH}-sysroot/usr/bin/
+    cp /etc/resolv.conf debian-${DEBIANVER}-${ARCH}-sysroot/etc
+    cp -pr "${0}" debian-${DEBIANVER}-${ARCH}-sysroot/
+    chroot debian-${DEBIANVER}-${ARCH}-sysroot /bin/bash "${0}" chroot
+    rm -rf debian-${DEBIANVER}-${ARCH}-sysroot/usr/bin
+    rm -rf debian-${DEBIANVER}-${ARCH}-sysroot/bin
+    find debian-${DEBIANVER}-${ARCH}-sysroot -maxdepth 2 -mindepth 1 -type d  | egrep -v 'usr|lib'
+    tar czf debian-${DEBIANVER}-${ARCH}-sysroot.tar.gz --owner=0 --group=0 debian-${DEBIANVER}-${ARCH}-sysroot
 fi
 
 if [ "$1"  ==  "chroot" ] ; then
@@ -42,13 +56,15 @@ if [ "$1"  ==  "chroot" ] ; then
 
     apt-get update
 
-    echo debian-${VERSION}-${ARCH} > /etc/hostname
-    hostname debian-${VERSION}-${ARCH}
+    echo debian-${DEBIANVER}-${ARCH} > /etc/hostname
+    hostname debian-${DEBIANVER}-${ARCH}
 
-
+    echo "Installing development packages we need in our sysroot..."
     apt-get -y install libc6-dev libncurses5-dev libbz2-dev zlib1g-dev curl libcurl4-openssl-dev libreadline-dev libbz2-dev
 
     # Clean up links
+    # NOTE: the library versions will change between Debian releases,
+    # so this section will likely need some manual tweaking.
     pushd /usr/lib/${TRIPLE}
     rm libz.so
     ln -s ../../../lib/${TRIPLE}/libz.so.1.2.8 libz.so
