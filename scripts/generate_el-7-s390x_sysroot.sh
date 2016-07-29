@@ -16,7 +16,7 @@ echo "Removing unneeded packages..."
 yum remove -y autofs cups-libs git-core libtiff libxml2-python libxslt mysql-libs opencryptoki-libs pango plymouth-core-libs python-lxml sssd-client samba-common systemtap-runtime
 
 echo "Installing critical libraries we need for building gcc and our various dependencies..."
-yum install --assumeyes zlib-devel bzip2-devel libcurl-devel readline-devel e2fsprogs-devel xz-devel
+yum install --assumeyes zlib-devel bzip2-devel libcurl-devel libselinux-devel readline-devel e2fsprogs-devel xz-devel
 
 # You won't be able to make any further package changes using yum after
 # this point. We vendor our own libxml2 and don't want a copy in our sysroot.
