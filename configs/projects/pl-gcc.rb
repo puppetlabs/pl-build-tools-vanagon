@@ -9,7 +9,7 @@ project "pl-gcc" do |proj|
     proj.release "0"
   elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
     proj.version "5.2.0"
-    proj.release "10"
+    proj.release "11"
   else
     proj.version "4.8.2"
     proj.release "7"
