@@ -3,7 +3,7 @@ project "pl-cmake" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Labs cmake"
-  if platform.name =~ /fedora-f24/
+  if platform.name =~ /fedora-f24|debian-8-armel/
     proj.version "3.5.2"
     proj.release "0"
   else
