@@ -1,12 +1,7 @@
 component "yaml-cpp" do |pkg, settings, platform|
 
-  if platform.architecture =~ /arm/ || platform.name =~ /fedora-f24/
-    pkg.version "0.5.3"
-    pkg.md5sum "9a60a3051c2ef01980c78a2d6be40ed9"
-  else
-    pkg.version "0.5.1"
-    pkg.md5sum "0fa47a5ed8fedefab766592785c85ee7"
-  end
+  pkg.version "0.5.3"
+  pkg.md5sum "9a60a3051c2ef01980c78a2d6be40ed9"
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   cmake = "#{settings[:bindir]}/cmake"
