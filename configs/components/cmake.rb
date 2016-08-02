@@ -1,11 +1,9 @@
 component "cmake" do |pkg, settings, platform|
+
   # Source-Related Metadata
-  pkg.version "3.2.3"
-  pkg.md5sum "d51c92bf66b1e9d4fe2b7aaedd51377c"
-  if platform.name =~ /fedora-f24/
-    pkg.version "3.5.2"
-    pkg.md5sum "701386a1b5ec95f8d1075ecf96383e02"
-  end
+  pkg.version "3.5.2"
+  pkg.md5sum "701386a1b5ec95f8d1075ecf96383e02"
+
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   if platform.name =~ /sles-12/
