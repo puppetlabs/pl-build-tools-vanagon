@@ -10,7 +10,7 @@ platform "solaris-10-sparc" do |plat|
 
   base_pkgs = ['arc', 'gcc', 'gccruntime', 'gccS', 'gnu-idn', 'gpch', 'gtar', 'hea', 'libm', 'wgetu', 'xcu4']
   base_url = 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends'
-  plat.output_dir File.join("solaris", "10", "PC1")
+  plat.output_dir File.join("solaris", "10")
 
   plat.provision_with %[echo "# Write the noask file to a temporary directory
 # please see man -s 4 admin for details about this file:
