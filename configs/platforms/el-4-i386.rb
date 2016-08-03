@@ -9,4 +9,5 @@ platform "el-4-i386" do |plat|
 
   plat.install_build_dependencies_with "yum install -y"
   plat.vmpooler_template "centos-4-i386"
+  plat.output_dir File.join("deb", plat.get_codename)
 end
