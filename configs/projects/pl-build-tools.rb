@@ -52,9 +52,7 @@ proj.setting(:datadir, File.join(proj.prefix, "share"))
 proj.setting(:mandir, File.join(proj.datadir, "man"))
 
 # proj.identifier
-if platform.is_osx?
-  proj.identifier "com.puppetlabs"
-elsif platform.is_solaris?
+if platform.is_solaris?
   proj.identifier "puppetlabs.com"
 end
 

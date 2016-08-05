@@ -12,12 +12,7 @@ component "yaml-cpp" do |pkg, settings, platform|
   cmake = "#{settings[:bindir]}/cmake"
   addtl_flags = ""
 
-  # This is pretty horrible.  But so is package management on OSX.
-  if platform.is_osx?
-    pkg.build_requires "pl-gcc-4.8.2"
-    pkg.build_requires "pl-cmake-3.2.3"
-    pkg.build_requires "pl-boost-1.58.0"
-  elsif platform.is_cross_compiled_linux?
+  if platform.is_cross_compiled_linux?
     pkg.build_requires "pl-binutils-#{platform.architecture}"
     pkg.build_requires "pl-gcc-#{platform.architecture}"
     pkg.build_requires "pl-boost-#{platform.architecture}"
@@ -71,13 +66,6 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.build_requires "pl-tar"
   end
 
-  # Different toolchains for different target platforms.
-  if platform.is_osx?
-    toolchain = "pl-build-toolchain-darwin"
-  else
-    toolchain = "pl-build-toolchain"
-  end
-
   pkg.build do
     [ "rm -rf build-shared",
       "mkdir build-shared",
@@ -85,7 +73,7 @@ component "yaml-cpp" do |pkg, settings, platform|
       "#{special_path ? special_path : ''} \
       \"#{cmake}\" \
       #{addtl_flags} \
-    -DCMAKE_TOOLCHAIN_FILE=#{special_prefix ? special_prefix : settings[:prefix]}/#{toolchain}.cmake \
+    -DCMAKE_TOOLCHAIN_FILE=#{special_prefix ? special_prefix : settings[:prefix]}/pl-build-toolchain.cmake \
     -DCMAKE_INSTALL_PREFIX=#{special_prefix ? special_prefix : settings[:prefix]} \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DYAML_CPP_BUILD_TOOLS=0 \
@@ -99,7 +87,7 @@ component "yaml-cpp" do |pkg, settings, platform|
       "#{special_path ? special_path : ''} \
       \"#{cmake}\" \
       #{addtl_flags} \
-    -DCMAKE_TOOLCHAIN_FILE=#{special_prefix ? special_prefix : settings[:prefix]}/#{toolchain}.cmake \
+    -DCMAKE_TOOLCHAIN_FILE=#{special_prefix ? special_prefix : settings[:prefix]}/pl-build-toolchain.cmake \
     -DCMAKE_INSTALL_PREFIX=#{special_prefix ? special_prefix : settings[:prefix]} \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DYAML_CPP_BUILD_TOOLS=0 \
