@@ -12,12 +12,10 @@ component "gcc" do |pkg, settings, platform|
   end
   pkg.url "http://ftp.gnu.org/gnu/gcc/gcc-#{pkg.get_version}/gcc-#{pkg.get_version}.tar.gz"
 
-  # The 10.10 versioning breaks some stuff.
-  pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
   pkg.apply_patch "resources/patches/gcc/aix-inclhack.patch" if platform.is_aix?
 
   # Package Dependency Metadata
-  if platform.is_linux? || platform.is_osx?
+  if platform.is_linux?
     pkg.requires "binutils"
   end
 
@@ -225,12 +223,6 @@ component "gcc" do |pkg, settings, platform|
     --target=#{target_platform} \
     --build=#{target_platform} \
     --disable-libjava-multilib"
-  end
-
-  # bootstrap-debug  has to be explicitly passed to configure to suppress
-  # the bootstrap comparison failures under the more recent clang compilers.
-  if platform.is_osx?
-    configure_command << " --with-build-config=bootstrap-debug"
   end
 
   if platform.is_cross_compiled_linux?

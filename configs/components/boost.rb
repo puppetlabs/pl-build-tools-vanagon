@@ -23,8 +23,6 @@ component "boost" do |pkg, settings, platform|
     pkg.build_requires 'http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/bzip2-1.0.5-3.aix5.3.ppc.rpm'
     pkg.build_requires 'http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/zlib-devel-1.2.3-4.aix5.2.ppc.rpm'
     pkg.build_requires 'http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/zlib-1.2.3-4.aix5.2.ppc.rpm'
-  elsif platform.is_osx?
-    pkg.build_requires "pl-gcc-4.8.2"
   elsif platform.is_cross_compiled_linux?
     pkg.build_requires "pl-binutils-#{platform.architecture}"
     pkg.build_requires "pl-gcc-#{platform.architecture}"
@@ -74,9 +72,7 @@ component "boost" do |pkg, settings, platform|
   gpp = "#{settings[:bindir]}/g++"
   b2flags = ""
 
-  if platform.is_osx?
-    gpp = "#{settings[:bindir]}/g++"
-  elsif platform.is_cross_compiled_linux?
+  if platform.is_cross_compiled_linux?
     pkg.environment "PATH" => "#{settings[:basedir]}/bin:$$PATH"
     linkflags = "-Wl,-rpath=#{settings[:libdir]}"
     gpp = "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
@@ -120,9 +116,7 @@ component "boost" do |pkg, settings, platform|
   end
 
   # Set user-config.jam
-  if platform.is_osx?
-    userconfigjam = %Q{using darwin : : #{gpp};}
-  elsif platform.is_windows?
+  if platform.is_windows?
     userconfigjam = %Q{using gcc : : #{gpp} ;}
   else
     if platform.architecture =~ /arm|s390x/ || platform.is_aix?

@@ -30,8 +30,6 @@ component "cmake" do |pkg, settings, platform|
       pkg.build_requires 'pl-binutils'
       pkg.build_requires 'pl-gcc'
     end
-  elsif platform.is_osx?
-    pkg.build_requires "pl-gcc-4.8.2"
   else
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
@@ -54,7 +52,7 @@ component "cmake" do |pkg, settings, platform|
   pkg.environment "PATH" => "$$PATH:/usr/local/bin"
   pkg.environment "MAKE" => platform.make
 
-  if platform.is_aix? or platform.is_osx?
+  if platform.is_aix?
     pkg.environment "LDFLAGS" => "$${LDFLAGS}"
     pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
     pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
@@ -70,15 +68,9 @@ component "cmake" do |pkg, settings, platform|
     pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
   end
 
-  # Even though only system curl is available on the build host,
-  # the build on OSX bombs without this.
-  if platform.is_osx?
-    extra_flags = " --system-curl"
-  end
-
   # Build Commands
   pkg.configure do
-    "./configure --prefix=#{settings[:prefix]} --docdir=share/doc #{extra_flags}"
+    "./configure --prefix=#{settings[:prefix]} --docdir=share/doc"
   end
 
   pkg.build do
