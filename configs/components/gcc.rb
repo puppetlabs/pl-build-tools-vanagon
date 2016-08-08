@@ -1,23 +1,12 @@
 component "gcc" do |pkg, settings, platform|
-  # Source-Related Metadata
-  if platform.name =~ /fedora-f24/
-    pkg.version "6.1.0"
-    pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
-  elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
-    pkg.version "5.2.0"
-    pkg.md5sum "1180e9ef7f5a2e4b1eab3e1a0d3fa228"
-  else
-    pkg.version "4.8.2"
-    pkg.md5sum "deca88241c1135e2ff9fa5486ab5957b"
-  end
+  pkg.version "6.1.0"
+  pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
   pkg.url "http://ftp.gnu.org/gnu/gcc/gcc-#{pkg.get_version}/gcc-#{pkg.get_version}.tar.gz"
 
-  # The 10.10 versioning breaks some stuff.
-  pkg.apply_patch "resources/patches/gcc/patch-10.10.diff" if platform.is_osx?
   pkg.apply_patch "resources/patches/gcc/aix-inclhack.patch" if platform.is_aix?
 
   # Package Dependency Metadata
-  if platform.is_linux? || platform.is_osx?
+  if platform.is_linux?
     pkg.requires "binutils"
   end
 
@@ -225,12 +214,6 @@ component "gcc" do |pkg, settings, platform|
     --target=#{target_platform} \
     --build=#{target_platform} \
     --disable-libjava-multilib"
-  end
-
-  # bootstrap-debug  has to be explicitly passed to configure to suppress
-  # the bootstrap comparison failures under the more recent clang compilers.
-  if platform.is_osx?
-    configure_command << " --with-build-config=bootstrap-debug"
   end
 
   if platform.is_cross_compiled_linux?

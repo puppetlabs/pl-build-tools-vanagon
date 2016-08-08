@@ -5,8 +5,8 @@ platform "solaris-10-i386" do |plat|
   plat.vmpooler_template "solaris-10-u8-x86_64"
 
   base_pkgs = ['arc', 'gcc', 'gccruntime', 'gccS', 'gnu-idn', 'gpch', 'gtar', 'hea', 'libm', 'wgetu', 'xcu4']
-  base_url = 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends'
   plat.output_dir File.join("solaris", "10")
+  base_url = 'http://pl-build-tools-staging.delivery.puppetlabs.net/solaris/10/depends'
 
   plat.provision_with %[echo "# Write the noask file to a temporary directory
 # please see man -s 4 admin for details about this file:

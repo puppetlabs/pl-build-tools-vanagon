@@ -9,8 +9,8 @@ platform "solaris-10-sparc" do |plat|
   plat.num_cores "/usr/bin/kstat cpu_info | /opt/csw/bin/ggrep -E '[[:space:]]+core_id[[:space:]]' | wc -l"
 
   base_pkgs = ['arc', 'gcc', 'gccruntime', 'gccS', 'gnu-idn', 'gpch', 'gtar', 'hea', 'libm', 'wgetu', 'xcu4']
-  base_url = 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/depends'
   plat.output_dir File.join("solaris", "10")
+  base_url = 'http://pl-build-tools-staging.delivery.puppetlabs.net/solaris/10/depends'
 
   plat.provision_with %[echo "# Write the noask file to a temporary directory
 # please see man -s 4 admin for details about this file:
