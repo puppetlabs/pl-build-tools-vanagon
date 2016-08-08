@@ -4,7 +4,7 @@ project "pl-boost" do |proj|
 
   proj.description "Puppet Inc boost"
   proj.version "1.61.0"
-  proj.release "2"
+  proj.release "3"
   proj.license "Boost and MIT and Python"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"

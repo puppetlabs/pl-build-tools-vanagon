@@ -6,10 +6,6 @@ component "boost" do |pkg, settings, platform|
   # Apparently boost doesn't use dots to version they use underscores....arg
   pkg.url "http://downloads.sourceforge.net/project/boost/boost/#{pkg.get_version}/boost_#{pkg.get_version.gsub('.','_')}.tar.gz"
 
-  if platform.is_solaris?
-    pkg.apply_patch 'resources/patches/boost/solaris-10-boost-build.patch'
-  end
-
   # Package Dependency Metadata
 
   # Build Requirements
@@ -65,7 +61,9 @@ component "boost" do |pkg, settings, platform|
   execute = "./"
   addtl_flags = ""
   gpp = "#{settings[:bindir]}/g++"
-  b2flags = ""
+
+  # b2flags is normally empty by default, but currently 1.61 has a feature leatherman cannot handle
+  b2flags = "define=BOOST_NO_CXX11_HDR_ATOMIC"
 
   if platform.is_cross_compiled_linux?
     pkg.environment "PATH" => "#{settings[:basedir]}/bin:$$PATH"
@@ -74,7 +72,7 @@ component "boost" do |pkg, settings, platform|
   elsif platform.is_solaris?
     pkg.environment "PATH" => "#{settings[:basedir]}/bin:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
     linkflags = "-Wl,-rpath=#{settings[:libdir]}"
-    b2flags = "define=_XOPEN_SOURCE=600"
+    b2flags = "#{b2flags} define=_XOPEN_SOURCE=600"
     if platform.architecture == "sparc"
       b2flags = "#{b2flags} instruction-set=v9"
     end
