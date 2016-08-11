@@ -29,12 +29,15 @@ component "cmake" do |pkg, settings, platform|
       pkg.build_requires 'pl-gcc'
     end
   else
-    pkg.build_requires "pl-gcc"
-    pkg.build_requires "make"
-
-    if platform.name =~ /el-4/
-      pkg.build_requires "pl-tar"
+    if platform.is_rpm?
+      pkg.build_requires "gcc-c++"
+      if platform.name =~ /el-4/
+        pkg.build_requires "pl-tar"
+      end
+    elsif platform.is_deb?
+      pkg.build_requies "g++"
     end
+    pkg.build_requires "make"
 
     case
     when platform.is_cisco_wrlinux?
@@ -62,8 +65,6 @@ component "cmake" do |pkg, settings, platform|
     pkg.environment "CXX" => "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   else
     pkg.environment "LDFLAGS" => "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:prefix]}/lib64,--enable-new-dtags"
-    pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
-    pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
   end
 
   # Build Commands
