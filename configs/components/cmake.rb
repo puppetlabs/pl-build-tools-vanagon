@@ -8,8 +8,6 @@ component "cmake" do |pkg, settings, platform|
 
   if platform.name =~ /sles-12/
     pkg.apply_patch 'resources/patches/cmake/avoid-select-sles-12.patch'
-  elsif platform.is_solaris?
-    pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
   end
 
   # Package Dependency Metadata
