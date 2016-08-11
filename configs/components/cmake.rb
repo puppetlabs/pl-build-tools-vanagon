@@ -35,7 +35,7 @@ component "cmake" do |pkg, settings, platform|
         pkg.build_requires "pl-tar"
       end
     elsif platform.is_deb?
-      pkg.build_requies "g++"
+      pkg.build_requires "g++"
     end
     pkg.build_requires "make"
 
