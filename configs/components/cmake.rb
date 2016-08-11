@@ -20,8 +20,8 @@ component "cmake" do |pkg, settings, platform|
     pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/make-3.80-1.aix5.1.ppc.rpm"
   elsif platform.is_solaris?
     if platform.os_version == "10"
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.i386.pkg.gz'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.i386.pkg.gz'
+      pkg.build_requires 'http://pl-build-tools-staging.delivery.puppetlabs.net/solaris/10/pl-gcc-6.1.0-2.i386.pkg.gz'
+      pkg.build_requires 'http://pl-build-tools-staging.delivery.puppetlabs.net/solaris/10/pl-binutils-2.27-1.i386.pkg.gz'
     elsif platform.os_version == "11"
       pkg.build_requires 'pl-binutils'
       pkg.build_requires 'pl-gcc'
@@ -56,6 +56,7 @@ component "cmake" do |pkg, settings, platform|
     pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
     pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
   elsif platform.is_solaris?
+    pkg.environment "PATH" => "$$PATH:/opt/csw/bin"
     pkg.environment "LDFLAGS"  => "-Wl,-rpath=#{settings[:basedir]}/lib"
     pkg.environment "CXXFLAGS" => "-Wl,-rpath=#{settings[:basedir]}/lib -static-libstdc++ -static-libgcc"
     pkg.environment "CFLAGS" => "-Wl,-rpath=#{settings[:basedir]}/lib -static-libgcc"
