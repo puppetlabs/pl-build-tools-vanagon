@@ -1,0 +1,12 @@
+# /bin/sh in Solaris 10 is too old to work with bash-style subshells, which
+# this script uses. So use bash to run the script instead of plain sh.
+# This fixes the boost bootstrap error: `machine=$' unexpected
+diff -urN boost_1_61_0.orig/tools/build/src/engine/build.sh boost_1_61_0/tools/build/src/engine/build.sh
+--- boost_1_61_0.orig/tools/build/src/engine/build.sh	2016-05-05 14:15:42.000000000 -0700
++++ boost_1_61_0/tools/build/src/engine/build.sh	2016-08-11 16:00:27.445415103 -0700
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ #~ Copyright 2002-2005 Rene Rivera.
+ #~ Distributed under the Boost Software License, Version 1.0.
