@@ -16,6 +16,11 @@ project "pl-binutils" do |proj|
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
+  if platform.is_solaris? && platform.os_version == "10"
+    proj.version "2.27"
+    proj.release "1"
+  end
+
   # Platform specific
   proj.setting(:cflags, "-I#{proj.includedir}")
   proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
