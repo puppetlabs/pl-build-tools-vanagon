@@ -16,10 +16,10 @@ component "yaml-cpp" do |pkg, settings, platform|
     cmake = "#{settings[:basedir]}/bin/cmake"
   elsif platform.is_solaris?
     if platform.os_version == "10"
-      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
-      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
-      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-boost-1.58.0-1.#{platform.architecture}.pkg.gz"
-      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-cmake-3.2.3-2.i386.pkg.gz"
+      pkg.build_requires "http://pl-build-tools-staging.delivery.puppetlabs.net/solaris/10/pl-gcc-6.1.0-2.#{platform.architecture}.pkg.gz"
+      pkg.build_requires "http://pl-build-tools-staging.delivery.puppetlabs.net/solaris/10/pl-binutils-2.27-1.#{platform.architecture}.pkg.gz"
+      pkg.build_requires "http://pl-build-tools-staging.delivery.puppetlabs.net/solaris/10/pl-boost-1.61.0-3.#{platform.architecture}.pkg.gz"
+      pkg.build_requires "http://pl-build-tools-staging.delivery.puppetlabs.net/solaris/10/pl-cmake-3.5.2-1.i386.pkg.gz"
     elsif platform.os_version == "11"
       pkg.build_requires "pl-binutils-#{platform.architecture}"
       pkg.build_requires "pl-gcc-#{platform.architecture}"
@@ -59,6 +59,10 @@ component "yaml-cpp" do |pkg, settings, platform|
 
   if platform.name =~ /el-4/
     pkg.build_requires "pl-tar"
+  end
+
+  if platform.is_solaris? && platform.os_version == "10"
+    pkg.environment "PATH" => "$$PATH:/opt/csw/bin"
   end
 
   pkg.build do
