@@ -80,7 +80,7 @@ rm -rf $SYSROOTDIR/usr/lib64/Y*
 echo "Converting absolute library symlinks to relative ones..."
 pushd $SYSROOTDIR/lib64
 find . -maxdepth 1 -lname '/*' |
-while read link ; do
+while read -r link ; do
   echo "Converting $link from absolute to relative..."
   target=$(readlink "$link")
   # shellcheck disable=SC2001
@@ -92,7 +92,7 @@ popd
 
 pushd $SYSROOTDIR/usr/lib64
 find . -maxdepth 1 -lname '/*' |
-while read link ; do
+while read -r link ; do
   echo "Converting $link from absolute to relative..."
   target=$(readlink "$link")
   # shellcheck disable=SC2001
@@ -104,7 +104,7 @@ popd
 
 pushd $SYSROOTDIR/usr/lib64/ncurses6
 find . -maxdepth 1 -lname '/*' |
-while read link ; do
+while read -r link ; do
   echo "Converting $link from absolute to relative..."
   target=$(readlink "$link")
   # shellcheck disable=SC2001
