@@ -1,3 +1,9 @@
+# This patch eliminates some hardcoded use of gcc, ar, and strip.
+# It also fixes link flags and the name of the libcurses shared
+# library file to fix issues we've encountered when building
+# with minigw.
+#
+# Patch added by Melissa Stone <melissa@puppet.com>
 diff --git a/win32/gccwin32.mak b/win32/gccwin32.mak
 index d586bde..0d6419d 100644
 --- a/win32/gccwin32.mak
