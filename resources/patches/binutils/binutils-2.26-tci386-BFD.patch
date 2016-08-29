@@ -1,3 +1,11 @@
+# This patch resolves build issues on Fedora 24 which uses GCC 6.1.
+# It was taken from git diff in upstream vendor repo:
+# https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;f=gas/config/tc-i386.c;h=a28def75916fb4fa8280404f8c023adc0773162d
+#
+# Additionally, this was also patched in minigw by Fedora:
+# http://pkgs.fedoraproject.org/cgit/rpms/mingw-binutils.git/commit/?h=f24&id=766ff1432ede287cff4cc6ba6286c4cd61a587e3
+#
+# Patch added by Rick Sherman <shermdog@puppet.com>
 --- a/gas/config/tc-i386.c
 +++ b/gas/config/tc-i386.c
 @@ -4218,6 +4218,8 @@ optimize_imm (void)
