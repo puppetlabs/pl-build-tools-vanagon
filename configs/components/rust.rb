@@ -26,8 +26,8 @@ component "rust" do |pkg, settings, platform|
   pkg.install do
     if platform.is_windows?
       # install.sh fails when doing a final check because of $(uname -s)
-      [ "./install.sh --prefix=$$(cygpath -u C:/ProgramData/Rust) || true",
-        "chmod -R 755 $$(cygpath -u C:/ProgramData/Rust)/lib"
+      [ "./install.sh --prefix=#{settings[:prefix]} --without=rust-docs || true",
+        "chmod -R 755 $$(cygpath -u #{settings[:prefix]})/lib"
       ]
     else
       [ "./install.sh --prefix=#{settings[:prefix]} --without=rust-docs" ]
