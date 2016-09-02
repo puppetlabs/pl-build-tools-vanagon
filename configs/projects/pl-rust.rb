@@ -4,7 +4,7 @@ project "pl-rust" do |proj|
 
   proj.description "Puppet Labs Rust"
   proj.version "1.11.0"
-  proj.release "1"
+  proj.release "2"
   proj.license "Apache 2.0 and MIT"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
