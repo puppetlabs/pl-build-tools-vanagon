@@ -6,6 +6,7 @@ component "toolchain" do |pkg, settings, platform|
       # Add toolchain file for huaweios, which builds on debian-8-amd64
       pkg.add_source "file://files/cmake/huaweios-toolchain.cmake"
       pkg.add_source "file://files/cmake/debian-8-armhf-toolchain.cmake"
+      pkg.add_source "file://files/cmake/debian-8-armel-toolchain.cmake"
     elsif platform.name =~ /el-\d-x86_64|sles-\d\d-x86_64/
       # Toolchain file for rhel and sles running on IBM z-series, which
       # builds on x86_64
@@ -66,6 +67,7 @@ component "toolchain" do |pkg, settings, platform|
       # Install toolchain file for huaweios and debian-8-armhf, which builds on debian-8-amd64
       pkg.install_file "huaweios-toolchain.cmake", "#{settings[:basedir]}/powerpc-linux-gnu/pl-build-toolchain.cmake"
       pkg.install_file "debian-8-armhf-toolchain.cmake", "#{settings[:basedir]}/arm-linux-gnueabihf/pl-build-toolchain.cmake"
+      pkg.install_file "debian-8-armel-toolchain.cmake", "#{settings[:basedir]}/arm-linux-gnueabi/pl-build-toolchain.cmake"
     elsif platform.name =~ /el-\d-x86_64|sles-\d\d-x86_64/
       # Install toolchain file used by the s390x rhel and sles platfoms, which are built on x86_64
       pkg.install_file "rhel-sles-s390x-toolchain.cmake", "#{settings[:basedir]}/s390x-linux-gnu/pl-build-toolchain.cmake"
