@@ -6,7 +6,7 @@ project "pl-gcc" do |proj|
 
   if platform.name =~ /fedora-f24|fedora-f25|ubuntu-16\.04-ppc64el|ubuntu-16\.10/
     proj.version "6.1.0"
-    proj.release "0"
+    proj.release "5"
   elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
     proj.version "5.2.0"
     proj.release "11"

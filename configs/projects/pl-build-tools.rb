@@ -16,8 +16,10 @@ elsif platform.architecture == "ppc64el" && platform.is_deb?
   # Note that the platform.architecture is the Debian packaging arch,
   # which differs from the platform triple used when compiling:
   platform_triple = "powerpc64le-linux-gnu"
-elsif platform.architecture =~ /arm/
+elsif platform.architecture == "armhf"
   platform_triple = "arm-linux-gnueabihf"
+elsif platform.architecture == "armel"
+  platform_triple = "arm-linux-gnueabi"
 elsif platform.is_windows?
   if platform.architecture == "x64"
     platform_triple = "x86_64-unknown-mingw32"
