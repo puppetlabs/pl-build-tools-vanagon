@@ -194,9 +194,12 @@ component "gcc" do |pkg, settings, platform|
   # The other flags are to instruct GCC on the proper target to look at in
   # libgcc when linking.
   if platform.architecture =~ /arm/i
-    configure_command << " --with-fpu=vfp \
-      --with-arch-directory=arm \
-      --with-float=hard \ "
+    configure_command << " --with-arch-directory=arm \ "
+    if platform.architecture == "armhf"
+      configure_command << " --with-fpu=vfp --with-float=hard \ "
+    else
+      configure_command << "--with-arch=armv4t --with-float=soft  \ "
+    end
   end
 
   # The target powerpc-ibm-aix6.1.0.0 is used on AIX 6.1, AIX 7.1 - even by
