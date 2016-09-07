@@ -1,133 +1,84 @@
 # Overview
 
-The pl-build-tools-vanagon repo is where all the automation lives to build packages to satisfy buildtime dependenices that we do not want to make publically available at this time. All packages built with this automation should be shipped to [the pl-build-tools repo](http://pl-build-tools.delivery.puppetlabs.net/). The release packages available in that repo are created with [the puppetlabs release repository] (https://github.com/puppetlabs/puppetlabs-release/tree/pl-build-tools).
+The pl-build-tools-vanagon repo is what we use to build packages to satisfy build-time dependencies for puppet-agent. By standardizing our own toolchain, we are able to create a consistent build process for use with our continuous integration processes. We also avoid having to workaround problems related to the plethora of different build tools (and versions) available by default on each target platform.
 
-# Runtime Requirements
+Internally at Puppet Inc, we ship these build packages to package repositories on our internal network. To help our partners and the community use these packages, we have mirrored them to externally accessible package repositories at [FIXME: ADD URL TO PUBLIC REPO HERE]().
 
-The [Gemfile](https://github.com/puppetlabs/pl-build-tools-vanagon/blob/master/Gemfile) specifies all of the needed ruby libraries to build a given project in this repo. Additionally, the automation requires a virtualization engine to build within for each desired package. More information on the different virtualization engine options is available in [the vanagon repo](https://github.com/puppetlabs/vanagon#-e-engine---engine-engine).
+# Build Targets 
 
-## Environment variables
-#### VANAGON\_LOCATION
-The location of Vanagon in the Gemfile can be overridden with the environment variable `VANAGON_LOCATION`. Can be set prior to `bundle install` or updated with `bundle update`.
+The build tools and libraries you can build using this repository can be found in the configs/projects/ directory, and includes:
 
-* `0.3.14` - Specific tag from the Vanagon git repo
-* `git@github.com:puppetlabs/vanagon#master` - Remote git location and tag
+* pl-gcc
+* pl-boost (build requires pl-gcc)
+* pl-cmake (build requires pl-gcc)
+* pl-yaml-cpp (build requires pl-gcc, pl-boost, and pl-cmake)
+
+among others.
+
+The packages we generate use the "pl-" prefix (for Puppet Labs) and get installed under `/opt/pl-build-tools/` in order not to conflict with system packages.
+
+# Setting Up Your Build Environment
+
+A modern Linux or Mac OS X operating system with a recent version of Ruby (1.9 or later) with the bundler gem is required to run these builds. 
+
+This repository makes use of the [Vanagon](https://github.com/puppetlabs/vanagon) build system, which is written in Ruby. The [Gemfile](https://github.com/puppetlabs/pl-build-tools-vanagon/blob/master/Gemfile) included in this repo specifies all of the needed ruby libraries to build a target project. Additionally, vanagon requires a virtualization engine to build target packages in. More information on the different virtualization engine options is available in the vanagon repo.
+
+Begin by cloning this repository:
+
+	git clone https://github.com/puppetlabs/pl-build-tools-vanagon.git
+
+and install the required Ruby gems with the `bundle install` command:
+
+	cd pl-build-tools-vanagon/
+	bundle install
+
+## Using `VANAGON_LOCATION` to specify a custom Vanagon source
+
+By default, our [Gemfile](https://github.com/puppetlabs/pl-build-tools-vanagon/blob/master/Gemfile) specifies a particular version of Vanagon (typically, the latest master branch checked out from the vanagon GitHub repo). There are times where you may wish to use a customized version of vanagon from a git repository branch, or a copy of Vanagon stored locally on your filesystem. You can do this by setting the environment variable `VANAGON_LOCATION` when running bundle install:
+
+* `0.3.14` - Use a specific git tag from the Vanagon git repo
+* `git@github.com:puppetlabs/vanagon#master` - Customize the remote git location and/or branch
 * `file:///workspace/vanagon` - Absolute file path
 * `file://../vanagon` - File path relative to the project directory
 
-# Building packages
-This repo uses automation in [vanagon](https://github.com/puppetlabs/vanagon) to build packages.
+# Examples
 
-## Arguments (position dependet)
-More detailed and up to date information can be found in [the vanagon repo](https://github.com/puppetlabs/vanagon#configuration-and-usage)
+Let's say you want to build pl-gcc for Debian 8 (Jessie) 64-bit. First verify that you have a project pl-gcc (`configs/projects/pl-gcc.rb`) and a platform file for Debian 8 (`configs/platforms/debian-8-amd64.rb`). Ensure you are current in the root directory of the repo, and run:
+
+	bundle exec build pl-gcc debian-8-amd64 <target host>
+
+where `target host` is the hostname or IP address of a 64-bit Debian 8 server or VM that the build will be run on. Internally at Puppet we have a dynamic vmpooler infrastructure that provides VMs for all of our target platforms, so `target host` is not necessary in that case.
+
+The build process will take the configuration defined in `configs/projects/pl-gcc.rb` and build any component dependencies required from `configs/components`. The final project will then be packaged and made available under the output/ directory.
+
+## Build Arguments
+
+The `build` command above comes from the vanagon gem, and it has a number of position-dependent arguments:
 
 ### project name
-The name of the project to build, and a file named <project_name>.rb must be present in configs/projects in the working directory.
+
+The name of the project to build. A file named `project_name.rb` must be present in the configs/projects/ directory.
 
 ### platform name
-The name of the platform to build against, and a file named <platform_name>.rb must be present in configs/platforms in the working directory.
 
-Platform can also be a comma separated list of platforms such as platform1,platform2.
+The name of the platform to build for. A file named `platform_name.rb` must be present in the configs/platforms/ directory.
+
+You can specify multiple platforms to build for at once by using a comma-separated list (e.g, platform1,platform2).
 
 ### target host [optional]
-Target host is an optional argument to override the host selection. Instead of using a vm collected from the pooler, the build will attempt to ssh to target as the root user.
 
-If building on multiple platforms, multiple targets can also be specified using a comma separated list such as host1,host2. If less targets are specified than platforms, the default engine (the pooler) will be used for platforms without a target. If more targets are specified than platforms, the extra will be ignored.
+Target host is an optional argument which overrides the host selection. Instead of using a vm collected from the pooler, the build will attempt to ssh to the target host as root.
 
-## Example
+If you're building multiple platforms at once, multiple target hosts can also be specified using a comma-separated list (e.g, host1,host2). If fewer targets are specified than platforms, the default build engine (the pooler) will be used for platforms without a target host. If more target hosts are specified than platforms, the extra target hosts will be ignored.
 
-To build a pl-gcc package for Debian 8, Jessie 64bit, first verify the existence and contents of both `configs/projects/pl-gcc.rb` and `configs/platforms/debian-8-amd64.rb`.
+# Howto: Add a New Platform
 
-    bundle install
-    bundle exec build pl-gcc debian-8-amd64
+To add a new platform, begin by adding the platform definition file in configs/platforms. Then additional customizations when building components for that platform can be added to the component definitions in configs/components. If this is an entirely new platform (and not just a new version of a platform already supported), you may need to make changes in vanagon as well. Using the build dependency graph above, start with pl-gcc and work your way through the dependency chain. Once packages for all of the relevant pl-build-tools have been generated, you can then move on to building a puppet-agent package using the [puppet-agent](https://github.com/puppetlabs/puppet-agent) repository.
 
-This will access and configure the virtualization engine defined in `configs/platforms/debian-8-amd64.rb`. It will then take the build instructions defined in `configs/projects/pl-gcc.rb`, as well as any dependencies that are defined in `configs/components` that are pulled in for the pl-gcc project. It will then follow the instructions, building out first any needed dependencies, then the final project. The needed files will then be packaged up in a package compatable with dpkg standards, and make it available locally.
+# Howto: Add a New Project
 
-## Building with jenkins
-To save time, you can also kick off a build using [Jenkins](http://jenkins-staging.delivery.puppetlabs.net/view/Build%20Toolchain/job/pl-build-tools_dynamic/). The job you want is hosted on jenkins-staging, so it's really slow (as of 2015-07-10). Be patient. This job will build your packages, ship them to builds.delivery.puppetlabs.net, and create repos and repo configs for you.
+New projects require an entry in `configs/projects`. A file for anything this project includes, with instructions on how to configure and build it, should also be added under `configs/components` if it does not already exists. Refer to existing projects in this repo or to [the example in vanagon](https://github.com/puppetlabs/vanagon/tree/master/examples) for more details.
 
-#### PLATFORMS
-These are the platforms you'll build your package for. A default list has been provided for you, but there is no guarantee that it will be up to date, or will build all that platforms you care about. Make sure you edit this list to contain the build targets you want.
+# Support
 
-#### PROJECT
-This is the project you want to build. It corresponds to the project file in `configs/projects` in your repo.
-
-#### REPO
-The repo where your vanagon project lives. Although this job was created to make building pl-build-tools-vanagon projects simpler, it can be used to build any vanagon project.
-
-#### BRANCH
-This is the branch you want to build from. This is especially useful when building a topic branch for testing. If you are building from a branch, specify `origin/branch_name` for clarity. If you are building from a tag, use `refs/tags/tag_name`. If you are building from a sha reference, use `sha`.
-
-
-## Building for AIX
-AIX is a special snowflake.
-
-#### Overall
-Our AIX boxes also have small filesystems. When buildling larger projects (like
-gcc), you might need to expand some filesystems.
-
-
-    chfs -a size=+2G /
-    chfs -a size=+1G /tmp
-    chfs -a size=+1G /opt
-
-Right now, since AIX isn't a special engine or anything, we're just using an
-LPAR ssh target to build. This means, you need to clean up your mess when
-you're done. Normally this means removing quite a few files in /root and
-wherever your installation path is (/opt/pl-build-tools or /opt/puppetlabs).
-You also might need to uninstall some rpms.
-
-Obviously this could (and should) be improved.
-
-#### GCC
-To build gcc, you have to build an intermediate GCC.
-There is a boostrapping GCC rpm available at
-http://pl-build-tools.delivery.puppetlabs.net/aix/6.1/ppc/gcc-aix-boostrap-4.6.4-1.aix6.1.ppc.rpm.
-That rpm should be installed to bootstrap any GCC >= 4.8. Beyond that, to build
-you'll need to export two env variables in the project a few ways.
-
-    export CC=/opt/gcc464/bin/gcc
-    export CXX=/opt/gcc464/bin/g++
-
-Once you do that, (you can do this by uncommenting the lines in the aix-61-ppc
-definition), you *should* be able to build GCC 4.8.2 for AIX 6.1 and 7.1. AIX
-5.3 will likely be a more involved and difficult process and we just haven't
-made it there yet.
-
-# Shipping packages to builds.delivery.puppetlabs.net/pl-build-tools
-This is meant for packages in active development that require testing.
-
-
-To ship a built archive, run
-
-    bundle exec ship
-
-This will ship packages to builds.delivery.puppetlabs.net/pl-build-tools, and can be found under the sha associated with the state of the repo when the build was kicked off.
-
-To make repos available on builds.delivery.puppetlabs.net/pl-build-tools in order to help make testing easier, run
-
-    bundle exec repo
-
-If you are only shipping debian packages, run
-
-    bundle exec repo deb
-
-If you are only shipping rpm packages, run
-
-    bundle exec repo rpm
-
-This will create repos and repo_configs to allow you to more easily install and test packages you have made available on builds.delivery.puppetlabs.net.
-
-# Shipping packages to pl-build-tools.delivery.puppetlabs.net
-This is meant for packages that have been tested, and are ready for a final ship. The packages to be shipped must already be available on builds.delivery.puppetlabs.net.
-
-    rake package:implode package:bootstrap
-    rake pl:jenkins:uber_ship
-
-This will download packages from builds.delivery.puppetlabs.net, sign them, and ship them to the appropriate repo on pl-build-tools.delivery.puppetlabs.net. This job requires the RE signing key.
-
-# Adding new platforms
-New platforms require a new platform entry in configs/platforms. Generally, this is all that needs to happen for a new platform, especially if it's a new version of a platform that already exists. However, if it's a new platform entirely, not just a new version, ther will likely be automation changes that are required. Make sure you know how the package management system on the new platform works, and check the vanagon repo to see if there are any vanagon changes required for this new plaform. If we've done things well, you should receive fairly explicit error messages about where the vanagon automation needs to be updated
-
-# Adding new projects
-New projects require an entry in `configs/projects`. A file for anything this project includes, with instructions on how to configure and build it, should also be added to `condigs/components` if it does not already exist. Refer to existing projects in this repo or to [the example in vanagon](https://github.com/puppetlabs/vanagon/tree/master/examples) for more details.
+Puppet, Inc. offers community-based support for this repository. Questions should be directed to the [Puppet Developers mailing list](https://groups.google.com/forum/#!forum/puppet-dev). Some code in this repository is related to platforms available only to Puppet Enterprise users, (e.g, Solaris and AIX), and we only offer support for those platforms to official partners of Puppet, Inc. 
