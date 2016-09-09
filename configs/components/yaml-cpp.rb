@@ -1,5 +1,5 @@
 component "yaml-cpp" do |pkg, settings, platform|
-
+  # Source-Related Metadata
   if platform.architecture =~ /arm/ || platform.name =~ /fedora-f24/
     pkg.version "0.5.3"
     pkg.md5sum "9a60a3051c2ef01980c78a2d6be40ed9"
@@ -9,16 +9,14 @@ component "yaml-cpp" do |pkg, settings, platform|
   end
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
-  cmake = "#{settings[:bindir]}/cmake"
-  addtl_flags = ""
+  # Package Dependency Metadata
 
+  # Build Requirements
   if platform.is_cross_compiled_linux?
     pkg.build_requires "pl-binutils-#{platform.architecture}"
     pkg.build_requires "pl-gcc-#{platform.architecture}"
     pkg.build_requires "pl-boost-#{platform.architecture}"
     pkg.build_requires "pl-cmake"
-    # We're using the x86_64 version of cmake
-    cmake = "#{settings[:basedir]}/bin/cmake"
   elsif platform.is_solaris?
     if platform.os_version == "10"
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2.#{platform.architecture}.pkg.gz"
@@ -31,26 +29,10 @@ component "yaml-cpp" do |pkg, settings, platform|
       pkg.build_requires "pl-boost-#{platform.architecture}"
       pkg.build_requires "pl-cmake"
     end
-    # We always use the i386 build of cmake, even on sparc
-    cmake = "#{settings[:basedir]}/i386-pc-solaris2.#{platform.os_version}/bin/cmake"
   elsif platform.is_windows?
-    arch = platform.architecture == 'x64' ? "64" : "32"
     pkg.build_requires "pl-boost-#{platform.architecture}"
     pkg.build_requires "pl-toolchain-#{platform.architecture}"
     pkg.build_requires "cmake"
-
-    pkg.environment "PATH" => "C:/tools/mingw#{arch}/bin:$$PATH"
-    pkg.environment "CYGWIN" => "nodosfilewarning"
-    pkg.environment "LIB" => "C:/tools/mingw#{arch}/lib"
-    pkg.environment "INCLUDE" => "C:/tools/mingw#{arch}/include"
-    pkg.environment "CC" => "C:/tools/mingw#{arch}/bin/gcc"
-    pkg.environment "CXX" => "C:/tools/mingw#{arch}/bin/g++"
-
-    cmake = "C:/ProgramData/chocolatey/bin/cmake.exe"
-    special_prefix = platform.convert_to_windows_path(settings[:prefix])
-
-    special_path = "PATH=C:/tools/mingw#{arch}/bin:C:/Windows/system32:C:/Windows:C:/Windows/System32/Wbem:C:/Windows/System32/WindowsPowerShell/v1.0:C:/pstools"
-    addtl_flags = "-G \"MinGW Makefiles\""
   elsif platform.is_aix?
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-boost-1.58.0-1.aix#{platform.os_version}.ppc.rpm"
@@ -60,12 +42,38 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.build_requires "make"
     pkg.build_requires "pl-cmake"
     pkg.build_requires "pl-boost"
+
+    if platform.name =~ /el-4/
+      pkg.build_requires "pl-tar"
+    end
   end
 
-  if platform.name =~ /el-4/
-    pkg.build_requires "pl-tar"
+  # Build-time Configuration
+  cmake = "#{settings[:bindir]}/cmake"
+  addtl_flags = ""
+
+  if platform.is_cross_compiled_linux?
+    # We're using the x86_64 version of cmake
+    cmake = "#{settings[:basedir]}/bin/cmake"
+  elsif platform.is_solaris?
+    # We always use the i386 build of cmake, even on sparc
+    cmake = "#{settings[:basedir]}/i386-pc-solaris2.#{platform.os_version}/bin/cmake"
+  elsif platform.is_windows?
+    arch = platform.architecture == 'x64' ? "64" : "32"
+    pkg.environment "PATH" => "C:/tools/mingw#{arch}/bin:$$PATH"
+    pkg.environment "CYGWIN" => "nodosfilewarning"
+    pkg.environment "LIB" => "C:/tools/mingw#{arch}/lib"
+    pkg.environment "INCLUDE" => "C:/tools/mingw#{arch}/include"
+    pkg.environment "CC" => "C:/tools/mingw#{arch}/bin/gcc"
+    pkg.environment "CXX" => "C:/tools/mingw#{arch}/bin/g++"
+
+    cmake = "C:/ProgramData/chocolatey/bin/cmake.exe"
+    special_prefix = platform.convert_to_windows_path(settings[:prefix])
+    special_path = "PATH=C:/tools/mingw#{arch}/bin:C:/Windows/system32:C:/Windows:C:/Windows/System32/Wbem:C:/Windows/System32/WindowsPowerShell/v1.0:C:/pstools"
+    addtl_flags = "-G \"MinGW Makefiles\""
   end
 
+  # Build Commands
   pkg.build do
     [ "rm -rf build-shared",
       "mkdir build-shared",
@@ -104,5 +112,4 @@ component "yaml-cpp" do |pkg, settings, platform|
       "#{platform[:make]} install"
     ]
   end
-
 end
