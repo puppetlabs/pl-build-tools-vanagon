@@ -1,9 +1,14 @@
 component "zlib" do |pkg, settings, platform|
-
+  # Source-Related Metadata
   pkg.version "1.2.8"
   pkg.md5sum "44d667c142d7cda120332623eab69f40"
   pkg.url "http://buildsources.delivery.puppetlabs.net/zlib-#{pkg.get_version}.tar.gz"
 
+  # Package Dependency Metadata
+
+  # Build Requirements
+
+  # Build-time Configuration
   # Set a default Makefile to avoid repeated use of the ternary operator
   # later on when we try to build this.
   makefile = "Makefile"
@@ -26,6 +31,7 @@ component "zlib" do |pkg, settings, platform|
     makefile = "win32/Makefile.gcc"
   end
 
+  # Build Commands
   pkg.configure do
     if platform.is_windows?
       # We're not calling `configure` for Windows because we're using a pre-populated
