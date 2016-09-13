@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "file_format": "This MAINTAINERS file format is described at https://github.com/puppetlabs/maintainers",
+  "issues": "RE Project for now.",
+  "people": [
+    {
+      "github": "stahnma",
+      "email": "stahnma@puppet.com",
+      "name": "Michael Stahnke"
+    },
+    {
+      "github": "ScottGarman",
+      "email": "scott.garman@puppet.com",
+      "name": "Scott Garman"
+    },
+    {
+      "github": "jcoconnor",
+      "email": "john.oconnor@puppet.com",
+      "name": "John O'Connor"
+    },
+    {
+      "github": "shermdog",
+      "email": "shermdog@puppet.com",
+      "name": "Rick Sherman"
+    },
+    {
+      "github": "McdonaldSeanp",
+      "email": "sean.mcdonald@puppet.com",
+      "name": "Sean McDonald"
+    },
+    {
+      "github": "geoffnichols",
+      "email": "geoff.nichols@puppet.com",
+      "name": "Geoff Nichols"
+    }
+  ]
+}
