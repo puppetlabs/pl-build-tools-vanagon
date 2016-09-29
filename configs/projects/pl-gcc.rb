@@ -5,7 +5,7 @@ project "pl-gcc" do |proj|
   proj.description "Puppet Labs GCC"
 
   proj.version "6.1.0"
-  proj.release "2"
+  proj.release "4"
 
   if platform.is_cross_compiled?
     proj.name "pl-gcc-#{platform.architecture}"

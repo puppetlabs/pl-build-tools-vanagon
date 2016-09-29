@@ -12,8 +12,10 @@ elsif platform.architecture == "s390x" && platform.is_rpm?
   platform_triple = "s390x-linux-gnu"
 elsif platform.architecture == "powerpc" && platform.is_deb?
   platform_triple = "powerpc-linux-gnu"
-elsif platform.architecture =~ /arm/
+elsif platform.architecture == "armhf"
   platform_triple = "arm-linux-gnueabihf"
+elsif platform.architecture == "armel"
+  platform_triple = "arm-linux-gnueabi"
 elsif platform.is_windows?
   if platform.architecture == "x64"
     platform_triple = "x86_64-unknown-mingw32"
