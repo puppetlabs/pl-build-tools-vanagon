@@ -2,7 +2,7 @@ project "pl-binutils" do |proj|
   # Project level settings our components will care about
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
-  if platform.is_cross_compiled?
+  if platform.is_cross_compiled_linux?
     proj.name "pl-binutils-#{platform.architecture}"
     # We need to set noarch here - otherwise the generated packages
     # will specify the target arch and not be installable
