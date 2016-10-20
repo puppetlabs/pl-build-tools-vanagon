@@ -235,7 +235,7 @@ component "gcc" do |pkg, settings, platform|
       --with-gnu-as \
       --with-as=#{settings[:bindir]}/as \
       --without-gnu-ld \
-      --with-ld=/usr/ccs/bin/ld -v"
+      --with-ld=#{settings[:bindir]}/ld"
 
       if platform.architecture.downcase == 'sparc'
         configure_command << " --with-sysroot=#{settings[:prefix]}/sysroot"
