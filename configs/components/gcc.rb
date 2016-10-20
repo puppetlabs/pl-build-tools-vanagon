@@ -90,7 +90,7 @@ component "gcc" do |pkg, settings, platform|
     pkg.build_requires "sysroot"
   elsif platform.is_solaris?
     if platform.os_version == '10'
-      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.25.#{platform.architecture}.pkg.gz"
+      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.27-1.#{platform.architecture}.pkg.gz"
     elsif platform.os_version == '11'
       pkg.build_requires "pl-binutils-#{platform.architecture}"
     end

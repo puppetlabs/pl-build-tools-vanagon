@@ -1,12 +1,20 @@
 component "binutils" do |pkg, settings, platform|
   # Source-Related Metadata
-  pkg.version "2.26"
-  pkg.md5sum "d66e2b663757cbf5d4b060feb4ef6b4b"
-  pkg.url "https://ftp.gnu.org/gnu/binutils/binutils-#{pkg.get_version}.tar.gz"
+  if platform.is_solaris? && platform.os_version == "10"
+    # Solaris 10 builds need binutils 2.27 due to a regression bug in 2.26:
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=19520
+    pkg.version "2.27"
+    pkg.md5sum "41b053ed4fb2c6a8173ef421460fbb28"
+    pkg.url "https://ftp.gnu.org/gnu/binutils/binutils-#{pkg.get_version}.tar.gz"
+  else
+    pkg.version "2.26"
+    pkg.md5sum "d66e2b663757cbf5d4b060feb4ef6b4b"
+    pkg.url "https://ftp.gnu.org/gnu/binutils/binutils-#{pkg.get_version}.tar.gz"
 
-  pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-common.h.patch"
-  pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-ldlang.c.patch"
-  pkg.apply_patch "resources/patches/binutils/binutils-2.26-tci386-BFD.patch"
+    pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-common.h.patch"
+    pkg.apply_patch "resources/patches/binutils/binutils-2.23.2-ldlang.c.patch"
+    pkg.apply_patch "resources/patches/binutils/binutils-2.26-tci386-BFD.patch"
+  end
 
   # Package Dependency Metadata
 
