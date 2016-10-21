@@ -57,6 +57,7 @@ component "cmake" do |pkg, settings, platform|
     pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
     pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
   elsif platform.is_solaris?
+    pkg.environment "PATH" => "$$PATH:/opt/csw/bin"
     pkg.environment "LDFLAGS"  => "-Wl,-rpath=#{settings[:basedir]}/lib"
     pkg.environment "CXXFLAGS" => "-Wl,-rpath=#{settings[:basedir]}/lib -static-libstdc++ -static-libgcc"
     pkg.environment "CFLAGS" => "-Wl,-rpath=#{settings[:basedir]}/lib -static-libgcc"
