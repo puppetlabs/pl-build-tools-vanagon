@@ -8,13 +8,13 @@ project "pl-yaml-cpp" do |proj|
     proj.release "1"
   else
     proj.version "0.5.1"
-    proj.release "5"
+    proj.release "6"
   end
   proj.license "MIT"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
-  if platform.is_cross_compiled?
+  if platform.is_cross_compiled_linux?
     proj.name "pl-yaml-cpp-#{platform.architecture}"
     proj.noarch
   else

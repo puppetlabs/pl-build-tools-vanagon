@@ -8,13 +8,13 @@ project "pl-boost" do |proj|
     proj.release "0"
   else
     proj.version "1.58.0"
-    proj.release "5"
+    proj.release "6"
   end
   proj.license "Boost and MIT and Python"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
-  if platform.is_cross_compiled?
+  if platform.is_cross_compiled_linux?
     proj.name "pl-boost-#{platform.architecture}"
     proj.noarch
   else
