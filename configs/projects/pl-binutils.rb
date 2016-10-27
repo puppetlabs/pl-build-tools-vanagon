@@ -18,7 +18,7 @@ project "pl-binutils" do |proj|
 
   if platform.is_solaris? && platform.os_version == "10"
     proj.version "2.27"
-    proj.release "1"
+    proj.release "2"
   end
 
   # Platform specific
