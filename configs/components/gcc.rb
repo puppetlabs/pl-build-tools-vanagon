@@ -234,7 +234,7 @@ component "gcc" do |pkg, settings, platform|
     configure_command << " --target=#{settings[:platform_triple]} \
       --with-gnu-as \
       --with-as=#{settings[:bindir]}/as \
-      --without-gnu-ld \
+      --with-gnu-ld \
       --with-ld=#{settings[:bindir]}/ld"
 
       if platform.architecture.downcase == 'sparc'
