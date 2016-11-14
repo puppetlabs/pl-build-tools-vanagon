@@ -43,7 +43,7 @@ component "binutils" do |pkg, settings, platform|
 
   # Build Commands
   pkg.configure do
-    if platform.is_cross_compiled_linux?
+    if platform.is_cross_compiled?
       # --with-sysroot is an undocumented configure option in binutils
       # but necessary to avoid "ld: this linker was not configured to
       # use sysroots" when doing subsequent builds (e.g, pl-gcc)
