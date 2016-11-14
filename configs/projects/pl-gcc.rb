@@ -7,7 +7,7 @@ project "pl-gcc" do |proj|
   proj.version "6.1.0"
   proj.release "4"
 
-  if platform.is_cross_compiled?
+  if platform.is_cross_compiled_linux?
     proj.name "pl-gcc-#{platform.architecture}"
     proj.noarch
   end

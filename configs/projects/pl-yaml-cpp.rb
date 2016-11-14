@@ -9,7 +9,7 @@ project "pl-yaml-cpp" do |proj|
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
 
-  if platform.is_cross_compiled?
+  if platform.is_cross_compiled_linux?
     proj.name "pl-yaml-cpp-#{platform.architecture}"
     proj.noarch
   else
