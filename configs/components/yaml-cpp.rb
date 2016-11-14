@@ -53,6 +53,7 @@ component "yaml-cpp" do |pkg, settings, platform|
   elsif platform.is_solaris?
     # We always use the i386 build of cmake, even on sparc
     cmake = "#{settings[:basedir]}/i386-pc-solaris2.#{platform.os_version}/bin/cmake"
+    pkg.environment "PATH" => "$$PATH:/opt/csw/bin"
   elsif platform.is_windows?
     arch = platform.architecture == 'x64' ? "64" : "32"
     pkg.environment "PATH" => "C:/tools/mingw#{arch}/bin:$$PATH"
