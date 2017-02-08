@@ -15,6 +15,10 @@ component "boost" do |pkg, settings, platform|
     pkg.apply_patch 'resources/patches/boost/solaris-10-boost-build.patch'
   end
 
+  if platform.is_cisco_wrlinux?
+    pkg.apply_patch 'resources/patches/boost/no-fionbio.patch'
+  end
+
   # Package Dependency Metadata
 
   # Build Requirements
