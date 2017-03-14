@@ -3,8 +3,8 @@ project "pl-rust" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Labs Rust"
-  proj.version "1.11.0"
-  proj.release "2"
+  proj.version "1.15.1"
+  proj.release "1"
   proj.license "Apache 2.0 and MIT"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
