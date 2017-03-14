@@ -1,10 +1,10 @@
 component 'rust' do |pkg, settings, platform|
   pkg.version '1.15.1'
-  if platform.is_osx?
+  if platform.is_macos?
     pkg.md5sum '5bb5b8bcf43cafe9e85fd7746a281ce1'
     pkg.url "https://static.rust-lang.org/dist/rust-#{pkg.get_version}-x86_64-apple-darwin.tar.gz"
   elsif platform.is_windows?
-    pkg.environment 'CYGWIN' => settings[:cygwin]
+    pkg.environment('CYGWIN', settings[:cygwin])
 
     if platform.architecture == 'x64'
       pkg.md5sum '8711e8d6672051296a186e9494444a30'
@@ -27,7 +27,7 @@ component 'rust' do |pkg, settings, platform|
     if platform.is_windows?
       # install.sh fails when doing a final check because of $(uname -s)
       [ "./install.sh --prefix=#{settings[:prefix]} --without=rust-docs || true",
-        "chmod -R 755 $$(cygpath -u #{settings[:prefix]})/lib"
+        "chmod -R 755 $(cygpath -u #{settings[:prefix]})/lib"
       ]
     else
       [ "./install.sh --prefix=#{settings[:prefix]} --without=rust-docs" ]
