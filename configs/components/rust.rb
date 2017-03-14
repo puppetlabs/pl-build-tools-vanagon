@@ -1,24 +1,24 @@
 component 'rust' do |pkg, settings, platform|
-  pkg.version '1.13.0'
+  pkg.version '1.15.1'
   if platform.is_osx?
-    pkg.md5sum '1cf07bc82270878bd55c7caf3784025a'
+    pkg.md5sum '5bb5b8bcf43cafe9e85fd7746a281ce1'
     pkg.url "https://static.rust-lang.org/dist/rust-#{pkg.get_version}-x86_64-apple-darwin.tar.gz"
   elsif platform.is_windows?
     pkg.environment 'CYGWIN' => settings[:cygwin]
 
     if platform.architecture == 'x64'
-      pkg.md5sum '145e5de69587e303cfd6d8a10a82651b'
+      pkg.md5sum '8711e8d6672051296a186e9494444a30'
       pkg.url "https://static.rust-lang.org/dist/rust-#{pkg.get_version}-x86_64-pc-windows-gnu.tar.gz"
     else
-      pkg.md5sum 'f1ea0be6e96d7a190d7b7682b52f4d18'
+      pkg.md5sum '0aad70fd0bdd7f6d2061ca85cdce6bd6'
       pkg.url "https://static.rust-lang.org/dist/rust-#{pkg.get_version}-i686-pc-windows-gnu.tar.gz"
     end
   elsif platform.is_linux?
     if platform.architecture =~ /x86_64|amd64/
-      pkg.md5sum '6ebf143bb4ab6cf8047335159659c263'
+      pkg.md5sum '0223554f067afc96413f0c0324608bbd'
       pkg.url "https://static.rust-lang.org/dist/rust-#{pkg.get_version}-x86_64-unknown-linux-gnu.tar.gz"
     elsif platform.architecture == 'i386'
-      pkg.md5sum '70163aa78a7bbb78873fbb9d3149aa66'
+      pkg.md5sum '3a5df5c50ea1d8b47356f0336597d169'
       pkg.url "https://static.rust-lang.org/dist/rust-#{pkg.get_version}-i686-unknown-linux-gnu.tar.gz"
     end
   end
