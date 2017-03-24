@@ -1,0 +1,24 @@
+From faed8e3a7cecf0bc98edb074a4bf57c94d1ad461 Mon Sep 17 00:00:00 2001
+From: Michael Smith <michael.smith@puppet.com>
+Date: Fri, 24 Mar 2017 19:31:28 +0100
+Subject: [PATCH] Use Windows paths
+
+---
+ Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 8168cad..fe8f360 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -39,7 +39,7 @@ all : lib/localcharset.h force
+ 	if test -d tests; then cd tests && $(MAKE) all; fi
+
+ lib/localcharset.h :
+-	builddir="`pwd`"; cd libcharset && $(MAKE) all && $(MAKE) install-lib libdir="$$builddir/lib" includedir="$$builddir/lib"
++	cygdir="`pwd`"; builddir="`cygpath -m $$cygdir`"; cd libcharset && $(MAKE) all && $(MAKE) install-lib libdir="$$builddir/lib" includedir="$$builddir/lib"
+
+ # Installs the library and include files only. Typically called with only
+ # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
+--
+2.11.0.windows.1
