@@ -7,7 +7,7 @@ project "pl-ruby" do |proj|
   proj.license "2 Clause BSD"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
-  proj.version "2.1.6"
+  proj.version "2.1.9"
   proj.release "4"
 
   # Platform specific - these flags do not work on AIX
