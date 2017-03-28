@@ -10,6 +10,10 @@ component "toolchain" do |pkg, settings, platform|
       # Toolchain file for rhel and sles running on IBM z-series, which
       # builds on x86_64
       pkg.add_source "file://files/cmake/rhel-sles-s390x-toolchain.cmake"
+    elsif platform.name =~ /ubuntu-16\.04-amd64/
+      # Toolchain file for Ubuntu 16.04 running on IBM Power8 hardware,
+      # which builds on amd64
+      pkg.add_source "file://files/cmake/ubuntu-powerpc64le-toolchain.cmake"
     end
   elsif platform.is_aix?
     pkg.version "2015.10.01"
@@ -63,8 +67,11 @@ component "toolchain" do |pkg, settings, platform|
       pkg.install_file "huaweios-toolchain.cmake", "#{settings[:basedir]}/powerpc-linux-gnu/pl-build-toolchain.cmake"
       pkg.install_file "debian-8-armhf-toolchain.cmake", "#{settings[:basedir]}/arm-linux-gnueabihf/pl-build-toolchain.cmake"
     elsif platform.name =~ /el-\d-x86_64|sles-\d\d-x86_64/
-      # Install toolchain file used the s390x rhel and sles platfoms, which are built on x86_64
+      # Install toolchain file used by the s390x rhel and sles platfoms, which are built on x86_64
       pkg.install_file "rhel-sles-s390x-toolchain.cmake", "#{settings[:basedir]}/s390x-linux-gnu/pl-build-toolchain.cmake"
+	elsif platform.name =~ /ubuntu-16\.04-amd64/
+      # Install toolchain file used by the Power8 ubuntu platfom, which is built on amd64
+      pkg.install_file "ubuntu-powerpc64le-toolchain.cmake", "#{settings[:basedir]}/powerpc64le-linux-gnu/pl-build-toolchain.cmake"
     end
   end
 end
