@@ -1,6 +1,6 @@
 component "gcc" do |pkg, settings, platform|
   # Source-Related Metadata
-  if platform.name =~ /fedora-f24|fedora-f25|ubuntu-16\.10/
+  if platform.name =~ /fedora-f24|fedora-f25|ubuntu-16\.04-ppc64el|ubuntu-16\.10/
     pkg.version "6.1.0"
     pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
   elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
@@ -113,9 +113,6 @@ component "gcc" do |pkg, settings, platform|
     # Without this, libstdc++ and libssp get built with a dependency on
     # libgcc_s, but with no way to find it.
     pkg.environment "LDFLAGS_FOR_TARGET" => "-Wl,-rpath=/opt/puppetlabs/puppet/lib"
-    # Do not use fPIC with the cross-compiler.
-    pkg.environment "CFLAGS" => "$${CFLAGS}"
-  elsif platform.architecture == "s390x"
     # Do not use fPIC with the cross-compiler.
     pkg.environment "CFLAGS" => "$${CFLAGS}"
     pkg.environment "CXXFLAGS" => "$${CXXFLAGS}"
