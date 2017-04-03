@@ -12,6 +12,10 @@ elsif platform.architecture == "s390x" && platform.is_rpm?
   platform_triple = "s390x-linux-gnu"
 elsif platform.architecture == "powerpc" && platform.is_deb?
   platform_triple = "powerpc-linux-gnu"
+elsif platform.architecture == "ppc64el" && platform.is_deb?
+  # Note that the platform.architecture is the Debian packaging arch,
+  # which differs from the platform triple used when compiling:
+  platform_triple = "powerpc64le-linux-gnu"
 elsif platform.architecture =~ /arm/
   platform_triple = "arm-linux-gnueabihf"
 elsif platform.is_windows?
