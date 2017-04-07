@@ -1,17 +1,13 @@
 component "cmake" do |pkg, settings, platform|
+
   # Source-Related Metadata
-  pkg.version "3.2.3"
-  pkg.md5sum "d51c92bf66b1e9d4fe2b7aaedd51377c"
-  if platform.name =~ /fedora-f24/
-    pkg.version "3.5.2"
-    pkg.md5sum "701386a1b5ec95f8d1075ecf96383e02"
-  end
+  pkg.version "3.5.2"
+  pkg.md5sum "701386a1b5ec95f8d1075ecf96383e02"
+
   pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   if platform.name =~ /sles-12/
     pkg.apply_patch 'resources/patches/cmake/avoid-select-sles-12.patch'
-  elsif platform.is_solaris?
-    pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
   end
 
   # Package Dependency Metadata
@@ -31,12 +27,15 @@ component "cmake" do |pkg, settings, platform|
       pkg.build_requires 'pl-gcc'
     end
   else
-    pkg.build_requires "pl-gcc"
-    pkg.build_requires "make"
-
-    if platform.name =~ /el-4/
-      pkg.build_requires "pl-tar"
+    if platform.is_rpm?
+      pkg.build_requires "gcc-c++"
+      if platform.name =~ /el-4/
+        pkg.build_requires "pl-tar"
+      end
+    elsif platform.is_deb?
+      pkg.build_requires "g++"
     end
+    pkg.build_requires "make"
 
     case
     when platform.is_cisco_wrlinux?
@@ -65,8 +64,6 @@ component "cmake" do |pkg, settings, platform|
     pkg.environment "CXX" => "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
   else
     pkg.environment "LDFLAGS" => "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:prefix]}/lib64,--enable-new-dtags"
-    pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
-    pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
   end
 
   # Build Commands

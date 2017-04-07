@@ -5,7 +5,7 @@ project "pl-yaml-cpp" do |proj|
   proj.description "Puppet Yaml CPP"
   if platform.architecture =~ /arm/ || platform.name =~ /fedora-f24/
     proj.version "0.5.3"
-    proj.release "1"
+    proj.release "3"
   else
     proj.version "0.5.1"
     proj.release "6"

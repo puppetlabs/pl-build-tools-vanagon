@@ -1,12 +1,7 @@
 component "boost" do |pkg, settings, platform|
   # Source-Related Metadata
-  pkg.version "1.58.0"
-  pkg.md5sum "5a5d5614d9a07672e1ab2a250b5defc5"
-
-  if platform.architecture =~ /arm/
-    pkg.version "1.61.0"
-    pkg.md5sum "874805ba2e2ee415b1877ef3297bf8ad"
-  end
+  pkg.version "1.61.0"
+  pkg.md5sum "874805ba2e2ee415b1877ef3297bf8ad"
 
   # Apparently boost doesn't use dots to version they use underscores....arg
   pkg.url "http://downloads.sourceforge.net/project/boost/boost/#{pkg.get_version}/boost_#{pkg.get_version.gsub('.','_')}.tar.gz"
@@ -65,7 +60,7 @@ component "boost" do |pkg, settings, platform|
   boost_libs = [ 'atomic', 'chrono', 'container', 'date_time', 'exception', 'filesystem', 'graph', 'graph_parallel', 'iostreams', 'locale', 'log', 'math', 'program_options', 'random', 'regex', 'serialization', 'signals', 'system', 'test', 'thread', 'timer', 'wave' ]
 
   cflags = "-fPIC -std=c99"
-  cxxflags = "-std=c++11 -fPIC"
+  cxxflags = "-std=c++14 -fPIC"
 
   # These are all places where windows differs from *nix. These are the default *nix settings.
   toolset = "--with-toolset=gcc"
@@ -74,7 +69,9 @@ component "boost" do |pkg, settings, platform|
   execute = "./"
   addtl_flags = ""
   gpp = "#{settings[:bindir]}/g++"
-  b2flags = ""
+
+  # b2flags is normally empty by default, but currently 1.61 has a feature leatherman cannot handle
+  b2flags = "define=BOOST_NO_CXX11_HDR_ATOMIC"
 
   if platform.is_cross_compiled_linux?
     pkg.environment "PATH" => "#{settings[:basedir]}/bin:$$PATH"
@@ -83,7 +80,7 @@ component "boost" do |pkg, settings, platform|
   elsif platform.is_solaris?
     pkg.environment "PATH" => "#{settings[:basedir]}/bin:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
     linkflags = "-Wl,-rpath=#{settings[:libdir]}"
-    b2flags = "define=_XOPEN_SOURCE=600"
+    b2flags = "#{b2flags} define=_XOPEN_SOURCE=600"
     if platform.architecture == "sparc"
       b2flags = "#{b2flags} instruction-set=v9"
     end
@@ -123,10 +120,10 @@ component "boost" do |pkg, settings, platform|
   if platform.is_windows?
     userconfigjam = %Q{using gcc : : #{gpp} ;}
   else
-    if platform.architecture =~ /arm|s390x/ || platform.is_aix?
+    if platform.architecture =~ /arm/ || platform.is_aix?
       userconfigjam = %Q{using gcc : 5.2.0 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cxxflags}" ;}
     else
-      userconfigjam = %Q{using gcc : 4.8.2 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cxxflags}" ;}
+      userconfigjam = %Q{using gcc : 6.1.0 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cxxflags}" ;}
     end
   end
 

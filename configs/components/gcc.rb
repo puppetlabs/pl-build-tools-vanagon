@@ -1,6 +1,6 @@
 component "gcc" do |pkg, settings, platform|
   # Source-Related Metadata
-  if platform.name =~ /fedora-f24|fedora-f25|ubuntu-16\.04-ppc64el|ubuntu-16\.10/
+  if platform.name =~ /fedora-f24|fedora-f25|ubuntu-16\.04-ppc64el|ubuntu-16\.10|debian-8-armel/
     pkg.version "6.1.0"
     pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
   elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
@@ -90,7 +90,7 @@ component "gcc" do |pkg, settings, platform|
     pkg.build_requires "sysroot"
   elsif platform.is_solaris?
     if platform.os_version == '10'
-      pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.27-1.#{platform.architecture}.pkg.gz"
+      pkg.build_requires "http://pl-build-tools-staging.delivery.puppetlabs.net/solaris/10/pl-binutils-2.27-1.#{platform.architecture}.pkg.gz"
     elsif platform.os_version == '11'
       pkg.build_requires "pl-binutils-#{platform.architecture}"
     end
@@ -194,9 +194,12 @@ component "gcc" do |pkg, settings, platform|
   # The other flags are to instruct GCC on the proper target to look at in
   # libgcc when linking.
   if platform.architecture =~ /arm/i
-    configure_command << " --with-fpu=vfp \
-      --with-arch-directory=arm \
-      --with-float=hard \ "
+    configure_command << " --with-arch-directory=arm \ "
+    if platform.architecture == "armhf"
+      configure_command << " --with-fpu=vfp --with-float=hard \ "
+    else
+      configure_command << "--with-arch=armv4t --with-float=soft  \ "
+    end
   end
 
   # The target powerpc-ibm-aix6.1.0.0 is used on AIX 6.1, AIX 7.1 - even by

@@ -74,7 +74,14 @@ component "yaml-cpp" do |pkg, settings, platform|
     addtl_flags = "-G \"MinGW Makefiles\""
   end
 
+<<<<<<< 05e759058a850d24b7e569cb38467a97d20f7e88
   # Build Commands
+=======
+  if platform.is_solaris? && platform.os_version == "10"
+    pkg.environment "PATH" => "$$PATH:/opt/csw/bin"
+  end
+
+>>>>>>> (maint) Fix PATH for solaris 10 builds of pl-yaml-cpp
   pkg.build do
     [ "rm -rf build-shared",
       "mkdir build-shared",
