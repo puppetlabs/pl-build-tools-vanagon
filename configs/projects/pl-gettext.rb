@@ -5,6 +5,7 @@ project "pl-gettext" do |proj|
   proj.description "Puppet gettext"
   # Windows rejects a 4-number version, because adding the release makes it 5.
   proj.version "0.19.8"
+  proj.release "2"
   proj.license "GPLv3+"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
