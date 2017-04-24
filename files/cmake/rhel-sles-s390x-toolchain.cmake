@@ -7,7 +7,7 @@ SET(CMAKE_SYSTEM_PROCESSOR s390x)
 # specify the cross compiler
 SET(PL_TOOLS_ROOT        /opt/pl-build-tools)
 SET(PL_TOOLS_PREFIX      ${PL_TOOLS_ROOT}/s390x-linux-gnu)
-SET(PL_TOOLS_SYSROOT     ${PL_TOOLS_PREFIX}/sysroot/lib/powerpc-linux-gnu)
+SET(PL_TOOLS_SYSROOT     ${PL_TOOLS_PREFIX}/sysroot/lib/s390x-linux-gnu)
 SET(CMAKE_C_COMPILER     ${PL_TOOLS_ROOT}/bin/s390x-linux-gnu-gcc)
 SET(CMAKE_CXX_COMPILER   ${PL_TOOLS_ROOT}/bin/s390x-linux-gnu-g++)
 SET(CMAKE_AR             ${PL_TOOLS_PREFIX}/bin/ar CACHE FILEPATH "Archiver")
