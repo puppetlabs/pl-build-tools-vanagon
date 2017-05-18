@@ -12,6 +12,9 @@ component "sysroot" do |pkg, settings, platform|
     when "el-7-s390x"
       pkg.version "2016.07.29"
       pkg.md5sum "8ce88d3df4c2c7f8a39ec46b0d78d88c"
+    when "el-7-ppc64le"
+      pkg.version "2016.05.15"
+      pkg.md5sum "5a31e65abf83ff077dd8bac797f193f4"
     when "huaweios-6-powerpc"
       pkg.version "2016.02.08"
       pkg.md5sum "82589b28efdc5ccf6181499c4f49a1ac"
@@ -47,7 +50,7 @@ component "sysroot" do |pkg, settings, platform|
   puts "sysroot base is " + sysroot_base
 
   libdirs = "lib"
-  libdirs = "lib lib64" if platform.architecture == "s390x"
+  libdirs = "lib lib64" if platform.architecture == "s390x" || platform.name =~ /el-7-ppc64le/
   pkg.install do
     [
       "mv #{libdirs} #{sysroot_base}/",
