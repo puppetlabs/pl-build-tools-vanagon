@@ -1,6 +1,6 @@
 component "gcc" do |pkg, settings, platform|
   # Source-Related Metadata
-  if platform.name =~ /fedora-f24|fedora-f25|ubuntu-16\.04-ppc64el|ubuntu-16\.10/
+  if platform.name =~ /el-7-ppc64le|fedora-f24|fedora-f25|ubuntu-16\.04-ppc64el|ubuntu-16\.10/
     pkg.version "6.1.0"
     pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
   elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
@@ -75,8 +75,7 @@ component "gcc" do |pkg, settings, platform|
       pkg.build_requires "g++"
       pkg.build_requires "libstdc++-dev"
       pkg.build_requires "libc6-dev"
-    when platform.architecture == "s390x"
-      # The s390x platforms we support are all RPM-based (SLES and RHEL)
+    when platform.architecture == "s390x" || platform.architecture == "ppc64le"
       pkg.build_requires "pl-binutils-#{platform.architecture}"
       pkg.build_requires "sysroot"
       pkg.build_requires "libstdc++-devel"
