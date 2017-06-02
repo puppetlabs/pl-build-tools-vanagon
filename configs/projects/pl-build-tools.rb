@@ -22,6 +22,8 @@ elsif platform.architecture == "armhf"
   platform_triple = "arm-linux-gnueabihf"
 elsif platform.architecture == "armel"
   platform_triple = "arm-linux-gnueabi"
+elsif platform.architecture == "aarch64"
+  platform_triple = "aarch64-linux-gnu"
 elsif platform.is_windows?
   if platform.architecture == "x64"
     platform_triple = "x86_64-unknown-mingw32"
