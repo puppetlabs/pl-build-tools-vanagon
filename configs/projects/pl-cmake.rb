@@ -8,7 +8,7 @@ project "pl-cmake" do |proj|
     proj.release "5"
   else
     proj.version "3.2.3"
-    proj.release "17"
+    proj.release "18"
   end
   proj.license "BSD"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
