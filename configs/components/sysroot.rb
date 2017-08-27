@@ -30,6 +30,9 @@ component "sysroot" do |pkg, settings, platform|
     when "sles-12-s390x"
       pkg.version "2016.05.02"
       pkg.md5sum "834b30ae19f7f8c30aa579b65f987f3a"
+    when "sles-12-ppc64le"
+      pkg.version "2017.08.21"
+      pkg.md5sum "90edf955953e38fe72356ade7296cd21"
     when "solaris-10-sparc"
       pkg.version "2015.07.28"
       pkg.md5sum "4eed18c2ddcc609f2f404094ce539ce2"
@@ -53,7 +56,7 @@ component "sysroot" do |pkg, settings, platform|
   puts "sysroot base is " + sysroot_base
 
   libdirs = "lib"
-  libdirs = "lib lib64" if platform.architecture == "s390x" || platform.name =~ /el-7-ppc64le/ || platform.architecture == "aarch64"
+  libdirs = "lib lib64" if platform.architecture == "s390x" || platform.name =~ /el-7-ppc64le|sles-12-ppc64le/ || platform.architecture == "aarch64"
   pkg.install do
     [
       "mv #{libdirs} #{sysroot_base}/",
