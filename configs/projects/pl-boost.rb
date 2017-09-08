@@ -8,7 +8,7 @@ project "pl-boost" do |proj|
     proj.release "0"
   else
     proj.version "1.58.0"
-    proj.release "6"
+    proj.release "7"
   end
   proj.license "Boost and MIT and Python"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
