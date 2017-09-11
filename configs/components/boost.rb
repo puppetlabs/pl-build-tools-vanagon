@@ -13,7 +13,10 @@ component "boost" do |pkg, settings, platform|
 
   if platform.is_solaris?
     pkg.apply_patch 'resources/patches/boost/solaris-10-boost-build.patch'
-    pkg.apply_patch 'resources/patches/boost/solaris-10-boost-filesystem-unique-path.patch' if platform.name =~ /solaris-10/
+  end
+
+  if platform.is_solaris? || platform.is_aix?
+    pkg.apply_patch 'resources/patches/boost/solaris-aix-boost-filesystem-unique-path.patch'
   end
 
   if platform.is_cisco_wrlinux?
