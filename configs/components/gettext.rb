@@ -45,7 +45,7 @@ component "gettext" do |pkg, settings, platform|
       end
       pkg.build_requires "make"
     else
-      pkg.build_requires "gcc"
+      pkg.build_requires "pl-gcc"
       pkg.build_requires "make"
     end
 
