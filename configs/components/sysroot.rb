@@ -8,7 +8,7 @@ component "sysroot" do |pkg, settings, platform|
       pkg.md5sum "d08a22cd4f431d4e1fc0d1869f60d9da"
     when "el-7-aarch64"
       pkg.version "2017.06.13"
-      pkg.md5sum "2767028fccf6176e199e88b365a2c75f"
+      pkg.md5sum "b1cb6fc6253a2bbb5cc17fda16ec64ae"
     when "el-6-s390x"
       pkg.version "2016.05.23"
       pkg.md5sum "e08bc4f2a5cfb39033ee138fd22bd7f2"
