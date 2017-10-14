@@ -23,6 +23,10 @@ component "boost" do |pkg, settings, platform|
     pkg.apply_patch 'resources/patches/boost/no-fionbio.patch'
   end
 
+  if platform.architecture == "aarch64"
+    pkg.apply_patch 'resources/patches/boost/boost-aarch64-flags.patch'
+  end
+
   # Package Dependency Metadata
 
   # Build Requirements
