@@ -64,6 +64,8 @@ end
 proj.setting(:includedir, File.join(proj.prefix, "include"))
 proj.setting(:datadir, File.join(proj.prefix, "share"))
 proj.setting(:mandir, File.join(proj.datadir, "man"))
+proj.setting(:artifactory_url, "https://artifactory.delivery.puppetlabs.net/artifactory")
+proj.setting(:buildsources_url, "#{proj.artifactory_url}/generic/buildsources")
 
 # proj.identifier
 if platform.is_solaris?
@@ -75,5 +77,5 @@ proj.directory proj.basedir
 # Here we rewrite public http urls to use our internal source host instead.
 # Something like https://www.openssl.org/source/openssl-1.0.0r.tar.gz gets
 # rewritten as
-# http://buildsources.delivery.puppetlabs.net/openssl-1.0.0r.tar.gz
-proj.register_rewrite_rule 'http', 'http://buildsources.delivery.puppetlabs.net'
+# https://artifactory.delivery.puppetlabs.net/artifactory/generic/buildsources/openssl-1.0.0r.tar.gz
+proj.register_rewrite_rule 'http', proj.buildsources_url

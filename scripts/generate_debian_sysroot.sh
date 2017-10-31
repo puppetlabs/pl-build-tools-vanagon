@@ -5,7 +5,7 @@ set -x
 # This script should be able to generate a sysroot that we use for
 # cross-compiling anything debian-based. To execute, you should just be able
 # to edit the constants below. In the end, you'll have a tar.gz file that is a
-# sysroot that needs to be placed on buildsources.
+# sysroot that needs to be placed in Artifactory.
 
 # For huaweios-6-powerpc:
 ARCH=powerpc

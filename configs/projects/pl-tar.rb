@@ -16,6 +16,6 @@ project "pl-tar" do |proj|
   proj.component "tar"
   proj.target_repo ""
 
-  proj.register_rewrite_rule 'http', 'http://buildsources.delivery.puppetlabs.net'
+  proj.register_rewrite_rule 'http', proj.buildsources_url
 
 end
