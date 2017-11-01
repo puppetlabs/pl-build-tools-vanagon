@@ -16,5 +16,5 @@ project "pl-pkg-config" do |proj|
   proj.component "pkg-config"
   proj.target_repo ""
 
-  proj.register_rewrite_rule 'http', 'http://buildsources.delivery.puppetlabs.net'
+  proj.register_rewrite_rule 'http', proj.buildsources_url
 end

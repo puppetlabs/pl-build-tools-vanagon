@@ -7,7 +7,7 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.version "0.5.1"
     pkg.md5sum "0fa47a5ed8fedefab766592785c85ee7"
   end
-  pkg.url "http://buildsources.delivery.puppetlabs.net/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  pkg.url "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   # Package Dependency Metadata
 

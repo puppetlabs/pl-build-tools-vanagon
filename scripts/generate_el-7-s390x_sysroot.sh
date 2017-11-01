@@ -80,4 +80,4 @@ if [ -e $sysrootdir.tar.gz ]; then
 fi
 tar --create --gzip --file $sysrootdir.tar.gz --owner=0 --group=0 $sysrootdir
 
-echo "Done. Now copy $sysrootdir.tar.gz over to buildsources."
+echo "Done. Now copy $sysrootdir.tar.gz over to Artifactory."

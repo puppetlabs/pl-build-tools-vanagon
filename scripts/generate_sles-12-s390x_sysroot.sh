@@ -144,4 +144,4 @@ if [ -e $SYSROOTDIR.tar.gz ]; then
 fi
 tar --create --gzip --file $SYSROOTDIR.tar.gz --owner=0 --group=0 $SYSROOTDIR
 
-echo "Done. Now copy $SYSROOTDIR.tar.gz over to buildsources."
+echo "Done. Now copy $SYSROOTDIR.tar.gz over to Artifactory."
