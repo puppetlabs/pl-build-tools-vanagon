@@ -151,21 +151,6 @@ component "gcc" do |pkg, settings, platform|
   # Initialize an empty configure_command string
   configure_command = ""
 
-  # We've abstracted the configure command a bit because of the difference in
-  # flags needed for ARM vs x86 and x86_64 vs AIX/ppc
-  configure_command << " ../gcc-#{pkg.get_version}/configure \
-    --prefix=#{settings[:basedir]} \
-    --disable-nls \
-    --enable-languages=c,c++ \
-    --disable-libgcj "
-
-  # We used to run with --disable-shared on several platforms (or attempt to).
-  # After a logic issue was discovered, and more discussion was had we've
-  # elected to always build shared and copy over the components required into
-  # the agent via the runtime component. See RE-7315 for more info.
-  #
-  # TODO: what impact does this have with client-tools?
-
   #  Some notes on AIX.
   #    AIX ships with gcc-4.2.4. We want 4.8.2 or higher. To get to 4.8.2 you
   #    need to build something in the 4.6 series as an intermediate GCC I have
@@ -180,6 +165,15 @@ component "gcc" do |pkg, settings, platform|
     configure_command << " chsec -f /etc/security/limits -s default -a stack=2560000;"
     configure_command << " chsec -f /etc/security/limits -s default -a data=2560000;"
   end
+
+  # We've abstracted the configure command a bit because of the difference in
+  # flags needed for ARM vs x86 and x86_64 vs AIX/ppc
+  configure_command << " ../gcc-#{pkg.get_version}/configure \
+    --prefix=#{settings[:basedir]} \
+    --disable-nls \
+    --enable-languages=c,c++ \
+    --disable-libgcj "
+
 
   # On the ARM Debian builds, you actually need multilib, so we'll exclude this
   # exclude flag on ARM.
