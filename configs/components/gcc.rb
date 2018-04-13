@@ -1,6 +1,6 @@
 component "gcc" do |pkg, settings, platform|
   # Source-Related Metadata
-  if platform.name =~ /debian-9|el-7-aarch64|el-7-ppc64le|fedora-f24|fedora-f25|fedora-f26|fedora-f27|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-16\.10/
+  if platform.name =~ /debian-9|el-7-aarch64|el-7-ppc64le|fedora-f24|fedora-f25|fedora-f26|fedora-f27|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-16\.10|ubuntu-18\.04/
     pkg.version "6.1.0"
     pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
   elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
@@ -14,17 +14,15 @@ component "gcc" do |pkg, settings, platform|
 
   pkg.apply_patch "resources/patches/gcc/aix-inclhack.patch" if platform.is_aix?
 
-  # These patches are necessary because Fedora 27 uses glib 2.26 instead of glib 2.25;
-  # the latter is what Fedora 26 used. glib 2.26 results in the following errors when
-  # building gcc:
+  # glib 2.26 produces the following errors when building with gcc 5.y or 6.y:
   #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81712
   #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81066
   #
-  # Any (future) Linux platforms that use glib 2.26 with gcc 5.y or 6.y should have these
+  # Any Linux platforms that use glib 2.26+ with gcc 5.y or 6.y should have these
   # patches applied.
   #
-  # On Fedora, you can check the glib version by running `ldd --version`
-  if platform.name =~ /fedora-f27/
+  # On Linux, you can check the glib version by running `ldd --version`
+  if platform.name =~ /fedora-f27/ || platform.name =~ /ubuntu-18.04/
     pkg.apply_patch "resources/patches/gcc/ucontext_t-linux-unwind_h.patch"
     pkg.apply_patch "resources/patches/gcc/sanitizer_linux.patch"
   end
