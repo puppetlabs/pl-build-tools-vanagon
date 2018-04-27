@@ -42,10 +42,6 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.build_requires "make"
     pkg.build_requires "pl-cmake"
     pkg.build_requires "pl-boost"
-
-    if platform.name =~ /el-4/
-      pkg.build_requires "pl-tar"
-    end
   end
 
   # Build-time Configuration

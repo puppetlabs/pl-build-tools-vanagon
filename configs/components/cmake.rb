@@ -34,10 +34,6 @@ component "cmake" do |pkg, settings, platform|
     pkg.build_requires "pl-gcc"
     pkg.build_requires "make"
 
-    if platform.name =~ /el-4/
-      pkg.build_requires "pl-tar"
-    end
-
     case
     when platform.is_cisco_wrlinux?
       pkg.build_requires "ncurses-dev"

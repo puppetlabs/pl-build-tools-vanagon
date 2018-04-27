@@ -55,10 +55,6 @@ component "gettext" do |pkg, settings, platform|
       pkg.environment("PATH", "#{settings[:prefix]}/bin:$(PATH)")
     end
 
-    if platform.name =~ /el-4/
-      pkg.build_requires "pl-tar"
-    end
-
     pkg.configure do
       ["./configure --prefix=#{settings[:prefix]} #{settings[:host]} --without-emacs"]
     end

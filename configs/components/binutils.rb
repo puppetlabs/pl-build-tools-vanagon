@@ -19,9 +19,7 @@ component "binutils" do |pkg, settings, platform|
   # Package Dependency Metadata
 
   # Build Requirements
-  if platform.name =~ /el-4/
-    pkg.build_requires "pl-tar"
-  elsif platform.is_aix?
+  if platform.is_aix?
     if platform.os_version =~ /6.1|7.1/
       pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/gcc-4.2.0-3.aix6.1.ppc.rpm"
       pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/libgcc-4.2.0-3.aix6.1.ppc.rpm"
