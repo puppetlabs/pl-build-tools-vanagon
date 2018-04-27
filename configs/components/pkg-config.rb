@@ -9,10 +9,6 @@ component "pkg-config" do |pkg, settings, platform|
     pkg.environment "PATH" => "#{settings[:bindir]}:$$PATH"
   end
 
-  if platform.name =~ /el-4/
-    pkg.build_requires "pl-tar"
-  end
-
   pkg.configure do
     "./configure --prefix=#{settings[:basedir]} --with-internal-glib"
   end

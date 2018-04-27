@@ -111,10 +111,6 @@ component "gcc" do |pkg, settings, platform|
     end
   end
 
-  if platform.name =~ /el-4/
-    pkg.build_requires "pl-tar"
-  end
-
   # Build-time Configuration
   if platform.is_aix?
     # AIX can't use the exact flags that linux does, but we should still

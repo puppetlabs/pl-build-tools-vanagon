@@ -52,9 +52,6 @@ component "boost" do |pkg, settings, platform|
     # Various Linux platforms
     case platform.name
     when /el|fedora/
-      if platform.name =~ /el-4/
-        pkg.build_requires 'pl-tar'
-      end
       pkg.build_requires 'bzip2-devel'
       pkg.build_requires 'zlib-devel'
     when /sles-10/

@@ -13,10 +13,6 @@ component "ruby" do |pkg, settings, platform|
     pkg.build_requires "pl-gcc-#{platform.architecture}"
   end
 
-  if platform.name =~ /el-4/
-    pkg.build_requires "pl-tar"
-  end
-
   # Ensure ruby is built with zlib support
   if platform.is_deb?
     pkg.build_requires "zlib1g-dev"
