@@ -1,7 +1,7 @@
 component "ruby" do |pkg, settings, platform|
   pkg.version "2.1.9"
   pkg.md5sum "d9d2109d3827789344cc3aceb8e1d697"
-  pkg.mirror "#{settings[:buildsources_url]}/ruby-#{pkg.get_version}.tar.gz"
+  #pkg.mirror "#{settings[:buildsources_url]}/ruby-#{pkg.get_version}.tar.gz"
   pkg.url "https://cache.ruby-lang.org/pub/ruby/2.1/ruby-#{pkg.get_version}.tar.gz"
 
   pkg.apply_patch "resources/patches/ruby/libyaml_cve-2014-9130.patch"
