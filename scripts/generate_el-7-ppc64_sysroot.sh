@@ -19,7 +19,7 @@ echo "Removing unneeded packages..."
 yum remove -y autofs cups-libs git-core libtiff libxslt mysql-libs opencryptoki-libs pango plymouth-core-libs python-lxml sssd-client samba-common systemtap-runtime
 
 echo "Installing critical libraries we need for building gcc and our various dependencies..."
-yum install --assumeyes rsync zlib-devel bzip2-devel libblkid-devel libcurl-devel libselinux-devel readline-devel e2fsprogs-devel xz-devel
+yum install --assumeyes rsync zlib-devel bzip2-devel libblkid-devel libcurl-devel libselinux-devel readline-devel e2fsprogs-devel xz-devel glibc-devel
 
 # Create a sysroot working area we can make further modifications to
 echo "Creating $sysrootdir and syncing sysroot directories under it..."

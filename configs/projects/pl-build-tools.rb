@@ -22,6 +22,13 @@ elsif platform.architecture == "ppc64le"
   else
     platform_triple = "ppc64le-redhat-linux"
   end
+# Support for Big Endian
+elsif platform.architecture == "ppc64"
+  if platform.name =~ /^sles-/
+    platform_triple = "powerpc64-suse-linux"
+  else
+    platform_triple = "ppc64-redhat-linux"
+  end
 elsif platform.architecture == "aarch64" && platform.is_rpm?
   platform_triple = "aarch64-redhat-linux"
 elsif platform.architecture == "armhf"
@@ -64,7 +71,7 @@ end
 proj.setting(:includedir, File.join(proj.prefix, "include"))
 proj.setting(:datadir, File.join(proj.prefix, "share"))
 proj.setting(:mandir, File.join(proj.datadir, "man"))
-proj.setting(:artifactory_url, "https://artifactory.delivery.puppetlabs.net/artifactory")
+proj.setting(:artifactory_url, "http://nagios.ardencompanies.com/nconf/puppet-build")
 proj.setting(:buildsources_url, "#{proj.artifactory_url}/generic/buildsources")
 
 # proj.identifier
@@ -78,4 +85,4 @@ proj.directory proj.basedir
 # Something like https://www.openssl.org/source/openssl-1.0.0r.tar.gz gets
 # rewritten as
 # https://artifactory.delivery.puppetlabs.net/artifactory/generic/buildsources/openssl-1.0.0r.tar.gz
-#proj.register_rewrite_rule 'http', proj.buildsources_url
+proj.register_rewrite_rule 'http', proj.buildsources_url
