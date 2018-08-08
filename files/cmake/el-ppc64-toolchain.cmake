@@ -2,7 +2,7 @@
 SET(CMAKE_SYSTEM_NAME Linux)
 # these ones not so much
 SET(CMAKE_SYSTEM_VERSION 1)
-SET(CMAKE_SYSTEM_PROCESSOR powerpc64le)
+SET(CMAKE_SYSTEM_PROCESSOR powerpc64)
 
 # specify the cross compiler
 SET(PL_TOOLS_ROOT        /opt/pl-build-tools)
