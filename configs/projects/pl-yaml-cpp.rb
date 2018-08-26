@@ -7,8 +7,8 @@ project "pl-yaml-cpp" do |proj|
     proj.version "0.5.3"
     proj.release "1"
   else
-    proj.version "0.5.1"
-    proj.release "6"
+    proj.version "0.5.3"
+    proj.release "1"
   end
   proj.license "MIT"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"

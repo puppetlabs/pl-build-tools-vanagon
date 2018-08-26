@@ -22,6 +22,13 @@ elsif platform.architecture == "ppc64le"
   else
     platform_triple = "ppc64le-redhat-linux"
   end
+# Support for Big Endian
+elsif platform.architecture == "ppc64"
+  if platform.name =~ /^sles-/
+    platform_triple = "powerpc64-suse-linux"
+  else
+    platform_triple = "ppc64-redhat-linux"
+  end
 elsif platform.architecture == "aarch64" && platform.is_rpm?
   platform_triple = "aarch64-redhat-linux"
 elsif platform.architecture == "armhf"

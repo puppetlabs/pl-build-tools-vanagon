@@ -11,6 +11,8 @@ component "iconv" do |pkg, settings, platform|
     pkg.apply_patch "resources/patches/iconv/use-windows-paths.patch"
   end
 
+  pkg.apply_patch "resources/patches/iconv/check-glib-version.patch"
+
   pkg.configure do
     [" ./configure --prefix=#{settings[:prefix]} #{settings[:host]}"]
   end

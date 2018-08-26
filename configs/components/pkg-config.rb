@@ -1,6 +1,6 @@
 component "pkg-config" do |pkg, settings, platform|
   pkg.version "0.28"
-  pkg.url "http://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz"
+  pkg.url "http://pkgconfig.freedesktop.org/releases/pkg-config-#{pkg.get_version}.tar.gz"
   pkg.md5sum "aa3c86e67551adc3ac865160e34a2a0d"
 
   if platform.is_solaris?

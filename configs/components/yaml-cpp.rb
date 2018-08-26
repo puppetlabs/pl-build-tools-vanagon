@@ -4,10 +4,12 @@ component "yaml-cpp" do |pkg, settings, platform|
     pkg.version "0.5.3"
     pkg.md5sum "9a60a3051c2ef01980c78a2d6be40ed9"
   else
-    pkg.version "0.5.1"
-    pkg.md5sum "0fa47a5ed8fedefab766592785c85ee7"
+    pkg.version "0.5.3"
+    pkg.md5sum "2bba14e6a7f12c7272f87d044e4a7211"
+    #pkg.md5sum "0fa47a5ed8fedefab766592785c85ee7"
   end
-  pkg.url "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  pkg.url "https://github.com/jbeder/yaml-cpp/archive/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  #pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   # Package Dependency Metadata
 
@@ -74,6 +76,7 @@ component "yaml-cpp" do |pkg, settings, platform|
   pkg.build do
     [ "rm -rf build-shared",
       "mkdir build-shared",
+      "cp -r ../yaml-cpp-yaml-cpp-0.5.3/* .",
       "cd build-shared",
       "#{special_path ? special_path : ''} \
       \"#{cmake}\" \
