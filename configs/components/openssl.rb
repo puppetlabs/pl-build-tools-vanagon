@@ -24,9 +24,14 @@ component "openssl" do |pkg, settings, platform|
     make = "/usr/bin/make"
     pkg.environment "MAKE" => make
     prefix = platform.convert_to_windows_path(settings[:prefix])
-    cflags = settings[:cflags]
-    ldflags = settings[:ldflags]
   end
+
+  if platform.is_linux?
+    target = "linux-#{platform.architecture}"
+  end
+
+  cflags = settings[:cflags]
+  # ldflags = settings[:ldflags] - not currently used
 
   pkg.configure do
     [# OpenSSL Configure doesn't honor CFLAGS or LDFLAGS as environment variables.
