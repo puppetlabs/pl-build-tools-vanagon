@@ -2,7 +2,7 @@ component "pdcurses" do |pkg, settings, platform|
 
   pkg.version "3.4"
   pkg.md5sum "4e04e4412d1b1392a7f9a489b95b331a"
-  pkg.url "#{settings[:buildsources_url]}/PDCurses-#{pkg.get_version}.tar.gz"
+  pkg.url "https://sourceforge.net/projects/pdcurses/files/pdcurses/#{pkg.get_version}/PDCurses-#{pkg.get_version}.tar.gz"
 
   makefile = "Makefile"
   if platform.is_windows?
