@@ -11,6 +11,11 @@ component "iconv" do |pkg, settings, platform|
     pkg.apply_patch "resources/patches/iconv/use-windows-paths.patch"
   end
 
+  # Ensure iconv compiles when glibc on the build machine is recent
+  # See this thread for detail: 
+  # https://lists.gnu.org/archive/html/bug-gnu-libiconv/2016-04/msg00001.html
+  pkg.apply_patch "resources/patches/iconv/check-glib-version.patch"
+
   pkg.configure do
     [" ./configure --prefix=#{settings[:prefix]} #{settings[:host]}"]
   end
