@@ -11,6 +11,7 @@ component "gcc" do |pkg, settings, platform|
     pkg.md5sum "deca88241c1135e2ff9fa5486ab5957b"
   end
   pkg.url "http://ftp.gnu.org/gnu/gcc/gcc-#{pkg.get_version}/gcc-#{pkg.get_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/gcc-#{pkg.get_version}.tar.gz"
 
   pkg.apply_patch "resources/patches/gcc/aix-inclhack.patch" if platform.is_aix?
 

@@ -7,6 +7,7 @@ component "yaml-cpp" do |pkg, settings, platform|
   pkg.version "0.5.3"
   pkg.md5sum "2bba14e6a7f12c7272f87d044e4a7211"
   pkg.url "https://github.com/jbeder/yaml-cpp/archive/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   # Package Dependency Metadata
 
@@ -70,7 +71,7 @@ component "yaml-cpp" do |pkg, settings, platform|
   end
 
   # Build Commands
-  # 2018-09-04 - Note the addition of the c -r command to unroll yaml-cpp's
+  # 2018-09-04 - Note the addition of the cp -r command to unroll yaml-cpp's
   # annoying package-name doubling. It'd be nice if the maintainer would fix
   # this.
   pkg.build do

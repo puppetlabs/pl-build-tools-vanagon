@@ -3,6 +3,7 @@ component "gdbm" do |pkg, settings, platform|
   pkg.version "1.10"
   pkg.md5sum "88770493c2559dc80b561293e39d3570"
   pkg.url "https://ftp.gnu.org/gnu/gdbm/gdbm-#{pkg.get_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/gdbm-#{pkg.get_version}.tar.gz"
 
   prefix = settings[:prefix]
   if platform.is_windows?

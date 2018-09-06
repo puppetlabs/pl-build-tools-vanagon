@@ -10,6 +10,8 @@ component "cmake" do |pkg, settings, platform|
     pkg.url "https://cmake.org/files/v3.2/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
   end
 
+  pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+
   if platform.name =~ /sles-12/
     pkg.apply_patch 'resources/patches/cmake/avoid-select-sles-12.patch'
   elsif platform.is_solaris?

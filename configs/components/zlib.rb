@@ -3,6 +3,7 @@ component "zlib" do |pkg, settings, platform|
   pkg.version "1.2.8"
   pkg.md5sum "44d667c142d7cda120332623eab69f40"
   pkg.url "http://zlib.net/fossils/zlib-#{pkg.get_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/zlib-#{pkg.get_version}.tar.gz"
 
   # Package Dependency Metadata
 
