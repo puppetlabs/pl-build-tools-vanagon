@@ -2,6 +2,7 @@ component "m4" do |pkg, settings, platform|
   pkg.version "1.4.17"
   pkg.md5sum "a5e9954b1dae036762f7b13673a2cf76"
   pkg.url "http://ftp.gnu.org/gnu/#{pkg.get_name}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   if platform.is_aix?
     pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/make-3.80-1.aix5.1.ppc.rpm"

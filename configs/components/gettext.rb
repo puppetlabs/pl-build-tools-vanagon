@@ -13,6 +13,7 @@ component "gettext" do |pkg, settings, platform|
     end
 
     pkg.url "https://github.com/mlocati/gettext-iconv-windows/releases/download/v#{pkg.get_version}-v1.14/#{pkg.get_name}#{pkg.get_version}-iconv1.14-shared-#{arch}.zip"
+    pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}#{pkg.get_version}-iconv1.14-shared-#{arch}.zip"
 
     pkg.environment("PATH", "/cygdrive/c/tools/mingw#{arch}/bin:$(PATH):/cygdrive/c/ProgramData/chocolatey/tools")
     pkg.environment("CYGWIN", "nodosfilewarning winsymlinks:native")
@@ -30,6 +31,7 @@ component "gettext" do |pkg, settings, platform|
   else
     pkg.md5sum "97e034cf8ce5ba73a28ff6c3c0638092"
     pkg.url "http://ftp.gnu.org/gnu/#{pkg.get_name}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+    pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
     if platform.is_aix?
       pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"

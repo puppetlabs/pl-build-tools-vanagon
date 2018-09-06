@@ -2,6 +2,7 @@ component "automake" do |pkg, settings, platform|
   pkg.version "1.15"
   pkg.md5sum "716946a105ca228ab545fc37a70df3a3"
   pkg.url "http://ftp.gnu.org/gnu/automake/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   if platform.is_aix?
     pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"

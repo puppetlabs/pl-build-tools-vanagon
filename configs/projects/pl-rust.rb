@@ -10,6 +10,4 @@ project "pl-rust" do |proj|
   proj.homepage "https://www.puppetlabs.com"
   proj.component "rust"
   proj.target_repo ""
-
-  proj.register_rewrite_rule 'http', proj.buildsources_url
 end

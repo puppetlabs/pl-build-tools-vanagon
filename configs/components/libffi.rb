@@ -3,6 +3,7 @@ component "libffi" do |pkg, settings, platform|
   pkg.version "3.0.13"
   pkg.md5sum "45f3b6dbc9ee7c7dfbbbc5feba571529" # 3.0.13
   pkg.url "http://sourceware.org/pub/libffi/libffi-#{pkg.get_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/libffi-#{pkg.get_version}.tar.gz"
 
   pkg.apply_patch "resources/patches/libffi/0001-Includes-should-go-in-includedir-not-libdir.patch"
 
