@@ -1,17 +1,15 @@
 language: bash
 
-# Use container-based infrastructure for quicker build start-up
-sudo: false
+sudo: required
 
-addons:
-  apt:
-    sources:
-    - debian-sid  # Grab shellcheck from the Debian repo (o_O)
-    packages:
-    - shellcheck
+services:
+  - docker
+
+before_install:
+  - docker build -t ci-test-img .
 
 script:
-  - bash -c 'find . -type f -name "*.sh"  | xargs shellcheck'
+  - docker run ci-test-img
 
 matrix:
   fast_finish: true

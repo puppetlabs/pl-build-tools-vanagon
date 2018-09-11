@@ -34,7 +34,7 @@ rm -r $sysrootdir/usr/lib64/{a,cracklib,d,e,f,g,k,libasound,libau,libavahi,libde
 
 # Since we're relocating the sysroot, we can't have absolute symlinks
 echo "Converting absolute library symlinks to relative ones..."
-pushd $sysrootdir/usr/lib64
+pushd $sysrootdir/usr/lib64 || exit
 find . -maxdepth 1 -lname '/*' |
 while read -r link ; do
   echo "Converting $link from absolute to relative..."
@@ -44,14 +44,14 @@ while read -r link ; do
   rm "$link"
   ln -sf "$reltarget" "$link"
 done
-popd
+popd || exit
 
 # On RHEL 7, /lib64 is a symlink to /usr/lib64. But we need to avoid
 # including any symlinks to directories to avoid packaging errors. So
 # convert any symlinks from ../../lib64/ to point to their targets, which are
 # in the current directory anyway.
 echo "Converting problematic library symlinks to local ones..."
-pushd $sysrootdir/usr/lib64
+pushd $sysrootdir/usr/lib64 || exit
 find . -maxdepth 1 -lname '../../lib64/*' |
 while read -r link ; do
   echo "Converting $link..."
@@ -61,7 +61,7 @@ while read -r link ; do
   rm "$link"
   ln -sf "$reltarget" "./$link"
 done
-popd
+popd || exit
 
 # ppc64le is a 64-bit platform and keeps those libs in /lib64 and /usr/lib64.
 # But when building gcc, you'll run into errors finding libraries if you

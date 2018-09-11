@@ -37,7 +37,7 @@ rm -r $sysrootdir/usr/lib/$triple/{audit,gconv,krb,openssl,perl}*
 
 # Since we're relocating the sysroot, we can't have absolute symlinks
 echo "Converting absolute library symlinks to relative ones..."
-pushd $sysrootdir/usr/lib/$triple
+pushd $sysrootdir/usr/lib/$triple || exit
 find . -maxdepth 1 -lname '/*' |
 while read -r link ; do
   echo "Converting $link from absolute to relative..."
@@ -47,7 +47,7 @@ while read -r link ; do
   rm "$link"
   ln -sf "$reltarget" "$link"
 done
-popd
+popd || exit
 
 # We duplicate the Debian multilib libraries into lib/ in the sysroot due
 # to the fact that leatherman does not yet fully support Debian-style
@@ -55,7 +55,7 @@ popd
 cp -a $sysrootdir/lib/$triple/* $sysrootdir/lib/
 # Likewise, an extra step is needed here to consolidate header files to avoid
 # the same problems with multilib path searching:
-rsync --archive --copy-dirlinks $sysroot/usr/include/$triple/ $sysrootdir/usr/include/
+rsync --archive --copy-dirlinks $sysrootdir/usr/include/$triple/ $sysrootdir/usr/include/
 
 echo "Generating the sysroot tarball..."
 if [ -e $sysrootdir.tar.gz ]; then
