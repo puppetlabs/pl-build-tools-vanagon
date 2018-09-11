@@ -38,7 +38,7 @@ rm -r $sysrootdir/usr/lib64/{a,b,coreutils,crash,cups,e,g,h,k,ldscripts,libblas,
 
 # Since we're relocating the sysroot, we can't have absolute symlinks
 echo "Converting absolute library symlinks to relative ones..."
-pushd $sysrootdir/usr/lib64
+pushd $sysrootdir/usr/lib64 || exit
 find . -maxdepth 1 -lname '/*' |
 while read -r link ; do
   echo "Converting $link from absolute to relative..."
@@ -48,9 +48,9 @@ while read -r link ; do
   rm "$link"
   ln -sf "$reltarget" "$link"
 done
-popd
+popd || exit
 
-pushd $sysrootdir/usr/lib64/ncurses6
+pushd $sysrootdir/usr/lib64/ncurses6 || exit
 find . -maxdepth 1 -lname '/*' |
 while read -r link ; do
   echo "Converting $link from absolute to relative..."
@@ -60,7 +60,7 @@ while read -r link ; do
   rm "$link"
   ln -sf "$reltarget" "$link"
 done
-popd
+popd || exit
 
 # s390x is a 64-bit platform and keeps those libs in /lib64 and /usr/lib64.
 # But when building gcc, you'll run into errors finding libraries if you

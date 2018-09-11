@@ -42,7 +42,7 @@ if [ -z "$1" ] ; then
     chroot debian-${DEBIANVER}-${ARCH}-sysroot /bin/bash "${0}" chroot
     rm -rf debian-${DEBIANVER}-${ARCH}-sysroot/usr/bin
     rm -rf debian-${DEBIANVER}-${ARCH}-sysroot/bin
-    find debian-${DEBIANVER}-${ARCH}-sysroot -maxdepth 2 -mindepth 1 -type d  | egrep -v 'usr|lib'
+    find debian-${DEBIANVER}-${ARCH}-sysroot -maxdepth 2 -mindepth 1 -type d  | grep -E -v 'usr|lib'
     tar czf debian-${DEBIANVER}-${ARCH}-sysroot.tar.gz --owner=0 --group=0 debian-${DEBIANVER}-${ARCH}-sysroot
 fi
 

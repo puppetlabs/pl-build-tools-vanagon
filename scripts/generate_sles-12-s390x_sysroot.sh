@@ -78,7 +78,7 @@ rm -rf $SYSROOTDIR/usr/lib64/Y*
 
 # Since we're relocating the sysroot, we can't have absolute symlinks
 echo "Converting absolute library symlinks to relative ones..."
-pushd $SYSROOTDIR/lib64
+pushd $SYSROOTDIR/lib64 || exit
 find . -maxdepth 1 -lname '/*' |
 while read -r link ; do
   echo "Converting $link from absolute to relative..."
@@ -88,9 +88,9 @@ while read -r link ; do
   rm "$link"
   ln -sf "$reltarget" "$link"
 done
-popd
+popd || exit
 
-pushd $SYSROOTDIR/usr/lib64
+pushd $SYSROOTDIR/usr/lib64 || exit
 find . -maxdepth 1 -lname '/*' |
 while read -r link ; do
   echo "Converting $link from absolute to relative..."
@@ -100,9 +100,9 @@ while read -r link ; do
   rm "$link"
   ln -sf "$reltarget" "$link"
 done
-popd
+popd || exit
 
-pushd $SYSROOTDIR/usr/lib64/ncurses6
+pushd $SYSROOTDIR/usr/lib64/ncurses6 || exit
 find . -maxdepth 1 -lname '/*' |
 while read -r link ; do
   echo "Converting $link from absolute to relative..."
@@ -112,7 +112,7 @@ while read -r link ; do
   rm "$link"
   ln -sf "$reltarget" "$link"
 done
-popd
+popd || exit
 
 # RPM on SLES doesn't scoop up sylinks to directories, they must be added
 # via specfile entries. Since we're adding the sysroot to the pl-gcc RPM,
