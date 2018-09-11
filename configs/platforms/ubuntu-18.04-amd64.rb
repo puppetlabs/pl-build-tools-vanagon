@@ -1,4 +1,4 @@
-platform "ubuntu-18.08-amd64" do |plat|
+platform "ubuntu-18.04-amd64" do |plat|
   plat.servicedir "/lib/systemd/system"
   plat.defaultdir "/etc/default"
   plat.servicetype "systemd"
