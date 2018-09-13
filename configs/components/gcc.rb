@@ -1,6 +1,6 @@
 component "gcc" do |pkg, settings, platform|
   # Source-Related Metadata
-  if platform.name =~ /debian-9|el-7-aarch64|el-7-ppc64le|fedora-f24|fedora-f25|fedora-f26|fedora-f27|fedora-28|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-16\.10|ubuntu-18\.04/
+  if platform.name =~ /debian-9|el-7-aarch64|el-7-ppc64|fedora-f24|fedora-f25|fedora-f26|fedora-f27|fedora-28|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-16\.10|ubuntu-18\.04/
     pkg.version "6.1.0"
     pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
   elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
@@ -11,6 +11,7 @@ component "gcc" do |pkg, settings, platform|
     pkg.md5sum "deca88241c1135e2ff9fa5486ab5957b"
   end
   pkg.url "http://ftp.gnu.org/gnu/gcc/gcc-#{pkg.get_version}/gcc-#{pkg.get_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/gcc-#{pkg.get_version}.tar.gz"
 
   pkg.apply_patch "resources/patches/gcc/aix-inclhack.patch" if platform.is_aix?
 
@@ -88,7 +89,7 @@ component "gcc" do |pkg, settings, platform|
       pkg.build_requires "g++"
       pkg.build_requires "libstdc++-dev"
       pkg.build_requires "libc6-dev"
-    when platform.architecture == "s390x" || platform.architecture == "ppc64le" || platform.architecture == "aarch64"
+    when platform.architecture == "s390x" || platform.architecture == "ppc64le" || platform.architecture == "aarch64" || platform.architecture == "ppc64"
       pkg.build_requires "pl-binutils-#{platform.architecture}"
       pkg.build_requires "sysroot"
       pkg.build_requires "libstdc++-devel"

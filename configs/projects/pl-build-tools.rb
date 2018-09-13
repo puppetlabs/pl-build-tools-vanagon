@@ -22,6 +22,11 @@ elsif platform.architecture == "ppc64le"
   else
     platform_triple = "ppc64le-redhat-linux"
   end
+elsif platform.architecture == "ppc64"
+  # Adds big-endian powerpc support for RHEL.
+  if platform.name =~ /^el-/
+    platform_triple = "ppc64-redhat-linux"
+  end
 elsif platform.architecture == "aarch64" && platform.is_rpm?
   platform_triple = "aarch64-redhat-linux"
 elsif platform.architecture == "armhf"
@@ -73,9 +78,3 @@ if platform.is_solaris?
 end
 
 proj.directory proj.basedir
-
-# Here we rewrite public http urls to use our internal source host instead.
-# Something like https://www.openssl.org/source/openssl-1.0.0r.tar.gz gets
-# rewritten as
-# https://artifactory.delivery.puppetlabs.net/artifactory/generic/buildsources/openssl-1.0.0r.tar.gz
-proj.register_rewrite_rule 'http', proj.buildsources_url

@@ -1,13 +1,13 @@
 component "yaml-cpp" do |pkg, settings, platform|
   # Source-Related Metadata
-  if platform.architecture =~ /arm/ || platform.name =~ /fedora-f24/
-    pkg.version "0.5.3"
-    pkg.md5sum "9a60a3051c2ef01980c78a2d6be40ed9"
-  else
-    pkg.version "0.5.1"
-    pkg.md5sum "0fa47a5ed8fedefab766592785c85ee7"
-  end
-  pkg.url "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  # Originally 0.5.3 was used exclusively for arm and fedora-f24. These sources
+  # don't seem to be available outside of puppetlab's internal artifactory
+  # system so I've bumped the release number to 0.5.3 for everything.
+  # 2018-09-04 - Phil DeMonaco
+  pkg.version "0.5.3"
+  pkg.md5sum "2bba14e6a7f12c7272f87d044e4a7211"
+  pkg.url "https://github.com/jbeder/yaml-cpp/archive/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   # Package Dependency Metadata
 
@@ -71,9 +71,13 @@ component "yaml-cpp" do |pkg, settings, platform|
   end
 
   # Build Commands
+  # 2018-09-04 - Note the addition of the cp -r command to unroll yaml-cpp's
+  # annoying package-name doubling. It'd be nice if the maintainer would fix
+  # this.
   pkg.build do
     [ "rm -rf build-shared",
       "mkdir build-shared",
+      "cp -r ../yaml-cpp-yaml-cpp-0.5.3/* .",
       "cd build-shared",
       "#{special_path ? special_path : ''} \
       \"#{cmake}\" \
