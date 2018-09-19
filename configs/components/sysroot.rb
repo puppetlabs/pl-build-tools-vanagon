@@ -15,9 +15,9 @@ component "sysroot" do |pkg, settings, platform|
     when "el-7-s390x"
       pkg.version "2016.07.29"
       pkg.md5sum "8ce88d3df4c2c7f8a39ec46b0d78d88c"
-    when "el-7-ppc64"
-      pkg.version "2018.08.08"
-      pkg.md5sum "1fb328fecfe7cf8d940f6c11ddc613b7"
+    when "el-7-ppc64" # Centos 7.5 - Infrastructure Server Install
+      pkg.version "2018.09.14"
+      pkg.md5sum "9aa45667c6b265fd2f356ee650bf0e27"
     when "el-7-ppc64le"
       pkg.version "2016.05.15"
       pkg.md5sum "5a31e65abf83ff077dd8bac797f193f4"
