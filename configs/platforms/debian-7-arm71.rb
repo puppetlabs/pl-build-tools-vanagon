@@ -1,4 +1,6 @@
 platform "debian-7-arm71" do |plat|
+  # Note: This is a community-maintained platform. It is not tested in Puppet's
+  # CI pipelines, and does not receive official releases.
   plat.servicedir "/etc/init.d"
   plat.defaultdir "/etc/default"
   plat.servicetype "sysv"
