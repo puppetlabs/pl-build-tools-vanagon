@@ -55,9 +55,6 @@ component "boost" do |pkg, settings, platform|
     when /el|fedora/
       pkg.build_requires 'bzip2-devel'
       pkg.build_requires 'zlib-devel'
-    when /sles-10/
-      pkg.build_requires 'bzip2'
-      pkg.build_requires 'zlib-devel'
     when /sles-(11|12)/
       pkg.build_requires 'libbz2-devel'
       pkg.build_requires 'zlib-devel'

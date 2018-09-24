@@ -1,14 +1,8 @@
 component "cmake" do |pkg, settings, platform|
   # Source-Related Metadata
-  if platform.name =~ /fedora-f24/
-    pkg.version "3.5.2"
-    pkg.md5sum "701386a1b5ec95f8d1075ecf96383e02"
-    pkg.url "https://cmake.org/files/v3.5/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
-  else
-    pkg.version "3.2.3"
-    pkg.md5sum "d51c92bf66b1e9d4fe2b7aaedd51377c"
-    pkg.url "https://cmake.org/files/v3.2/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
-  end
+  pkg.version "3.2.3"
+  pkg.md5sum "d51c92bf66b1e9d4fe2b7aaedd51377c"
+  pkg.url "https://cmake.org/files/v3.2/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 

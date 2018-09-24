@@ -1,6 +1,6 @@
 component "gcc" do |pkg, settings, platform|
   # Source-Related Metadata
-  if platform.name =~ /debian-9|el-7-aarch64|el-7-ppc64|fedora-f24|fedora-f25|fedora-f26|fedora-f27|fedora-28|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-16\.10|ubuntu-18\.04/
+  if platform.name =~ /debian-9|el-7-aarch64|el-7-ppc64|fedora-f27|fedora-28|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-18\.04/
     pkg.version "6.1.0"
     pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
   elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
