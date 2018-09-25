@@ -1,6 +1,6 @@
 component "gcc" do |pkg, settings, platform|
   # Source-Related Metadata
-  if platform.name =~ /debian-9|el-7-aarch64|el-7-ppc64|fedora-f27|fedora-28|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-18\.04/
+  if platform.name =~ /debian-9|el-7-aarch64|el-7-ppc64|fedora-f27|fedora-28|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-18\.(04|10)/
     pkg.version "6.1.0"
     pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
   elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
@@ -23,7 +23,7 @@ component "gcc" do |pkg, settings, platform|
   # patches applied.
   #
   # On Linux, you can check the glib version by running `ldd --version`
-  if platform.name =~ /fedora-f27|fedora-28|ubuntu-18.04/
+  if platform.name =~ /fedora-f27|fedora-28|ubuntu-18.(04|10)/
     pkg.apply_patch "resources/patches/gcc/ucontext_t-linux-unwind_h.patch"
     pkg.apply_patch "resources/patches/gcc/sanitizer_linux.patch"
   end
