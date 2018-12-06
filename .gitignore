@@ -6,3 +6,4 @@ Gemfile.lock
 *.log
 ext/packaging
 pkg
+.idea

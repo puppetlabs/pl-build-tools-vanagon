@@ -113,7 +113,7 @@ if [ "$1"  ==  "chroot" ] ; then
     rm -f libbz2.so
     ln -s ../../../lib/${TRIPLE}/libbz2.so.1 libbz2.so
     rm libhistory.so
-    ln -s ../../../lib/${TRIPLE}/libhistory.so.6
+    ln -s ../../../lib/${TRIPLE}/libhistory.so.6 libhistory.so
     rm libBrokenLocale.so
     ln -s ../../../lib/${TRIPLE}/libBrokenLocale.so.1 libBrokenLocale.so
     popd
