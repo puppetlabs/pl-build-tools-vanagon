@@ -1,15 +1,19 @@
 component "cmake" do |pkg, settings, platform|
   # Source-Related Metadata
-  pkg.version "3.2.3"
-  pkg.md5sum "d51c92bf66b1e9d4fe2b7aaedd51377c"
-  pkg.url "https://cmake.org/files/v3.2/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  if platform.is_solaris?
+    pkg.version "3.12.4"
+    pkg.url "https://cmake.org/files/v3.12/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+    pkg.md5sum "4970869480ee37c8f4c8e7f83c4359cd"
+  else
+    pkg.version "3.2.3"
+    pkg.url "https://cmake.org/files/v3.2/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+    pkg.md5sum "d51c92bf66b1e9d4fe2b7aaedd51377c"
+  end
 
   pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
   if platform.name =~ /sles-12/
     pkg.apply_patch 'resources/patches/cmake/avoid-select-sles-12.patch'
-  elsif platform.is_solaris?
-    pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
   end
 
   # Package Dependency Metadata
