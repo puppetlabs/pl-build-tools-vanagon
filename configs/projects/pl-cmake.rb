@@ -3,7 +3,10 @@ project "pl-cmake" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Labs cmake"
-  if platform.name =~ /debian-8-armel/
+  if platform.is_solaris?
+    proj.version "3.12.4"
+    proj.release "1"
+  elsif platform.name =~ /debian-8-armel/
     proj.version "3.5.2"
     proj.release "5"
   else
