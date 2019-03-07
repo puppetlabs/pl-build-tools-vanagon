@@ -7,7 +7,7 @@ project "pl-gcc" do |proj|
   if platform.name =~ /debian-8-armel|debian-9|el-7-aarch64|el-7-ppc64|fedora-28|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-18\.(04|10)/
     proj.version "6.1.0"
     proj.release "6"
-  elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
+  elsif platform.is_aix? || platform.architecture =~ /arm/
     proj.version "5.2.0"
     proj.release "11"
   else

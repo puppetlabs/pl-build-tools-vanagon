@@ -21,12 +21,6 @@ component "sysroot" do |pkg, settings, platform|
     when "ubuntu-16.04-ppc64el"
       pkg.version "2017.03.27"
       pkg.md5sum "60c71cf24c8ff1694e6a540133075fd9"
-    when "sles-11-s390x"
-      pkg.version "2016.04.12"
-      pkg.md5sum "f719aabd9f3d180a70bcc88680bd4ada"
-    when "sles-12-s390x"
-      pkg.version "2016.05.02"
-      pkg.md5sum "834b30ae19f7f8c30aa579b65f987f3a"
     when "sles-12-ppc64le"
       pkg.version "2017.08.21"
       pkg.md5sum "90edf955953e38fe72356ade7296cd21"
@@ -53,7 +47,7 @@ component "sysroot" do |pkg, settings, platform|
   puts "sysroot base is " + sysroot_base
 
   libdirs = "lib"
-  libdirs = "lib lib64" if platform.architecture == "s390x" || platform.name =~ /el-7-ppc64|sles-12-ppc64le/ || platform.architecture == "aarch64"
+  libdirs = "lib lib64" if platform.name =~ /el-7-ppc64|sles-12-ppc64le/ || platform.architecture == "aarch64"
   pkg.install do
     [
       "mv #{libdirs} #{sysroot_base}/",

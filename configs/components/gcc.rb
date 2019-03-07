@@ -3,7 +3,7 @@ component "gcc" do |pkg, settings, platform|
   if platform.name =~ /debian-9|el-7-aarch64|el-7-ppc64|fedora-28|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-18\.(04|10)/
     pkg.version "6.1.0"
     pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
-  elsif platform.is_aix? || platform.architecture == "s390x" || platform.architecture =~ /arm/
+  elsif platform.is_aix? || platform.architecture =~ /arm/
     pkg.version "5.2.0"
     pkg.md5sum "1180e9ef7f5a2e4b1eab3e1a0d3fa228"
   else
@@ -89,7 +89,7 @@ component "gcc" do |pkg, settings, platform|
       pkg.build_requires "g++"
       pkg.build_requires "libstdc++-dev"
       pkg.build_requires "libc6-dev"
-    when platform.architecture == "s390x" || platform.architecture == "ppc64le" || platform.architecture == "aarch64" || platform.architecture == "ppc64"
+    when platform.architecture == "ppc64le" || platform.architecture == "aarch64" || platform.architecture == "ppc64"
       pkg.build_requires "pl-binutils-#{platform.architecture}"
       pkg.build_requires "sysroot"
       pkg.build_requires "libstdc++-devel"
