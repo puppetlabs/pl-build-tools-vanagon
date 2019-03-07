@@ -8,8 +8,6 @@ if platform.is_solaris?
   else
     platform_triple = "#{platform.architecture}-sun-solaris2.#{platform.os_version}"
   end
-elsif platform.architecture == "s390x" && platform.is_rpm?
-  platform_triple = "s390x-linux-gnu"
 elsif platform.architecture == "powerpc" && platform.is_deb?
   platform_triple = "powerpc-linux-gnu"
 elsif platform.architecture == "ppc64el" && platform.is_deb?
@@ -61,11 +59,7 @@ proj.setting(:sysconfdir, "/etc/pl-build-tools")
 proj.setting(:logdir, "/var/log/pl-build-tools")
 proj.setting(:piddir, "/var/run/pl-build-tools")
 proj.setting(:bindir, File.join(proj.prefix, "bin"))
-if platform.architecture == "s390x"
-  proj.setting(:libdir, File.join(proj.prefix, "lib64"))
-else
-  proj.setting(:libdir, File.join(proj.prefix, "lib"))
-end
+proj.setting(:libdir, File.join(proj.prefix, "lib"))
 proj.setting(:includedir, File.join(proj.prefix, "include"))
 proj.setting(:datadir, File.join(proj.prefix, "share"))
 proj.setting(:mandir, File.join(proj.datadir, "man"))
