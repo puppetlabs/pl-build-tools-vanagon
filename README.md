@@ -1,21 +1,23 @@
 # Overview
 
-The pl-build-tools-vanagon repo is what we use to build packages to satisfy build-time dependencies for puppet-agent. By standardizing our own toolchain, we are able to create a consistent build process for use with our continuous integration processes. We also avoid having to workaround problems related to the plethora of different build tools (and versions) available by default on each target platform.
+The pl-build-tools-vanagon repo uses [vanagon](https://github.com/puppetlabs/vanagon) to build packages that satisfy build-time dependencies for puppet software: artifacts built using this repo are _not_ included in final builds of puppet software. For runtime dependency packages, see the [puppet-runtime project](https://github.com/puppetlabs/puppet-runtime) instead.
 
-Internally at Puppet Inc, we ship these build packages to package repositories on our internal network. To help our partners and the community use these packages, we have mirrored them to externally accessible package repositories at [FIXME: ADD URL TO PUBLIC REPO HERE]().
+This project exists to create a consistent build process for use in our continuous integration systems, and to provide versions of build tools that may not be available as system tools on all of the target platforms that Puppet Enterprise supports.
 
-# Build Targets 
+At Puppet Inc, we ship these packages to repositories on our internal network only, but you may build them locally: see the general [vanagon instructions](https://github.com/puppetlabs/vanagon#configuration-and-usage) and the examples below to get started.
 
-The build tools and libraries you can build using this repository can be found in the configs/projects/ directory, and includes:
+# Available projects
+
+The tools and libraries you can build using this repository can be found in the [`configs/projects/`](configs/projects) directory. For example:
 
 * pl-gcc
 * pl-boost (build requires pl-gcc)
 * pl-cmake (build requires pl-gcc)
 * pl-yaml-cpp (build requires pl-gcc, pl-boost, and pl-cmake)
 
-among others.
+...and others.
 
-The packages we generate use the "pl-" prefix (for Puppet Labs) and get installed under `/opt/pl-build-tools/` in order not to conflict with system packages.
+These projects all generate packages with a "pl-" prefix (for Puppet Labs) and are installed under `/opt/pl-build-tools/` so that they do not conflict with equivalent system packages. Note that not all projects are guaranteed to successfully build on every platform listed in [`configs/platforms/`](configs/platforms).
 
 # Setting Up Your Build Environment
 
