@@ -1,11 +1,5 @@
 component "sysroot" do |pkg, settings, platform|
   case platform.name
-    when "debian-8-armhf"
-      pkg.version "2016.05.18"
-      pkg.md5sum "906c60e460ea848f49fb2885202d0f18"
-    when "debian-8-armel"
-      pkg.version "2016.09.07"
-      pkg.md5sum "d08a22cd4f431d4e1fc0d1869f60d9da"
     when "el-7-aarch64"
       pkg.version "2017.06.13"
       pkg.md5sum "b1cb6fc6253a2bbb5cc17fda16ec64ae"

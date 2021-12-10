@@ -3,13 +3,9 @@ project "pl-cmake" do |proj|
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
   proj.description "Puppet Labs cmake"
-  if platform.name =~ /debian-8-armel/
-    proj.version "3.5.2"
-    proj.release "5"
-  else
-    proj.version "3.2.3"
-    proj.release "19"
-  end
+  proj.version "3.2.3"
+  proj.release "19"
+
   proj.license "BSD"
   proj.vendor "Puppet Labs <info@puppetlabs.com>"
   proj.homepage "https://www.puppetlabs.com"
