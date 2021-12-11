@@ -2,12 +2,7 @@ component "toolchain" do |pkg, settings, platform|
   if platform.is_linux?
     pkg.version "2016.05.03"
     pkg.url "file://files/cmake/linux-toolchain.cmake"
-    if platform.name =~ /debian-8-amd64/
-      # Add toolchain file for huaweios, which builds on debian-8-amd64
-      pkg.add_source "file://files/cmake/huaweios-toolchain.cmake"
-      pkg.add_source "file://files/cmake/debian-8-armhf-toolchain.cmake"
-      pkg.add_source "file://files/cmake/debian-8-armel-toolchain.cmake"
-    elsif platform.name =~ /el-\d-x86_64|sles-\d\d-x86_64/
+    if platform.name =~ /el-\d-x86_64|sles-\d\d-x86_64/
       # Toolchain files for rhel and sles running on IBM z-series, Power8, 
       # and aarch64, which builds on x86_64
       pkg.add_source "file://files/cmake/el-ppc64-toolchain.cmake"
@@ -62,12 +57,7 @@ component "toolchain" do |pkg, settings, platform|
   else
     filename = pkg.get_url.split('/').last
     pkg.install_file filename, "#{settings[:prefix]}/pl-build-toolchain.cmake"
-    if platform.name =~ /debian-8-amd64/
-      # Install toolchain file for huaweios and debian-8-armhf, which builds on debian-8-amd64
-      pkg.install_file "huaweios-toolchain.cmake", "#{settings[:basedir]}/powerpc-linux-gnu/pl-build-toolchain.cmake"
-      pkg.install_file "debian-8-armhf-toolchain.cmake", "#{settings[:basedir]}/arm-linux-gnueabihf/pl-build-toolchain.cmake"
-      pkg.install_file "debian-8-armel-toolchain.cmake", "#{settings[:basedir]}/arm-linux-gnueabi/pl-build-toolchain.cmake"
-    elsif platform.name =~ /el-\d-x86_64|sles-\d\d-x86_64/
+    if platform.name =~ /el-\d-x86_64|sles-\d\d-x86_64/
       # Install toolchain files used by the Power8/aarch64 rhel and sles platfoms, which are built on x86_64
       pkg.install_file "el-ppc64-toolchain.cmake", "#{settings[:basedir]}/ppc64-redhat-linux/pl-build-toolchain.cmake"
       pkg.install_file "el-ppc64le-toolchain.cmake", "#{settings[:basedir]}/ppc64le-redhat-linux/pl-build-toolchain.cmake"
