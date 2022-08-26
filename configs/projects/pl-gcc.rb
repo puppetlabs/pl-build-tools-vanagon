@@ -1,28 +1,28 @@
-project "pl-gcc" do |proj|
+project 'pl-gcc' do |proj|
   # Project level settings our components will care about
   instance_eval File.read('configs/projects/pl-build-tools.rb')
 
-  proj.description "Puppet Labs GCC"
+  proj.description 'Puppet Labs GCC'
 
-  if platform.name =~ /debian-9|el-7-aarch64|el-7-ppc64|sles-12-ppc64le|ubuntu-16\.04-ppc64el|ubuntu-18\.(04|10)/
-    proj.version "6.1.0"
-    proj.release "6"
-  elsif platform.is_aix? || platform.architecture =~ /arm/
-    proj.version "5.2.0"
-    proj.release "11"
+  if platform.is_aix? || platform.architecture =~ /arm/
+    gcc_version = '5.2.0'
+    proj.release '11'
   else
-    proj.version "4.8.2"
-    proj.release "9"
+    gcc_version = '12.2.0'
+    proj.release '0'
   end
+
+  proj.version gcc_version
+  proj.setting(:gcc_version, gcc_version)
 
   if platform.is_cross_compiled?
     proj.name "pl-gcc-#{platform.architecture}"
     proj.noarch
   end
 
-  proj.license "Same as GCC"
-  proj.vendor "Puppet Labs <info@puppetlabs.com>"
-  proj.homepage "https://www.puppetlabs.com"
+  proj.license 'Same as GCC'
+  proj.vendor 'Puppet Labs <info@puppet.com>'
+  proj.homepage 'https://www.puppet.com'
 
   # Platform specific - these flags do not work on AIX
   unless platform.is_aix?
@@ -30,14 +30,23 @@ project "pl-gcc" do |proj|
     proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
   end
 
-  proj.component "gmp"
-  proj.component "mpfr"
-  proj.component "mpc"
-  proj.component "gcc"
+  # https://gmplib.org
+  proj.setting(:gmp_version, '6.2.1')
+  proj.component 'gmp'
+
+  # https://www.mpfr.org
+  proj.setting(:mpfr_version, '4.1.0')
+  proj.component 'mpfr'
+
+  # https://directory.fsf.org/wiki/Mpc
+  proj.setting(:mpc_version, '1.2.0')
+  proj.component 'mpc'
+
+  proj.component 'gcc'
 
   if platform.is_cross_compiled?
-    proj.component "sysroot"
+    proj.component 'sysroot'
   end
 
-  proj.target_repo ""
+  proj.target_repo ''
 end
