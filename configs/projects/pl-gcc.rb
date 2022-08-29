@@ -26,8 +26,10 @@ project 'pl-gcc' do |proj|
 
   # Platform specific - these flags do not work on AIX
   unless platform.is_aix?
+    libdir =  '/opt/pl-build-tools/lib64'
+    proj.setting(:libdir, libdir)
     proj.setting(:cflags, "-I#{proj.includedir}")
-    proj.setting(:ldflags, "-L#{proj.libdir} -Wl,-rpath=#{proj.libdir}")
+    proj.setting(:ldflags, "-L#{libdir} -Wl,-rpath=#{libdir}")
   end
 
   # https://gmplib.org
