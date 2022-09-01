@@ -1,6 +1,7 @@
-# https://directory.fsf.org/wiki/Mpc
-component 'mpc' do |pkg, settings, _platform|
-  pkg.version settings[:mpc_version]
-  pkg.md5sum '2f1ce56ac775f2be090863f364931a03'
+# This is here just for the downloading and unpacking
+component "mpc" do |pkg, settings, platform|
+  pkg.version "1.0.3"
+  pkg.md5sum "d6a1d5f8ddea3abd2cc3e98f58352d26"
   pkg.url "http://ftp.gnu.org/gnu/mpc/mpc-#{pkg.get_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/mpc-#{pkg.get_version}.tar.gz"
 end
