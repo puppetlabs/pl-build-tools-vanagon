@@ -12,7 +12,7 @@ project "pl-gcc" do |proj|
     proj.release "11"
   else
     proj.version "4.8.2"
-    proj.release "9"
+    proj.release "10"
   end
 
   if platform.is_cross_compiled?
