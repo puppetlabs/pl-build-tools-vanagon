@@ -9,11 +9,6 @@ component "toolchain" do |pkg, settings, platform|
       pkg.add_source "file://files/cmake/el-ppc64le-toolchain.cmake"
       pkg.add_source "file://files/cmake/sles-ppc64le-toolchain.cmake"
       pkg.add_source "file://files/cmake/el-aarch64-toolchain.cmake"
-    elsif platform.name =~ /ubuntu-16\.04-amd64/
-      # Toolchain file for Ubuntu 16.04 running on IBM Power8 hardware,
-      # which builds on amd64
-      pkg.add_source "file://files/cmake/ubuntu-powerpc64le-toolchain.cmake"
-    end
   elsif platform.is_aix?
     pkg.version "2015.10.01"
     # Despite the name, this toolchain applies to all aix versions
@@ -63,9 +58,5 @@ component "toolchain" do |pkg, settings, platform|
       pkg.install_file "el-ppc64le-toolchain.cmake", "#{settings[:basedir]}/ppc64le-redhat-linux/pl-build-toolchain.cmake"
       pkg.install_file "sles-ppc64le-toolchain.cmake", "#{settings[:basedir]}/powerpc64le-suse-linux/pl-build-toolchain.cmake"
       pkg.install_file "el-aarch64-toolchain.cmake", "#{settings[:basedir]}/aarch64-redhat-linux/pl-build-toolchain.cmake"
-    elsif platform.name =~ /ubuntu-16\.04-amd64/
-      # Install toolchain file used by the Power8 ubuntu platfom, which is built on amd64
-      pkg.install_file "ubuntu-powerpc64le-toolchain.cmake", "#{settings[:basedir]}/powerpc64le-linux-gnu/pl-build-toolchain.cmake"
-    end
   end
 end
