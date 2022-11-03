@@ -1,6 +1,9 @@
 component "gcc" do |pkg, settings, platform|
   # Source-Related Metadata
-  if platform.name =~ /el-7-aarch64|el-7-ppc64|sles-12-ppc64le|ubuntu-18\.(04|10)/
+  if platform.is_solaris?
+    pkg.version "7.5.0"
+    pkg.md5sum "115814d16ea8d96e13949360d5d76a8c"
+  elsif platform.name =~ /el-7-aarch64|el-7-ppc64|sles-12-ppc64le|ubuntu-18\.(04|10)/
     pkg.version "6.1.0"
     pkg.md5sum "8d04cbdfddcfad775fdbc5e112af2690"
   elsif platform.is_aix? || platform.architecture =~ /arm/
