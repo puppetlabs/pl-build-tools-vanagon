@@ -31,18 +31,18 @@ project 'pl-gcc' do |proj|
   end
 
   # https://gmplib.org
-  proj.setting(:gmp_version, '4.3.2')
-  proj.setting(:gmp_md5sum, '2a431d487dfd76d0f618d241b1e551cc')
+  proj.setting(:gmp_version, '5.1.3')
+  proj.setting(:gmp_md5sum, 'e5fe367801ff067b923d1e6a126448aa')
   proj.component 'gmp'
 
   # https://www.mpfr.org
-  proj.setting(:mpfr_version, '2.4.2')
-  proj.setting(:mpfr_md5sum, '0e3dcf9fe2b6656ed417c89aa9159428')
+  proj.setting(:mpfr_version, '3.1.6')
+  proj.setting(:mpfr_md5sum, '95dcfd8629937996f826667b9e24f6ff')
   proj.component 'mpfr'
 
   # https://directory.fsf.org/wiki/Mpc
-  proj.setting(:mpc_version, '1.0.3')
-  proj.setting(:mpc_md5sum, 'd6a1d5f8ddea3abd2cc3e98f58352d26')
+  proj.setting(:mpc_version, '1.2.0')
+  proj.setting(:mpc_md5sum, '2f1ce56ac775f2be090863f364931a03')
   proj.component 'mpc'
 
   proj.component 'gcc'
