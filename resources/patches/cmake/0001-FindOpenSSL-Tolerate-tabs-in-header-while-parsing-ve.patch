@@ -1,0 +1,29 @@
+From 6962c466e5a02c4b8a7b7db7645e2403c01bb76c Mon Sep 17 00:00:00 2001
+From: Wayne Stambaugh <stambaughw@gmail.com>
+Date: Sat, 3 Oct 2015 11:40:00 -0400
+Subject: [PATCH 1/4] FindOpenSSL: Tolerate tabs in header while parsing
+ version (#15765)
+
+Tolerate tabs instead of spaces in the "# define" line.
+
+(cherry picked from commit 6b575dec8d393c4a38c587ee97afa068eeb4b432)
+---
+ Modules/FindOpenSSL.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Modules/FindOpenSSL.cmake b/Modules/FindOpenSSL.cmake
+index 3adc269262..b97db51866 100644
+--- a/Modules/FindOpenSSL.cmake
++++ b/Modules/FindOpenSSL.cmake
+@@ -285,7 +285,7 @@ endfunction()
+ if (OPENSSL_INCLUDE_DIR)
+   if(OPENSSL_INCLUDE_DIR AND EXISTS "${OPENSSL_INCLUDE_DIR}/openssl/opensslv.h")
+     file(STRINGS "${OPENSSL_INCLUDE_DIR}/openssl/opensslv.h" openssl_version_str
+-         REGEX "^# *define[\t ]+OPENSSL_VERSION_NUMBER[\t ]+0x([0-9a-fA-F])+.*")
++         REGEX "^#[\t ]*define[\t ]+OPENSSL_VERSION_NUMBER[\t ]+0x([0-9a-fA-F])+.*")
+ 
+     # The version number is encoded as 0xMNNFFPPS: major minor fix patch status
+     # The status gives if this is a developer or prerelease and is ignored here.
+-- 
+2.25.1
+

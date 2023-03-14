@@ -9,6 +9,7 @@ component "toolchain" do |pkg, settings, platform|
       pkg.add_source "file://files/cmake/el-ppc64le-toolchain.cmake"
       pkg.add_source "file://files/cmake/sles-ppc64le-toolchain.cmake"
       pkg.add_source "file://files/cmake/el-aarch64-toolchain.cmake"
+    end
   elsif platform.is_aix?
     pkg.version "2015.10.01"
     # Despite the name, this toolchain applies to all aix versions
@@ -58,5 +59,6 @@ component "toolchain" do |pkg, settings, platform|
       pkg.install_file "el-ppc64le-toolchain.cmake", "#{settings[:basedir]}/ppc64le-redhat-linux/pl-build-toolchain.cmake"
       pkg.install_file "sles-ppc64le-toolchain.cmake", "#{settings[:basedir]}/powerpc64le-suse-linux/pl-build-toolchain.cmake"
       pkg.install_file "el-aarch64-toolchain.cmake", "#{settings[:basedir]}/aarch64-redhat-linux/pl-build-toolchain.cmake"
+    end
   end
 end

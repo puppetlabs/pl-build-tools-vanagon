@@ -1,0 +1,39 @@
+From 433ec42c8af1e519000521a7dfab9bbdf7b2c701 Mon Sep 17 00:00:00 2001
+From: Billy Brumley <bbrumley@gmail.com>
+Date: Sat, 6 Jun 2020 10:31:59 +0300
+Subject: [PATCH 4/4] FindOpenSSL: Fix OpenSSL 3.0.0 version extraction
+
+Fix the regex syntax added by commit 61d746e592 (FindOpenSSL: Detect
+OpenSSL 3.0.0, 2020-05-27, v3.17.3~1^2).  Add missing escapes.
+Test with `openssl-3.0.0-alpha3`.
+
+While at it, also unset a temporary variable after use.
+
+(cherry picked from commit 796b447373ea8b085a8e41903dacdf9cc27f171a)
+---
+ Modules/FindOpenSSL.cmake | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Modules/FindOpenSSL.cmake b/Modules/FindOpenSSL.cmake
+index 1432d2f4c5..fd5a051490 100644
+--- a/Modules/FindOpenSSL.cmake
++++ b/Modules/FindOpenSSL.cmake
+@@ -319,11 +319,13 @@ if(OPENSSL_INCLUDE_DIR AND EXISTS "${OPENSSL_INCLUDE_DIR}/openssl/opensslv.h")
+     # Since OpenSSL 3.0.0, the new version format is MAJOR.MINOR.PATCH and
+     # a new OPENSSL_VERSION_STR macro contains exactly that
+     file(STRINGS "${OPENSSL_INCLUDE_DIR}/openssl/opensslv.h" OPENSSL_VERSION_STR
+-         REGEX "^#[\t ]*define[\t ]+OPENSSL_VERSION_STR[\t ]+\"([0-9])+\.([0-9])+\.([0-9])+\".*")
+-    string(REGEX REPLACE "^.*OPENSSL_VERSION_STR[\t ]+\"([0-9]+\.[0-9]+\.[0-9]+)\".*$"
++         REGEX "^#[\t ]*define[\t ]+OPENSSL_VERSION_STR[\t ]+\"([0-9])+\\.([0-9])+\\.([0-9])+\".*")
++    string(REGEX REPLACE "^.*OPENSSL_VERSION_STR[\t ]+\"([0-9]+\\.[0-9]+\\.[0-9]+)\".*$"
+            "\\1" OPENSSL_VERSION_STR "${OPENSSL_VERSION_STR}")
+ 
+     set(OPENSSL_VERSION "${OPENSSL_VERSION_STR}")
++
++    unset(OPENSSL_VERSION_STR)
+   endif ()
+ endif ()
+ 
+-- 
+2.25.1
+
