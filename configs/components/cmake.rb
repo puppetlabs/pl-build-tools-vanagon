@@ -12,6 +12,12 @@ component "cmake" do |pkg, settings, platform|
     pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
   end
 
+  # Remove these if/when bumping to CMake 3.18 or above
+  pkg.apply_patch 'resources/patches/cmake/0001-FindOpenSSL-Tolerate-tabs-in-header-while-parsing-ve.patch'
+  pkg.apply_patch 'resources/patches/cmake/0002-FindOpenSSL-Do-not-assume-that-the-version-regex-fin.patch'
+  pkg.apply_patch 'resources/patches/cmake/0003-FindOpenSSL-Detect-OpenSSL-3.0.0.patch'
+  pkg.apply_patch 'resources/patches/cmake/0004-FindOpenSSL-Fix-OpenSSL-3.0.0-version-extraction.patch'
+
   # Package Dependency Metadata
 
   # Build Requirements
