@@ -1,0 +1,25 @@
+name: ci-test-img
+
+on: [push]
+
+jobs:
+  ci-test-img:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: build container
+        uses: docker/build-push-action@v4
+        with:
+          load: true
+          push: false
+          tags: ci-test-img:latest
+
+      - name: run ci-test-img
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ci-test-img:latest
