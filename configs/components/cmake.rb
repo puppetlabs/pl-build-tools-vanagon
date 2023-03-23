@@ -1,89 +1,85 @@
-component "cmake" do |pkg, settings, platform|
-  # Source-Related Metadata
-  pkg.version "3.2.3"
-  pkg.md5sum "d51c92bf66b1e9d4fe2b7aaedd51377c"
-  pkg.url "https://cmake.org/files/v3.2/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+component 'cmake' do |pkg, settings, platform|
+  cmake_full_version = settings[:cmake_version]
+  cmake_major_minor = cmake_full_version.split('.')[0..1].join('.')
 
-  pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
+  pkg.version cmake_full_version
+  pkg.md5sum 'd0bec4e0690bb164035c43a4d6a135c9'
+  pkg.url "https://cmake.org/files/v#{cmake_major_minor}/#{pkg.get_name}-#{cmake_full_version}.tar.gz"
+  pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{cmake_full_version}.tar.gz"
 
-  if platform.name =~ /sles-12/
-    pkg.apply_patch 'resources/patches/cmake/avoid-select-sles-12.patch'
-  elsif platform.is_solaris?
-    pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
-  end
+  pl_build_tools = 'http://pl-build-tools.delivery.puppetlabs.net'
+  os_mirror = 'http://osmirror.delivery.puppetlabs.net'
+  base_path = '/usr/local/bin:/usr/bin:/bin'
 
-  # Remove these if/when bumping to CMake 3.18 or above
-  pkg.apply_patch 'resources/patches/cmake/0001-FindOpenSSL-Tolerate-tabs-in-header-while-parsing-ve.patch'
-  pkg.apply_patch 'resources/patches/cmake/0002-FindOpenSSL-Do-not-assume-that-the-version-regex-fin.patch'
-  pkg.apply_patch 'resources/patches/cmake/0003-FindOpenSSL-Detect-OpenSSL-3.0.0.patch'
-  pkg.apply_patch 'resources/patches/cmake/0004-FindOpenSSL-Fix-OpenSSL-3.0.0-version-extraction.patch'
-
-  # Package Dependency Metadata
-
-  # Build Requirements
   pkg.build_requires 'toolchain'
 
-  if platform.is_aix?
-    pkg.build_requires "http://pl-build-tools.delivery.puppetlabs.net/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"
-    pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/make-3.80-1.aix5.1.ppc.rpm"
-  elsif platform.is_solaris?
-    if platform.os_version == "10"
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-gcc-4.8.2-8.i386.pkg.gz'
-      pkg.build_requires 'http://pl-build-tools.delivery.puppetlabs.net/solaris/10/pl-binutils-2.27-1.i386.pkg.gz'
-    elsif platform.os_version == "11"
-      pkg.build_requires 'pl-binutils'
-      pkg.build_requires 'pl-gcc'
-    end
-  else
-    pkg.build_requires "pl-gcc"
-    pkg.build_requires "make"
+  case
+  when platform.is_aix?
+    pkg.build_requires "#{pl_build_tools}/aix/#{platform.os_version}/ppc/pl-gcc-5.2.0-1.aix#{platform.os_version}.ppc.rpm"
+    pkg.build_requires "#{os_mirror}/AIX_MIRROR/make-3.80-1.aix5.1.ppc.rpm"
+    pkg.environment('CC', "#{settings[:bindir]}/gcc")
+    pkg.environment('CXX',"#{settings[:bindir]}/g++")
+    pkg.environment('PATH', base_path)
 
-    case
-    when platform.is_cisco_wrlinux?
-      pkg.build_requires "ncurses-dev"
-    when platform.is_rpm?
-      pkg.build_requires "ncurses-devel"
-    when platform.is_deb?
-      pkg.build_requires "libncurses5-dev"
-    end
+  when platform.is_solaris? && platform.os_version == '10'
+    pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
+    pkg.build_requires "#{pl_build_tools}/solaris/10/pl-gcc-4.8.2-8.i386.pkg.gz"
+    pkg.build_requires "#{pl_build_tools}/solaris/10/pl-binutils-2.27-1.i386.pkg.gz"
+    pkg.environment('LDFLAGS', "-Wl,-rpath=#{settings[:basedir]}/lib")
+    pkg.environment('CXXFLAGS', "-Wl,-rpath=#{settings[:basedir]}/lib -static-libstdc++ -static-libgcc")
+    pkg.environment('CFLAGS', "-Wl,-rpath=#{settings[:basedir]}/lib -static-libgcc")
+    pkg.environment('CC', "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-gcc")
+    pkg.environment('CXX', "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++")
+    pkg.environment('PATH', "#{base_path}:/opt/csw/bin")
+
+  when platform.is_solaris? && platform.os_version == '11'
+    pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
+    pkg.build_requires 'pl-binutils'
+    pkg.build_requires 'pl-gcc'
+    pkg.environment('LDFLAGS', "-Wl,-rpath=#{settings[:basedir]}/lib")
+    pkg.environment('CXXFLAGS', "-Wl,-rpath=#{settings[:basedir]}/lib -static-libstdc++ -static-libgcc")
+    pkg.environment('CFLAGS', "-Wl,-rpath=#{settings[:basedir]}/lib -static-libgcc")
+    pkg.environment('CC', "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-gcc")
+    pkg.environment('CXX', "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++")
+    pkg.environment('PATH', "#{base_path}:/opt/csw/bin")
+
+  when platform.is_cisco_wrlinux?
+    pkg.build_requires 'pl-gcc'
+    pkg.build_requires 'make'
+    pkg.build_requires 'ncurses-dev'
+    pkg.build_requires 'openssl-dev'
+    pkg.environment('LDFLAGS', "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:prefix]}/lib64,--enable-new-dtags")
+    pkg.environment('CC', "#{settings[:bindir]}/gcc")
+    pkg.environment('CXX', "#{settings[:bindir]}/g++")
+    pkg.environment('PATH', base_path)
+
+  when platform.is_rpm?
+    pkg.build_requires 'gcc-c++'
+    pkg.build_requires 'make'
+    pkg.build_requires 'ncurses-devel'
+    pkg.build_requires 'openssl-devel'
+    pkg.environment('LDFLAGS', "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:prefix]}/lib64,--enable-new-dtags")
+    pkg.environment('PATH', base_path)
+
+  when platform.is_deb?
+    pkg.build_requires 'make'
+    pkg.build_requires 'libncurses5-dev'
+    pkg.build_requires 'openssl-dev'
+    pkg.environment('LDFLAGS', "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:prefix]}/lib64,--enable-new-dtags")
+    pkg.environment('PATH', base_path)
   end
 
-  # Build-time Configuration
-  pkg.environment "PATH" => "$$PATH:/usr/local/bin"
-  pkg.environment "MAKE" => platform.make
-
-  if platform.is_aix?
-    pkg.environment "LDFLAGS" => "$${LDFLAGS}"
-    pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
-    pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
-  elsif platform.is_solaris?
-    pkg.environment "PATH" => "$$PATH:/opt/csw/bin"
-    pkg.environment "LDFLAGS"  => "-Wl,-rpath=#{settings[:basedir]}/lib"
-    pkg.environment "CXXFLAGS" => "-Wl,-rpath=#{settings[:basedir]}/lib -static-libstdc++ -static-libgcc"
-    pkg.environment "CFLAGS" => "-Wl,-rpath=#{settings[:basedir]}/lib -static-libgcc"
-    pkg.environment "CC" => "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-gcc"
-    pkg.environment "CXX" => "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++"
-  else
-    pkg.environment "LDFLAGS" => "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:prefix]}/lib64,--enable-new-dtags"
-    pkg.environment "CC"   => "#{settings[:bindir]}/gcc"
-    pkg.environment "CXX"  => "#{settings[:bindir]}/g++"
-  end
-
-  # Build Commands
   pkg.configure do
     "./configure --prefix=#{settings[:prefix]} --docdir=share/doc"
   end
 
   pkg.build do
-    [
-      "./configure --prefix=#{settings[:prefix]} --docdir=share/doc",
-      "#{platform[:make]} VERBOSE=1 -j$(shell expr $(shell #{platform[:num_cores]}) + 1)",
-    ]
+    "#{platform[:make]} VERBOSE=1 -j$(shell expr $(shell #{platform[:num_cores]}) + 1)"
   end
 
   pkg.install do
     [
-      "#{platform[:make]} -j$(shell expr $(shell #{platform[:num_cores]}) + 1) install",
+      "#{platform[:make]} install",
       # Replace all files with spaces in them with underscores because solaris 10
       # can't have files with spaces in packages:
       %Q[find #{settings[:basedir]} -type f | grep ' ' | while read sfile; do mv "$$sfile" "$${sfile// /_}"; done]
