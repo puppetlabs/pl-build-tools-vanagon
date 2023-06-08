@@ -28,6 +28,6 @@ jobs:
         projectName: ${{ github.event.repository.name }}
         skipProjects: ''
         skipPlatforms: ''
-        sshKey: ${{ secrets.SECBOT_SSH_KEY }}
+        sshKey: ${{ secrets.SEC_SECBOT_SSH_PUBLIC }}
         sshKeyName: 'id_ed25519'
         branch : ${{ github.ref_name }}
