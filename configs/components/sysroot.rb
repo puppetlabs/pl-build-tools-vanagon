@@ -1,8 +1,5 @@
 component "sysroot" do |pkg, settings, platform|
   case platform.name
-    when "el-7-aarch64"
-      pkg.version "2017.06.13"
-      pkg.md5sum "b1cb6fc6253a2bbb5cc17fda16ec64ae"
     when "el-7-ppc64" # Centos 7.5 - Infrastructure Server Install
       pkg.version "2018.09.14"
       pkg.md5sum "9aa45667c6b265fd2f356ee650bf0e27"
