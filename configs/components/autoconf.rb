@@ -1,6 +1,6 @@
 component "autoconf" do |pkg, settings, platform|
-  pkg.version "2.69"
-  pkg.md5sum "82d05e03b93e45f5a39b828dc9c6c29b"
+  pkg.version "2.72"
+  pkg.md5sum "bac878ad1e88ca3fcf7c570910cf9af1"
   pkg.url "http://ftp.gnu.org/gnu/autoconf/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
   pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
@@ -18,6 +18,10 @@ component "autoconf" do |pkg, settings, platform|
     end
     pkg.environment "PATH" => "#{settings[:basedir]}/bin:/usr/ccs/bin:/usr/sfw/bin:$$PATH"
     pkg.build_requires "make"
+  elsif platform.is_sles? && platform.os_version == '11'
+    pkg.build_requires 'pl-gcc8'
+    pkg.environment "CC" => "/opt/pl-build-tools/bin/gcc"
+    pkg.environment "PATH" => "#{settings[:basedir]}/bin:$$PATH"
   else
     pkg.build_requires "gcc"
     pkg.build_requires "make"

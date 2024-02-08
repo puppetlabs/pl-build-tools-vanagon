@@ -1,6 +1,6 @@
 component "automake" do |pkg, settings, platform|
-  pkg.version "1.15"
-  pkg.md5sum "716946a105ca228ab545fc37a70df3a3"
+  pkg.version "1.16.5"
+  pkg.md5sum "00502a65dee9f9e1a9f47aa55b7de4f7"
   pkg.url "http://ftp.gnu.org/gnu/automake/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
   pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{pkg.get_version}.tar.gz"
 
