@@ -1,11 +1,10 @@
 component 'cmake' do |pkg, settings, platform|
   cmake_full_version = settings[:cmake_version]
-  cmake_major_minor = cmake_full_version.split('.')[0..1].join('.')
 
   pkg.version cmake_full_version
-  pkg.md5sum 'd0bec4e0690bb164035c43a4d6a135c9'
-  pkg.url "https://cmake.org/files/v#{cmake_major_minor}/#{pkg.get_name}-#{cmake_full_version}.tar.gz"
-  pkg.mirror "#{settings[:buildsources_url]}/#{pkg.get_name}-#{cmake_full_version}.tar.gz"
+  pkg.md5sum settings[:cmake_source_md5sum]
+  pkg.url settings[:cmake_download_url]
+  pkg.mirror "#{settings[:buildsources_url]}/#{settings[:cmake_tarball_name]}"
 
   pl_build_tools = 'http://pl-build-tools.delivery.puppetlabs.net'
   os_mirror = 'http://osmirror.delivery.puppetlabs.net'
@@ -31,6 +30,17 @@ component 'cmake' do |pkg, settings, platform|
     pkg.environment('CC', "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-gcc")
     pkg.environment('CXX', "#{settings[:basedir]}/bin/#{settings[:platform_triple]}-g++")
     pkg.environment('PATH', "#{base_path}:/opt/csw/bin")
+
+  when platform.is_sles? && platform.os_version == '11'
+    pkg.build_requires 'pl-gcc8'
+    pkg.build_requires 'make'
+    pkg.build_requires 'ncurses-devel'
+    pkg.build_requires 'openssl-devel'
+    pkg.environment('CC', "#{settings[:basedir]}/bin/gcc")
+    pkg.environment('CXX', "#{settings[:basedir]}/bin/g++")
+
+    pkg.environment('LDFLAGS', "-Wl,-rpath=#{settings[:libdir]},-rpath=#{settings[:prefix]}/lib64,--enable-new-dtags")
+    pkg.environment('PATH', base_path)
 
   when platform.is_solaris? && platform.os_version == '11'
     pkg.apply_patch 'resources/patches/cmake/use-g++-as-linker-solaris.patch'
