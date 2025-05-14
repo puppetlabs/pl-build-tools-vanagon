@@ -2,10 +2,10 @@ name: vanagon mend
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches: 
+  pull_request_target:
+    branches:
     - main
-    
+
 jobs:
  mend_vanagon:
    runs-on: ubuntu-latest
@@ -13,7 +13,7 @@ jobs:
     - name: Connect to Twingate
       uses: twingate/github-action@v1
       with:
-        service-key: ${{ secrets.TWINGATE_PUBLIC_REPO_KEY }}
+        service-key: ${{ secrets.TWINGATE_KEY }}
     - name: checkout the current PR
       uses: actions/checkout@v2
       with:
@@ -28,6 +28,6 @@ jobs:
         projectName: ${{ github.event.repository.name }}
         skipProjects: ''
         skipPlatforms: ''
-        sshKey: ${{ secrets.SEC_SECBOT_SSH_PUBLIC }}
+        sshKey: ${{ secrets.SECBOT_SSH_KEY }}
         sshKeyName: 'id_ed25519'
         branch : ${{ github.ref_name }}

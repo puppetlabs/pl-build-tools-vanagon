@@ -1,4 +1,4 @@
-source ENV['GEM_SOURCE'] || 'https://rubygems.org'
+source ENV['GEM_SOURCE'] || 'https://artifactory.delivery.puppetlabs.net/artifactory/api/gems/rubygems/'
 
 def location_for(place)
   if place =~ /^((?:git[:@]|https:)[^#]*)#(.*)/
@@ -10,7 +10,7 @@ def location_for(place)
   end
 end
 
-gem 'vanagon', *location_for(ENV['VANAGON_LOCATION'] || '~> 0.21')
-gem 'packaging', *location_for(ENV['PACKAGING_LOCATION'] || '~> 0.100')
+gem 'vanagon', *location_for(ENV['VANAGON_LOCATION'] || '~> 2')
+gem 'packaging', *location_for(ENV['PACKAGING_LOCATION'] || '~> 2')
 gem 'json'
 gem 'rake'
