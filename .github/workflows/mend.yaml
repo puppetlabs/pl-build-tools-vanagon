@@ -1,33 +1,25 @@
 name: vanagon mend
 
 on:
-  workflow_dispatch:
-  pull_request_target:
+  push:
     branches:
     - main
+  schedule:
+    - cron: '8 8 * * *'
+  workflow_dispatch:
 
 jobs:
- mend_vanagon:
-   runs-on: ubuntu-latest
-   steps:
-    - name: Connect to Twingate
-      uses: twingate/github-action@v1
-      with:
-        service-key: ${{ secrets.TWINGATE_KEY }}
-    - name: checkout the current PR
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Run Vanagon Mend Scan
-      uses: puppetlabs/security-mend-vanagon-action@v4.0.0
-      with:
-        mendApiKey: ${{ secrets.MEND_API_KEY }}
-        mendURL: https://saas-eu.whitesourcesoftware.com/agent
-        mendToken: ${{ secrets.MEND_TOKEN }}
-        productName: Puppet Enterprise
-        projectName: ${{ github.event.repository.name }}
-        skipProjects: ''
-        skipPlatforms: ''
-        sshKey: ${{ secrets.SECBOT_SSH_KEY }}
-        sshKeyName: 'id_ed25519'
-        branch : ${{ github.ref_name }}
+  mend_vanagon:
+    strategy:
+      matrix:
+        vanagon_projects: ['pl-curl', 'pl-build-tools', 'pl-gcc8', 'pl-gettext', 'pl-toolchain',
+                           'pl-openssl', 'pl-gcc12', 'pl-ruby', 'pl-gcc', 'pl-binutils', 'pl-libffi',
+                           'pl-perl', 'pl-yaml-cpp', 'pl-make', 'pl-pdcurses', 'pl-zlib', 'pl-tar',
+                           'pl-gdbm', 'pl-autotools', 'pl-iconv', 'pl-rust', 'pl-boost', 'pl-pkg-config',
+                           'pl-cmake']
+    uses: puppetlabs/phoenix-gha-private/.github/workflows/mend-vanagon.yaml@main
+    with:
+      mend_product_name: Puppet Enterprise
+      vanagon_project: {{ matrix.vanagon_projects }}
+      vanagon_platform: el-9-x86_64
+    secrets: inherit
