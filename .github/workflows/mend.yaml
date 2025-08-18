@@ -20,6 +20,6 @@ jobs:
     uses: puppetlabs/phoenix-gha-private/.github/workflows/mend-vanagon.yaml@main
     with:
       mend_product_name: Puppet Enterprise
-      vanagon_project: {{ matrix.vanagon_projects }}
+      vanagon_project: ${{ matrix.vanagon_projects }}
       vanagon_platform: el-9-x86_64
     secrets: inherit
