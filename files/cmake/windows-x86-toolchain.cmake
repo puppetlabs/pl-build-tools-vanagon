@@ -5,7 +5,7 @@ SET(CMAKE_SYSTEM_VERSION 1)
 
 # specify the cross compiler
 SET(PL_TOOLS_ROOT        C:/tools/pl-build-tools)
-SET(GCC_ROOT             C:/tools/mingw32)
+SET(GCC_ROOT             C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw32)
 SET(CMAKE_C_COMPILER     ${GCC_ROOT}/bin/gcc.exe)
 SET(CMAKE_CXX_COMPILER   ${GCC_ROOT}/bin/g++.exe)
 
